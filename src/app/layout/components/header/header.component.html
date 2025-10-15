@@ -10,19 +10,7 @@
     <app-breadcrumb></app-breadcrumb>
   </div>
 
-  <!-- Center Section -->
-  <div class="header-center">
-    <!-- Search Bar -->
-    <div class="search-container">
-      <div class="search-input">
-        <i class="pi pi-search search-icon"></i>
-        <input type="text" placeholder="Buscar productos, clientes, ventas..." class="search-field">
-        <button class="search-btn">
-          <i class="pi pi-search"></i>
-        </button>
-      </div>
-    </div>
-  </div>
+
 
   <!-- Right Section -->
   <div class="header-right">
@@ -58,7 +46,7 @@
           </div>
         </div>
         <div class="user-dropdown-menu">
-          <a href="#" class="dropdown-item">
+          <a href="#" class="dropdown-item" (click)="goToProfile(); $event.preventDefault()">
             <i class="pi pi-user"></i>
             <span>Mi Perfil</span>
           </a>
@@ -71,7 +59,7 @@
             <span>Ayuda</span>
           </a>
           <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item logout">
+          <a href="#" class="dropdown-item logout" (click)="logout(); $event.preventDefault()">
             <i class="pi pi-sign-out"></i>
             <span>Cerrar Sesión</span>
           </a>
@@ -79,4 +67,13 @@
       </div>
     </div>
   </div>
+
+  <!-- Loading Spinner for Logout -->
+  <app-loading-spinner
+    *ngIf="isLoggingOut"
+    size="medium"
+    color="primary"
+    message="Cerrando sesión..."
+    [fullScreen]="true">
+  </app-loading-spinner>
 </header>

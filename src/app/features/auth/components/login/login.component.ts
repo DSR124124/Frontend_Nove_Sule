@@ -10,7 +10,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { CardModule } from 'primeng/card';
 import { DividerModule } from 'primeng/divider';
-import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { LoadingSpinnerComponent } from '../../../../shared/components/loading-spinner/loading-spinner.component';
 
 @Component({
   selector: 'app-login',
@@ -23,7 +23,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
     PasswordModule,
     CardModule,
     DividerModule,
-    ProgressSpinnerModule
+    LoadingSpinnerComponent
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'

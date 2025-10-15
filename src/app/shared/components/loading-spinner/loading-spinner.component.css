@@ -1,0 +1,151 @@
+/* ===========================================
+   LOADING SPINNER COMPONENT STYLES
+   =========================================== */
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  padding: var(--space-4);
+}
+
+.loading-container.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.95) !important;
+  backdrop-filter: blur(2px);
+  z-index: var(--z-modal);
+}
+
+.loading-container.full-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.98) !important;
+  backdrop-filter: blur(4px);
+  z-index: var(--z-modal);
+}
+
+/* Spinner Animation */
+.spinner {
+  position: relative;
+  display: inline-block;
+}
+
+.spinner-ring {
+  position: absolute;
+  border: 3px solid transparent;
+  border-top: 3px solid;
+  border-radius: 50%;
+  animation: spin 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+}
+
+.spinner-ring:nth-child(1) {
+  animation-delay: -0.45s;
+}
+
+.spinner-ring:nth-child(2) {
+  animation-delay: -0.3s;
+}
+
+.spinner-ring:nth-child(3) {
+  animation-delay: -0.15s;
+}
+
+/* Size Variants */
+.spinner.small {
+  width: 20px;
+  height: 20px;
+}
+
+.spinner.small .spinner-ring {
+  width: 20px;
+  height: 20px;
+  border-width: 2px;
+}
+
+.spinner.medium {
+  width: 40px;
+  height: 40px;
+}
+
+.spinner.medium .spinner-ring {
+  width: 40px;
+  height: 40px;
+  border-width: 3px;
+}
+
+.spinner.large {
+  width: 60px;
+  height: 60px;
+}
+
+.spinner.large .spinner-ring {
+  width: 60px;
+  height: 60px;
+  border-width: 4px;
+}
+
+/* Color Variants */
+.spinner.primary .spinner-ring {
+  border-top-color: var(--primary);
+}
+
+.spinner.secondary .spinner-ring {
+  border-top-color: var(--secondary);
+}
+
+.spinner.white .spinner-ring {
+  border-top-color: var(--text-white);
+}
+
+/* Loading Message */
+.loading-message {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  text-align: center;
+  font-weight: var(--font-medium);
+}
+
+.loading-container.overlay .loading-message,
+.loading-container.full-screen .loading-message {
+  color: var(--text-primary);
+  font-size: var(--text-base);
+}
+
+/* Animation Keyframes */
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .loading-container {
+    padding: var(--space-3);
+    gap: var(--space-2);
+  }
+
+  .loading-message {
+    font-size: var(--text-xs);
+  }
+
+  .loading-container.overlay .loading-message,
+  .loading-container.full-screen .loading-message {
+    font-size: var(--text-sm);
+  }
+}
+
+/* Dark Mode Support - Disabled for consistent white background */
