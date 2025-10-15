@@ -1,0 +1,47 @@
+<div class="sidebar-item" [class.collapsed]="isCollapsed" [class.active]="item.isActive" [class.has-children]="hasChildren()">
+  <!-- Main Item -->
+  <div class="item-content" [class.level-0]="level === 0" [class.level-1]="level === 1" [class.level-2]="level === 2">
+    <!-- Icon -->
+    <div class="item-icon">
+      <i [class]="item.icon" [class.icon-md]="true"></i>
+    </div>
+
+    <!-- Label (hidden when collapsed) -->
+    <span class="item-label" *ngIf="!isCollapsed">{{ item.label }}</span>
+
+    <!-- Badge (hidden when collapsed) -->
+    <span class="item-badge" *ngIf="!isCollapsed && item.badge" [class]="item.badgeClass || 'badge-primary'">
+      {{ item.badge }}
+    </span>
+
+    <!-- Expand/Collapse Arrow (hidden when collapsed) -->
+    <div class="item-arrow" *ngIf="!isCollapsed && hasChildren()" (click)="onToggleExpanded($event, item.id)">
+      <i class="pi" [class.pi-angle-right]="!item.isExpanded" [class.pi-angle-down]="item.isExpanded"></i>
+    </div>
+  </div>
+
+  <!-- Router Link (if no children) -->
+  <a *ngIf="!hasChildren() && item.routerLink"
+     [routerLink]="item.routerLink"
+     class="item-link"
+     (click)="onItemClick(item)">
+  </a>
+
+  <!-- Click Handler (if no router link) -->
+  <div *ngIf="!hasChildren() && !item.routerLink"
+       class="item-link"
+       (click)="onItemClick(item)">
+  </div>
+
+  <!-- Children Menu -->
+  <div class="item-children" *ngIf="hasChildren() && item.isExpanded && !isCollapsed">
+    <app-sidebar-item
+      *ngFor="let child of item.children"
+      [item]="child"
+      [isCollapsed]="isCollapsed"
+      [level]="level + 1"
+      (itemClick)="onItemClick($event)"
+      (toggleExpanded)="onChildToggleExpanded(child.id)">
+    </app-sidebar-item>
+  </div>
+</div>

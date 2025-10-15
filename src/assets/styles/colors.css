@@ -1,0 +1,251 @@
+/* ===========================================
+   NOVE SULE - BRAND COLOR PALETTE
+   =========================================== */
+
+:root {
+  /* ====== BASE BRAND COLORS ====== */
+  --deep-purple: #721b99;
+  --vibrant-pink: #f831d9;
+  --fresh-green: #4CAF50;
+  --bright-orange: #FF6D00;
+  --sky-blue: #03A9F4;
+  --coral-red: #F55252;
+
+  /* ====== SEMANTIC COLORS ====== */
+  --primary: var(--deep-purple);
+  --secondary: var(--vibrant-pink);
+  --accent: var(--fresh-green);
+  --success: #43A047;
+  --warning: #FF9800;
+  --error: #D32F2F;
+  --info: #1976D2;
+
+  /* ====== NEUTRAL COLORS ====== */
+  --white: #ffffff;
+  --black: #000000;
+  --gray-50: #f9fafb;
+  --gray-100: #f3f4f6;
+  --gray-200: #e5e7eb;
+  --gray-300: #d1d5db;
+  --gray-400: #9ca3af;
+  --gray-500: #6b7280;
+  --gray-600: #4b5563;
+  --gray-700: #374151;
+  --gray-800: #1f2937;
+  --gray-900: #111827;
+
+  /* ====== TEXT COLORS ====== */
+  --text-primary: #2c2c2c;
+  --text-secondary: var(--gray-500);
+  --text-muted: var(--gray-400);
+  --text-light: var(--gray-300);
+  --text-white: var(--white);
+  --text-on-primary: var(--white);
+  --text-on-secondary: var(--white);
+  --text-on-success: var(--white);
+  --text-on-warning: var(--white);
+  --text-on-error: var(--white);
+  --text-on-info: var(--white);
+
+  /* ====== BACKGROUND COLORS ====== */
+  --bg-primary: var(--white);
+  --bg-secondary: var(--gray-50);
+  --bg-tertiary: var(--gray-100);
+  --bg-dark: var(--gray-800);
+  --bg-overlay: rgba(0, 0, 0, 0.5);
+
+  /* ====== SURFACE COLORS ====== */
+  --surface-0: var(--white);
+  --surface-50: var(--gray-50);
+  --surface-100: var(--gray-100);
+  --surface-200: var(--gray-200);
+  --surface-300: var(--gray-300);
+  --surface-400: var(--gray-400);
+  --surface-500: var(--gray-500);
+  --surface-600: var(--gray-600);
+  --surface-700: var(--gray-700);
+  --surface-800: var(--gray-800);
+  --surface-900: var(--gray-900);
+
+  /* ====== BORDER COLORS ====== */
+  --border-light: var(--gray-200);
+  --border-medium: var(--gray-300);
+  --border-dark: var(--gray-600);
+  --border-primary: var(--primary);
+  --border-secondary: var(--secondary);
+  --border-success: var(--success);
+  --border-warning: var(--warning);
+  --border-error: var(--error);
+  --border-info: var(--info);
+
+  /* ====== HOVER COLORS ====== */
+  --primary-hover: #5a1578;
+  --secondary-hover: #e61ed6;
+  --accent-hover: #388e3c;
+  --success-hover: #388e3c;
+  --warning-hover: #e65100;
+  --error-hover: #c62828;
+  --info-hover: #1565c0;
+
+  /* ====== LIGHT BACKGROUND VARIANTS ====== */
+  --primary-light: #e8d5f0;
+  --secondary-light: #fde8fc;
+  --accent-light: #e8f5e8;
+  --success-light: #e8f5e8;
+  --warning-light: #fff3e0;
+  --error-light: #ffebee;
+  --info-light: #e3f2fd;
+
+  /* ====== ALPHA COLORS ====== */
+  --primary-alpha-10: rgba(114, 27, 153, 0.1);
+  --primary-alpha-20: rgba(114, 27, 153, 0.2);
+  --primary-alpha-30: rgba(114, 27, 153, 0.3);
+  --secondary-alpha-10: rgba(248, 49, 217, 0.1);
+  --secondary-alpha-20: rgba(248, 49, 217, 0.2);
+  --secondary-alpha-30: rgba(248, 49, 217, 0.3);
+  --success-alpha-10: rgba(67, 160, 71, 0.1);
+  --success-alpha-20: rgba(67, 160, 71, 0.2);
+  --success-alpha-30: rgba(67, 160, 71, 0.3);
+
+  /* ====== GRADIENT DEFINITIONS ====== */
+  --gradient-primary: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+  --gradient-secondary: linear-gradient(135deg, var(--bright-orange) 0%, var(--coral-red) 100%);
+  --gradient-success: linear-gradient(135deg, var(--success) 0%, #5cbf60 100%);
+  --gradient-warning: linear-gradient(135deg, var(--warning) 0%, #ffb74d 100%);
+  --gradient-error: linear-gradient(135deg, var(--error) 0%, #ef5350 100%);
+  --gradient-info: linear-gradient(135deg, var(--info) 0%, #42a5f5 100%);
+
+  /* ====== FOCUS COLORS ====== */
+  --focus-ring: rgba(114, 27, 153, 0.3);
+  --focus-ring-success: rgba(67, 160, 71, 0.3);
+  --focus-ring-warning: rgba(255, 152, 0, 0.3);
+  --focus-ring-error: rgba(211, 47, 47, 0.3);
+  --focus-ring-info: rgba(25, 118, 210, 0.3);
+
+  /* ====== BUTTON COLORS ====== */
+
+  /* Primary Button */
+  --btn-primary: var(--primary);
+  --btn-primary-hover: var(--primary-hover);
+  --btn-primary-active: #4a0f66;
+  --btn-primary-disabled: var(--primary-light);
+  --btn-primary-text: var(--text-white);
+
+  /* Secondary Button */
+  --btn-secondary: var(--secondary);
+  --btn-secondary-hover: var(--secondary-hover);
+  --btn-secondary-active: #d41bb8;
+  --btn-secondary-disabled: var(--secondary-light);
+  --btn-secondary-text: var(--text-white);
+
+  /* Success Button */
+  --btn-success: var(--success);
+  --btn-success-hover: var(--success-hover);
+  --btn-success-active: #2e7d32;
+  --btn-success-disabled: var(--success-light);
+  --btn-success-text: var(--text-white);
+
+  /* Warning Button */
+  --btn-warning: var(--warning);
+  --btn-warning-hover: var(--warning-hover);
+  --btn-warning-active: #e65100;
+  --btn-warning-disabled: var(--warning-light);
+  --btn-warning-text: var(--text-white);
+
+  /* Error/Danger Button */
+  --btn-danger: var(--error);
+  --btn-danger-hover: var(--error-hover);
+  --btn-danger-active: #b71c1c;
+  --btn-danger-disabled: var(--error-light);
+  --btn-danger-text: var(--text-white);
+
+  /* Info Button */
+  --btn-info: var(--info);
+  --btn-info-hover: var(--info-hover);
+  --btn-info-active: #0d47a1;
+  --btn-info-disabled: var(--info-light);
+  --btn-info-text: var(--text-white);
+
+  /* Export Button */
+  --btn-export: var(--sky-blue);
+  --btn-export-hover: #0288d1;
+  --btn-export-active: #0277bd;
+  --btn-export-disabled: #b3e5fc;
+  --btn-export-text: var(--text-white);
+
+  /* Outline Button Variants */
+  --btn-outline-primary: transparent;
+  --btn-outline-primary-border: var(--primary);
+  --btn-outline-primary-text: var(--primary);
+  --btn-outline-primary-hover: var(--primary);
+  --btn-outline-primary-hover-text: var(--text-white);
+
+  /* ====== STATUS & CATEGORY COLORS ====== */
+  --status-success: var(--success);
+  --status-error: var(--error);
+  --status-warning: var(--warning);
+  --status-info: var(--info);
+  --status-pending: #6c757d;
+  --status-draft: var(--gray-400);
+
+  --category-green: var(--fresh-green);
+  --category-orange: var(--bright-orange);
+  --category-red: var(--coral-red);
+  --category-blue: var(--sky-blue);
+  --category-purple: var(--deep-purple);
+  --category-pink: var(--vibrant-pink);
+
+  /* ====== SHADOWS ====== */
+  --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+
+  /* ====== BORDER RADIUS ====== */
+  --radius-none: 0;
+  --radius-xs: 0.125rem;  /* 2px */
+  --radius-sm: 0.25rem;   /* 4px */
+  --radius-md: 0.5rem;    /* 8px */
+  --radius-lg: 0.75rem;   /* 12px */
+  --radius-xl: 1rem;      /* 16px */
+  --radius-2xl: 1.5rem;   /* 24px */
+  --radius-full: 9999px;
+
+  /* ====== TRANSITIONS ====== */
+  --transition-fast: 150ms ease-in-out;
+  --transition-normal: 300ms ease-in-out;
+  --transition-slow: 500ms ease-in-out;
+
+  /* ====== Z-INDEX SCALE ====== */
+  --z-behind: -1;
+  --z-auto: auto;
+  --z-base: 0;
+  --z-docked: 10;
+  --z-dropdown: 1000;
+  --z-sticky: 1020;
+  --z-banner: 1030;
+  --z-overlay: 1040;
+  --z-modal: 1050;
+  --z-popover: 1060;
+  --z-skiplink: 1070;
+  --z-toast: 1080;
+  --z-tooltip: 1090;
+
+  /* ====== SPACING SYSTEM ====== */
+  --space-px: 1px;
+  --space-0: 0;
+  --space-1: 0.25rem;    /* 4px */
+  --space-2: 0.5rem;     /* 8px */
+  --space-3: 0.75rem;    /* 12px */
+  --space-4: 1rem;       /* 16px */
+  --space-5: 1.25rem;    /* 20px */
+  --space-6: 1.5rem;     /* 24px */
+  --space-8: 2rem;       /* 32px */
+  --space-10: 2.5rem;    /* 40px */
+  --space-12: 3rem;      /* 48px */
+  --space-16: 4rem;      /* 64px */
+  --space-20: 5rem;      /* 80px */
+  --space-24: 6rem;      /* 96px */
+}

@@ -1,0 +1,557 @@
+
+   :root {
+    /* ====== DESIGN TOKENS ====== */
+    /* Note: Colors are now imported from colors.css */
+    /* This file only contains button-specific design tokens */
+
+    /* Border Radius */
+    --radius-sm: 0.25rem;
+    --radius-md: 0.375rem;
+    --radius-lg: 0.5rem;
+    --radius-full: 50%;
+
+    /* Font Weights */
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+
+    /* Shadows */
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+
+    /* Focus Ring */
+    --focus-ring: 0 0 0 3px rgba(59, 130, 246, 0.5);
+
+    /* ====== BUTTON COLOR MAPPINGS ====== */
+    /* These map to the standardized colors from colors.css */
+
+    /* Primary Button Colors */
+    --color-primary: var(--btn-primary);
+    --color-primary-hover: var(--btn-primary-hover);
+    --color-primary-active: var(--btn-primary-active);
+    --color-primary-disabled: var(--btn-primary-disabled);
+
+    /* Secondary Button Colors */
+    --color-secondary: var(--btn-secondary);
+    --color-secondary-hover: var(--btn-secondary-hover);
+    --color-secondary-active: var(--btn-secondary-active);
+    --color-secondary-disabled: var(--btn-secondary-disabled);
+
+    /* Success Button Colors */
+    --color-success: var(--btn-success);
+    --color-success-hover: var(--btn-success-hover);
+    --color-success-active: var(--btn-success-active);
+    --color-success-disabled: var(--btn-success-disabled);
+
+    /* Export Button Colors */
+    --color-export: var(--btn-export);
+    --color-export-hover: var(--btn-export-hover);
+    --color-export-active: var(--btn-export-active);
+    --color-export-disabled: var(--btn-export-disabled);
+
+    /* Warning Button Colors */
+    --color-warning: var(--btn-warning);
+    --color-warning-hover: var(--btn-warning-hover);
+    --color-warning-active: var(--btn-warning-active);
+    --color-warning-disabled: var(--btn-warning-disabled);
+
+    /* Danger Button Colors */
+    --color-danger: var(--btn-danger);
+    --color-danger-hover: var(--btn-danger-hover);
+    --color-danger-active: var(--btn-danger-active);
+    --color-danger-disabled: var(--btn-danger-disabled);
+
+    /* Info Button Colors */
+    --color-info: var(--btn-info);
+    --color-info-hover: var(--btn-info-hover);
+    --color-info-active: var(--btn-info-active);
+    --color-info-disabled: var(--btn-info-disabled);
+
+    /* Text Colors */
+    --color-text-light: var(--btn-text-light);
+    --color-text-dark: var(--btn-text-dark);
+
+    /* ====== LEGACY V2 COLORS (for backward compatibility) ====== */
+    /* These are kept for any existing components that might reference them */
+
+    /* Primary v2 */
+    --v2-primary: var(--primary-light);
+    --v2-primary-hover: var(--primary);
+    --v2-primary-active: var(--primary-hover);
+    --v2-primary-disabled: var(--primary-light);
+
+    /* Secondary v2 */
+    --v2-secondary: var(--secondary);
+    --v2-secondary-hover: var(--secondary-hover);
+    --v2-secondary-active: var(--secondary-active);
+    --v2-secondary-disabled: var(--secondary-light);
+
+    /* Success v2 */
+    --v2-success: var(--accent);
+    --v2-success-hover: var(--accent-hover);
+    --v2-success-active: var(--accent-hover);
+    --v2-success-disabled: var(--accent-light);
+
+    /* Warning v2 */
+    --v2-warning: var(--warning);
+    --v2-warning-hover: var(--warning-hover);
+    --v2-warning-active: var(--warning-hover);
+    --v2-warning-disabled: var(--warning-light);
+
+    /* Info v2 */
+    --v2-info: var(--info);
+    --v2-info-hover: var(--info-hover);
+    --v2-info-active: var(--info-hover);
+    --v2-info-disabled: var(--info-light);
+
+    /* Text helpers v2 */
+    --v2-text-dark: var(--text-primary);
+    --v2-text-light: var(--text-white);
+  }
+
+  /* =====================================================
+     BASE PRIMENG BUTTON STYLES
+     ===================================================== */
+
+  .p-button {
+    border: 0 !important;
+    border-radius: var(--radius-md);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: 0.2px;
+    transition: transform 0.06s ease, box-shadow 0.2s ease, background-color 0.15s ease, color 0.15s ease;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .p-button:not(.p-disabled):hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .p-button:not(.p-disabled):active {
+    transform: translateY(0);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .p-button:focus-visible {
+    outline: none;
+    box-shadow: var(--shadow-md), var(--focus-ring) !important;
+  }
+
+  .p-button.p-disabled,
+  .p-button:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+
+  /* =====================================================
+     BUTTON SEVERITIES - FILLED STYLES
+     ===================================================== */
+
+  /* Primary */
+  .p-button.btn-primary {
+    background: var(--color-primary) !important;
+    color: var(--color-text-light) !important;
+  }
+
+  .p-button.btn-primary:not(.p-disabled):hover {
+    background: var(--color-primary-hover) !important;
+  }
+
+  .p-button.btn-primary:not(.p-disabled):active {
+    background: var(--color-primary-active) !important;
+  }
+
+  .p-button.btn-primary.p-disabled,
+  .p-button.btn-primary:disabled {
+    background: var(--color-primary-disabled) !important;
+  }
+
+  /* Secondary */
+  .p-button.btn-secondary {
+    background: var(--color-secondary) !important;
+    color: var(--color-text-light) !important;
+  }
+
+  .p-button.btn-secondary:not(.p-disabled):hover {
+    background: var(--color-secondary-hover) !important;
+  }
+
+  .p-button.btn-secondary:not(.p-disabled):active {
+    background: var(--color-secondary-active) !important;
+  }
+
+  .p-button.btn-secondary.p-disabled,
+  .p-button.btn-secondary:disabled {
+    background: var(--color-secondary-disabled) !important;
+  }
+
+  /* Success */
+  .p-button.btn-success {
+    background: var(--color-success) !important;
+    color: var(--color-text-dark) !important;
+  }
+
+  .p-button.btn-success:not(.p-disabled):hover {
+    background: var(--color-success-hover) !important;
+  }
+
+  .p-button.btn-success:not(.p-disabled):active {
+    background: var(--color-success-active) !important;
+  }
+
+  .p-button.btn-success.p-disabled,
+  .p-button.btn-success:disabled {
+    background: var(--color-success-disabled) !important;
+  }
+
+  /* Export */
+  .p-button.btn-export {
+    background: var(--color-export) !important;
+    color: var(--color-text-light) !important;
+  }
+
+  .p-button.btn-export:not(.p-disabled):hover {
+    background: var(--color-export-hover) !important;
+  }
+
+  .p-button.btn-export:not(.p-disabled):active {
+    background: var(--color-export-active) !important;
+  }
+
+  .p-button.btn-export.p-disabled,
+  .p-button.btn-export:disabled {
+    background: var(--color-export-disabled) !important;
+  }
+
+  /* Warning */
+  .p-button.btn-warning {
+    background: var(--color-warning) !important;
+    color: #1a1a1a !important;
+  }
+
+  .p-button.btn-warning:not(.p-disabled):hover {
+    background: var(--color-warning-hover) !important;
+  }
+
+  .p-button.btn-warning:not(.p-disabled):active {
+    background: var(--color-warning-active) !important;
+  }
+
+  .p-button.btn-warning.p-disabled,
+  .p-button.btn-warning:disabled {
+    background: var(--color-warning-disabled) !important;
+  }
+
+  /* Danger */
+  .p-button.btn-danger {
+    background: var(--color-danger) !important;
+    color: var(--color-text-light) !important;
+  }
+
+  .p-button.btn-danger:not(.p-disabled):hover {
+    background: var(--color-danger-hover) !important;
+  }
+
+  .p-button.btn-danger:not(.p-disabled):active {
+    background: var(--color-danger-active) !important;
+  }
+
+  .p-button.btn-danger.p-disabled,
+  .p-button.btn-danger:disabled {
+    background: var(--color-danger-disabled) !important;
+  }
+
+  /* Info */
+  .p-button.btn-info {
+    background: var(--color-info) !important;
+    color: var(--color-text-light) !important;
+  }
+
+  .p-button.btn-info:not(.p-disabled):hover {
+    background: var(--color-info-hover) !important;
+  }
+
+  .p-button.btn-info:not(.p-disabled):active {
+    background: var(--color-info-active) !important;
+  }
+
+  .p-button.btn-info.p-disabled,
+  .p-button.btn-info:disabled {
+    background: var(--color-info-disabled) !important;
+  }
+
+  /* =====================================================
+     BUTTON VARIANTS - OUTLINED, TEXT, GHOST
+     ===================================================== */
+
+  /* Outlined Base */
+  .p-button.btn-outlined {
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+
+  /* Outlined by Severity */
+  .p-button.btn-primary.btn-outlined {
+    color: var(--color-primary) !important;
+    border: 2px solid var(--color-primary) !important;
+  }
+
+  .p-button.btn-secondary.btn-outlined {
+    color: var(--color-secondary) !important;
+    border: 2px solid var(--color-secondary) !important;
+  }
+
+  .p-button.btn-success.btn-outlined {
+    color: var(--color-success) !important;
+    border: 2px solid var(--color-success) !important;
+  }
+
+  .p-button.btn-export.btn-outlined {
+    color: var(--color-export) !important;
+    border: 2px solid var(--color-export) !important;
+  }
+
+  .p-button.btn-warning.btn-outlined {
+    color: var(--color-warning) !important;
+    border: 2px solid var(--color-warning) !important;
+  }
+
+  .p-button.btn-danger.btn-outlined {
+    color: var(--color-danger) !important;
+    border: 2px solid var(--color-danger) !important;
+  }
+
+  .p-button.btn-info.btn-outlined {
+    color: var(--color-info) !important;
+    border: 2px solid var(--color-info) !important;
+  }
+
+  /* Text Variant */
+  .p-button.btn-text {
+    background: transparent !important;
+    color: var(--color-secondary) !important;
+    box-shadow: none !important;
+  }
+
+  .p-button.btn-text:not(.p-disabled):hover {
+    background: rgba(63, 140, 249, 0.08) !important;
+  }
+
+  /* Ghost Variant */
+  .p-button.btn-ghost {
+    background: rgba(8, 40, 83, 0.08) !important;
+    color: var(--color-primary) !important;
+  }
+
+  .p-button.btn-ghost:not(.p-disabled):hover {
+    background: rgba(8, 40, 83, 0.12) !important;
+  }
+
+  /* =====================================================
+     BUTTON SIZES
+     ===================================================== */
+
+  .p-button.btn-sm {
+    padding: 0.35rem 0.7rem !important;
+    font-size: 0.8rem !important;
+  }
+
+  .p-button.btn-md {
+    padding: 0.55rem 1rem !important;
+    font-size: 0.95rem !important;
+  }
+
+  .p-button.btn-lg {
+    padding: 0.8rem 1.25rem !important;
+    font-size: 1.05rem !important;
+  }
+
+  /* Icon Only Buttons */
+  .p-button.p-button-icon-only.btn-sm {
+    width: 2rem !important;
+    height: 2rem !important;
+    border-radius: var(--radius-full) !important;
+  }
+
+  .p-button.p-button-icon-only.btn-md {
+    width: 2.25rem !important;
+    height: 2.25rem !important;
+    border-radius: var(--radius-full) !important;
+  }
+
+  .p-button.p-button-icon-only.btn-lg {
+    width: 2.75rem !important;
+    height: 2.75rem !important;
+    border-radius: var(--radius-full) !important;
+  }
+
+  /* =====================================================
+     VERSION 2 STYLES (.btn-v2 modifier)
+     ===================================================== */
+
+  /* Primary v2 */
+  .p-button.btn-primary.btn-v2 {
+    background: var(--v2-primary) !important;
+    color: var(--v2-text-dark) !important;
+  }
+
+  .p-button.btn-primary.btn-v2:not(.p-disabled):hover {
+    background: var(--v2-primary-hover) !important;
+    color: var(--v2-text-dark) !important;
+  }
+
+  .p-button.btn-primary.btn-v2:not(.p-disabled):active {
+    background: var(--v2-primary-active) !important;
+    color: var(--v2-text-light) !important;
+  }
+
+  .p-button.btn-primary.btn-v2.p-disabled,
+  .p-button.btn-primary.btn-v2:disabled {
+    background: var(--v2-primary-disabled) !important;
+    color: var(--v2-text-light) !important;
+  }
+
+  /* Secondary v2 */
+  .p-button.btn-secondary.btn-v2 {
+    background: var(--v2-secondary) !important;
+    color: var(--v2-text-light) !important;
+  }
+
+  .p-button.btn-secondary.btn-v2:not(.p-disabled):hover {
+    background: var(--v2-secondary-hover) !important;
+  }
+
+  .p-button.btn-secondary.btn-v2:not(.p-disabled):active {
+    background: var(--v2-secondary-active) !important;
+  }
+
+  .p-button.btn-secondary.btn-v2.p-disabled,
+  .p-button.btn-secondary.btn-v2:disabled {
+    background: var(--v2-secondary-disabled) !important;
+  }
+
+  /* Success v2 */
+  .p-button.btn-success.btn-v2 {
+    background: var(--v2-success) !important;
+    color: var(--v2-text-dark) !important;
+  }
+
+  .p-button.btn-success.btn-v2:not(.p-disabled):hover {
+    background: var(--v2-success-hover) !important;
+    color: var(--v2-text-light) !important;
+  }
+
+  .p-button.btn-success.btn-v2:not(.p-disabled):active {
+    background: var(--v2-success-active) !important;
+    color: var(--v2-text-light) !important;
+  }
+
+  .p-button.btn-success.btn-v2.p-disabled,
+  .p-button.btn-success.btn-v2:disabled {
+    background: var(--v2-success-disabled) !important;
+    color: var(--v2-text-light) !important;
+  }
+
+  /* Warning v2 */
+  .p-button.btn-warning.btn-v2 {
+    background: var(--v2-warning) !important;
+    color: #1a1a1a !important;
+  }
+
+  .p-button.btn-warning.btn-v2:not(.p-disabled):hover {
+    background: var(--v2-warning-hover) !important;
+  }
+
+  .p-button.btn-warning.btn-v2:not(.p-disabled):active {
+    background: var(--v2-warning-active) !important;
+    color: #1a1a1a !important;
+  }
+
+  .p-button.btn-warning.btn-v2.p-disabled,
+  .p-button.btn-warning.btn-v2:disabled {
+    background: var(--v2-warning-disabled) !important;
+    color: var(--v2-text-light) !important;
+  }
+
+  /* Info v2 */
+  .p-button.btn-info.btn-v2 {
+    background: var(--v2-info) !important;
+    color: var(--v2-text-light) !important;
+  }
+
+  .p-button.btn-info.btn-v2:not(.p-disabled):hover {
+    background: var(--v2-info-hover) !important;
+  }
+
+  .p-button.btn-info.btn-v2:not(.p-disabled):active {
+    background: var(--v2-info-active) !important;
+  }
+
+  .p-button.btn-info.btn-v2.p-disabled,
+  .p-button.btn-info.btn-v2:disabled {
+    background: var(--v2-info-disabled) !important;
+  }
+
+  /* =====================================================
+     VERSION 2 VARIANTS
+     ===================================================== */
+
+  /* Outlined v2 */
+  .p-button.btn-outlined.btn-v2 {
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+
+  .p-button.btn-primary.btn-outlined.btn-v2 {
+    color: var(--v2-primary-active) !important;
+    border: 2px solid var(--v2-primary-active) !important;
+  }
+
+  .p-button.btn-secondary.btn-outlined.btn-v2 {
+    color: var(--v2-secondary) !important;
+    border: 2px solid var(--v2-secondary) !important;
+  }
+
+  .p-button.btn-success.btn-outlined.btn-v2 {
+    color: var(--v2-success-hover) !important;
+    border: 2px solid var(--v2-success-hover) !important;
+  }
+
+  .p-button.btn-export.btn-outlined.btn-v2 {
+    color: var(--v2-success-active) !important;
+    border: 2px solid var(--v2-success-active) !important;
+  }
+
+  .p-button.btn-warning.btn-outlined.btn-v2 {
+    color: var(--v2-warning) !important;
+    border: 2px solid var(--v2-warning) !important;
+  }
+
+  .p-button.btn-info.btn-outlined.btn-v2 {
+    color: var(--v2-info) !important;
+    border: 2px solid var(--v2-info) !important;
+  }
+
+  /* Text v2 */
+  .p-button.btn-text.btn-v2 {
+    background: transparent !important;
+    color: var(--v2-secondary) !important;
+    box-shadow: none !important;
+  }
+
+  .p-button.btn-text.btn-v2:not(.p-disabled):hover {
+    background: rgba(58, 114, 224, 0.08) !important;
+  }
+
+  /* Ghost v2 */
+  .p-button.btn-ghost.btn-v2 {
+    background: rgba(237, 244, 255, 0.6) !important;
+    color: var(--v2-primary-active) !important;
+  }
+
+  .p-button.btn-ghost.btn-v2:not(.p-disabled):hover {
+    background: rgba(237, 244, 255, 0.85) !important;
+  }

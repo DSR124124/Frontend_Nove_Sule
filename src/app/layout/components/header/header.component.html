@@ -1,0 +1,119 @@
+<header class="header" [class.sidebar-collapsed]="isSidebarCollapsed">
+  <!-- Left Section -->
+  <div class="header-left">
+    <!-- Sidebar Toggle -->
+    <button class="sidebar-toggle" (click)="toggleSidebar()" [attr.aria-label]="isSidebarCollapsed ? 'Expandir sidebar' : 'Colapsar sidebar'">
+      <i class="pi" [class.pi-bars]="isSidebarCollapsed" [class.pi-times]="!isSidebarCollapsed"></i>
+    </button>
+
+    <!-- Breadcrumb -->
+    <app-breadcrumb></app-breadcrumb>
+  </div>
+
+  <!-- Center Section -->
+  <div class="header-center">
+    <!-- Search Bar -->
+    <div class="search-container">
+      <div class="search-input">
+        <i class="pi pi-search search-icon"></i>
+        <input type="text" placeholder="Buscar productos, clientes, ventas..." class="search-field">
+        <button class="search-btn">
+          <i class="pi pi-search"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right Section -->
+  <div class="header-right">
+    <!-- Time Display -->
+    <div class="time-display">
+      <div class="current-time">{{ getFormattedTime() }}</div>
+      <div class="current-date">{{ getFormattedDate() }}</div>
+    </div>
+
+    <!-- Notifications -->
+    <div class="notifications-container">
+      <button class="notification-btn" [class.has-unread]="unreadNotifications > 0">
+        <i class="pi pi-bell"></i>
+        <span class="notification-badge" *ngIf="unreadNotifications > 0">{{ unreadNotifications }}</span>
+      </button>
+
+      <!-- Notifications Dropdown -->
+      <div class="notifications-dropdown">
+        <div class="notifications-header">
+          <h3>Notificaciones</h3>
+          <button class="mark-all-read" (click)="markAllAsRead()" *ngIf="unreadNotifications > 0">
+            Marcar todas como leídas
+          </button>
+        </div>
+        <div class="notifications-list">
+          <div *ngFor="let notification of notifications"
+               class="notification-item"
+               [class.unread]="!notification.read"
+               (click)="markNotificationAsRead(notification.id)">
+            <div class="notification-icon" [class]="'icon-' + notification.type">
+              <i class="pi" [class.pi-check-circle]="notification.type === 'success'"
+                        [class.pi-exclamation-triangle]="notification.type === 'warning'"
+                        [class.pi-info-circle]="notification.type === 'info'"></i>
+            </div>
+            <div class="notification-content">
+              <div class="notification-title">{{ notification.title }}</div>
+              <div class="notification-message">{{ notification.message }}</div>
+              <div class="notification-time">{{ notification.time }}</div>
+            </div>
+          </div>
+        </div>
+        <div class="notifications-footer">
+          <a href="#" class="view-all">Ver todas las notificaciones</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- User Menu -->
+    <div class="user-menu">
+      <div class="user-avatar">
+        <i class="pi pi-user"></i>
+      </div>
+      <div class="user-info">
+        <div class="user-name">Usuario Admin</div>
+        <div class="user-role">Administrador</div>
+      </div>
+      <button class="user-menu-toggle">
+        <i class="pi pi-angle-down"></i>
+      </button>
+
+      <!-- User Dropdown -->
+      <div class="user-dropdown">
+        <div class="user-dropdown-header">
+          <div class="user-avatar-large">
+            <i class="pi pi-user"></i>
+          </div>
+          <div class="user-details">
+            <div class="user-name">Usuario Admin</div>
+            <div class="user-email">admin&#64;novasule.com</div>
+          </div>
+        </div>
+        <div class="user-dropdown-menu">
+          <a href="#" class="dropdown-item">
+            <i class="pi pi-user"></i>
+            <span>Mi Perfil</span>
+          </a>
+          <a href="#" class="dropdown-item">
+            <i class="pi pi-cog"></i>
+            <span>Configuración</span>
+          </a>
+          <a href="#" class="dropdown-item">
+            <i class="pi pi-question-circle"></i>
+            <span>Ayuda</span>
+          </a>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item logout">
+            <i class="pi pi-sign-out"></i>
+            <span>Cerrar Sesión</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>

@@ -1,0 +1,46 @@
+<div class="sidebar" [class.collapsed]="isCollapsed">
+  <!-- Sidebar Header -->
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-icon">
+        <i class="pi pi-shopping-cart icon-lg text-white"></i>
+      </div>
+      <div class="brand-text" *ngIf="!isCollapsed">
+        <h2 class="text-brand text-white">Nova Sule</h2>
+        <p class="text-caption text-white">Sistema de Gestión</p>
+      </div>
+    </div>
+    <button class="toggle-btn" (click)="toggleSidebar()" [attr.aria-label]="isCollapsed ? 'Expandir sidebar' : 'Colapsar sidebar'">
+      <i class="pi" [class.pi-angle-left]="!isCollapsed" [class.pi-angle-right]="isCollapsed"></i>
+    </button>
+  </div>
+
+  <!-- Sidebar Navigation -->
+  <nav class="sidebar-nav">
+    <div class="nav-section">
+      <div class="nav-items">
+        <app-sidebar-item
+          *ngFor="let item of menuItems"
+          [item]="item"
+          [isCollapsed]="isCollapsed"
+          [level]="0"
+          (itemClick)="onItemClick($event)"
+          (toggleExpanded)="onToggleExpanded($event)">
+        </app-sidebar-item>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Sidebar Footer -->
+  <div class="sidebar-footer" *ngIf="!isCollapsed">
+    <div class="user-info">
+      <div class="user-avatar">
+        <i class="pi pi-user icon-md"></i>
+      </div>
+      <div class="user-details">
+        <p class="user-name">Usuario Admin</p>
+        <p class="user-role">Administrador</p>
+      </div>
+    </div>
+  </div>
+</div>

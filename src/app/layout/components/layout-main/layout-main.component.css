@@ -1,0 +1,138 @@
+/* ===========================================
+   LAYOUT MAIN COMPONENT STYLES
+   =========================================== */
+
+.layout-main {
+  min-height: 100vh;
+  background: var(--bg-secondary);
+  transition: all var(--transition-normal);
+}
+
+/* Main Content */
+.main-content {
+  margin-left: 280px;
+  margin-top: 80px;
+  margin-bottom: 100px;
+  min-height: calc(100vh - 180px);
+  transition: margin-left var(--transition-normal);
+  background: var(--bg-secondary);
+}
+
+.layout-main.sidebar-collapsed .main-content {
+  margin-left: 80px;
+}
+
+.content-wrapper {
+  padding: var(--space-6);
+  min-height: 100%;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .main-content {
+    margin-left: 260px;
+  }
+
+  .layout-main.sidebar-collapsed .main-content {
+    margin-left: 70px;
+  }
+
+  .content-wrapper {
+    padding: var(--space-4);
+  }
+}
+
+@media (max-width: 768px) {
+  .main-content {
+    margin-left: 0;
+    margin-top: 80px;
+  }
+
+  .layout-main.sidebar-collapsed .main-content {
+    margin-left: 0;
+  }
+
+  .content-wrapper {
+    padding: var(--space-4);
+  }
+}
+
+@media (max-width: 480px) {
+  .content-wrapper {
+    padding: var(--space-3);
+  }
+}
+
+/* Content Area Styling */
+.content-wrapper {
+  background: var(--bg-primary);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-light);
+}
+
+/* Loading States */
+.layout-main.loading .main-content {
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+/* Animation for content transitions */
+.content-wrapper {
+  animation: fadeInUp var(--transition-normal) ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Scrollbar Styling */
+.main-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.main-content::-webkit-scrollbar-track {
+  background: var(--surface-100);
+  border-radius: var(--radius-sm);
+}
+
+.main-content::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: var(--radius-sm);
+}
+
+.main-content::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-hover);
+}
+
+/* Focus Management */
+.layout-main:focus-within {
+  outline: none;
+}
+
+/* Print Styles */
+@media print {
+  .layout-main {
+    background: white;
+  }
+
+  .main-content {
+    margin: 0;
+    box-shadow: none;
+    border: none;
+  }
+
+  .content-wrapper {
+    padding: 0;
+    box-shadow: none;
+    border: none;
+    border-radius: 0;
+  }
+}
