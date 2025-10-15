@@ -47,8 +47,4 @@ export class SidebarComponent implements OnInit, OnDestroy {
   onToggleExpanded(itemId: string): void {
     this.sidebarService.toggleMenuItemExpanded(itemId);
   }
-
-  toggleSidebar(): void {
-    this.sidebarService.toggleSidebar();
-  }
 }

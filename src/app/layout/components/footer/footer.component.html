@@ -1,70 +1,10 @@
 <footer class="footer" [class.sidebar-collapsed]="isSidebarCollapsed">
   <div class="footer-content">
-    <!-- Left Section -->
     <div class="footer-left">
-      <div class="footer-brand">
-        <div class="brand-icon">
-          <i class="pi pi-shopping-cart"></i>
-        </div>
-        <div class="brand-text">
-          <span class="brand-name">Nova Sule</span>
-          <span class="brand-tagline">Sistema de Gestión</span>
-        </div>
-      </div>
+      <span class="copyright">&copy; {{ currentYear }} Nova Sule. Todos los derechos reservados.</span>
     </div>
-
-    <!-- Center Section -->
-    <div class="footer-center">
-      <div class="footer-info">
-        <div class="info-item">
-          <i class="pi pi-clock"></i>
-          <span>Última actualización: {{ lastUpdateDate }}</span>
-        </div>
-        <div class="info-item">
-          <i class="pi pi-shield"></i>
-          <span>Sistema seguro y confiable</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Right Section -->
     <div class="footer-right">
-      <div class="footer-links">
-        <a href="#" class="footer-link">
-          <i class="pi pi-question-circle"></i>
-          <span>Ayuda</span>
-        </a>
-        <a href="#" class="footer-link">
-          <i class="pi pi-cog"></i>
-          <span>Configuración</span>
-        </a>
-        <a href="#" class="footer-link">
-          <i class="pi pi-info-circle"></i>
-          <span>Acerca de</span>
-        </a>
-      </div>
-      <div class="footer-version">
-        <span class="version-text">v{{ version }}</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- Footer Bottom -->
-  <div class="footer-bottom">
-    <div class="footer-bottom-content">
-      <div class="copyright">
-        <span>&copy; {{ currentYear }} Nova Sule. Todos los derechos reservados.</span>
-      </div>
-      <div class="footer-stats">
-        <div class="stat-item">
-          <i class="pi pi-users"></i>
-          <span>Usuarios activos: 15</span>
-        </div>
-        <div class="stat-item">
-          <i class="pi pi-chart-line"></i>
-          <span>Ventas hoy: S/ 2,450.00</span>
-        </div>
-      </div>
+      <span class="version">v{{ version }}</span>
     </div>
   </div>
 </footer>
