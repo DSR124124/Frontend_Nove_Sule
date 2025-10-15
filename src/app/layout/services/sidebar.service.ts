@@ -21,7 +21,7 @@ export class SidebarService {
       label: 'Catálogo',
       icon: 'pi pi-box',
       items: [
-        { label: 'Productos', icon: 'pi pi-shopping-bag', routerLink: '/catalogo/productos' },
+        { label: 'Productos', icon: 'pi pi-shopping-bag', routerLink: '/catalogo/productos/listado' },
         { label: 'Categorías', icon: 'pi pi-tags', routerLink: '/catalogo/categorias' },
         { label: 'Marcas', icon: 'pi pi-tag', routerLink: '/catalogo/marcas' },
         { label: 'Proveedores', icon: 'pi pi-truck', routerLink: '/catalogo/proveedores' }

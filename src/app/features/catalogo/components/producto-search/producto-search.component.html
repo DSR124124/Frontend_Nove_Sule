@@ -1,0 +1,88 @@
+<div class="search-container">
+  <div class="search-form">
+    <!-- Búsqueda por texto -->
+    <div class="form-group">
+      <label for="texto">Buscar por texto:</label>
+      <input
+        type="text"
+        id="texto"
+        [(ngModel)]="busqueda.texto"
+        placeholder="Nombre o descripción del producto"
+        class="form-control">
+    </div>
+
+    <!-- Rango de precios -->
+    <div class="form-row">
+      <div class="form-group">
+        <label for="precioMin">Precio mínimo:</label>
+        <input
+          type="number"
+          id="precioMin"
+          [(ngModel)]="busqueda.precioMin"
+          placeholder="0.00"
+          class="form-control"
+          step="0.01">
+      </div>
+      <div class="form-group">
+        <label for="precioMax">Precio máximo:</label>
+        <input
+          type="number"
+          id="precioMax"
+          [(ngModel)]="busqueda.precioMax"
+          placeholder="999.99"
+          class="form-control"
+          step="0.01">
+      </div>
+    </div>
+
+    <!-- Filtros por categoría, marca y proveedor -->
+    <div class="form-row">
+      <div class="form-group">
+        <label for="categoriaId">Categoría:</label>
+        <select
+          id="categoriaId"
+          [(ngModel)]="busqueda.categoriaId"
+          class="form-control">
+          <option value="">Todas las categorías</option>
+          <!-- Las opciones se cargarán dinámicamente -->
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="marcaId">Marca:</label>
+        <select
+          id="marcaId"
+          [(ngModel)]="busqueda.marcaId"
+          class="form-control">
+          <option value="">Todas las marcas</option>
+          <!-- Las opciones se cargarán dinámicamente -->
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="proveedorId">Proveedor:</label>
+        <select
+          id="proveedorId"
+          [(ngModel)]="busqueda.proveedorId"
+          class="form-control">
+          <option value="">Todos los proveedores</option>
+          <!-- Las opciones se cargarán dinámicamente -->
+        </select>
+      </div>
+    </div>
+
+    <!-- Botones de acción -->
+    <div class="form-actions">
+      <button
+        type="button"
+        (click)="onSearch()"
+        class="btn btn-primary">
+        <i class="fas fa-search"></i> Buscar
+      </button>
+      <button
+        type="button"
+        (click)="onClear()"
+        class="btn btn-secondary">
+        <i class="fas fa-times"></i> Limpiar
+      </button>
+    </div>
+  </div>
+</div>

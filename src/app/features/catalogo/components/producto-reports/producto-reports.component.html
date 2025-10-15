@@ -1,0 +1,123 @@
+<div class="reports-container">
+  <div class="reports-header">
+    <h2>Reportes de Productos</h2>
+    <div class="reports-actions">
+      <button
+        type="button"
+        (click)="onRefresh()"
+        class="btn btn-outline-primary"
+        [disabled]="loading">
+        <i class="fas fa-sync-alt" [class.fa-spin]="loading"></i> Actualizar
+      </button>
+      <button
+        type="button"
+        (click)="exportarCSV()"
+        class="btn btn-success">
+        <i class="fas fa-download"></i> Exportar CSV
+      </button>
+    </div>
+  </div>
+
+  <div class="error-message" *ngIf="error">
+    <div class="alert alert-danger">
+      <i class="fas fa-exclamation-circle"></i> {{error}}
+    </div>
+  </div>
+
+  <div class="reports-grid">
+    <!-- Productos más vendidos -->
+    <div class="report-card">
+      <div class="report-header">
+        <h3>
+          <i class="fas fa-trophy"></i>
+          Productos Más Vendidos
+        </h3>
+        <span class="badge badge-primary">{{productosMasVendidos.length}}</span>
+      </div>
+
+      <div class="report-content" *ngIf="!loading; else loadingTemplate">
+        <div class="productos-list" *ngIf="productosMasVendidos.length > 0; else noDataTemplate">
+          <div
+            *ngFor="let producto of productosMasVendidos; let i = index"
+            class="producto-item"
+            [class.top-product]="i < 3">
+            <div class="producto-rank">
+              <span class="rank-number">{{i + 1}}</span>
+            </div>
+            <div class="producto-info">
+              <h4>{{producto.nombre}}</h4>
+              <p class="codigo">{{producto.codigo}}</p>
+                <div class="producto-stats">
+                  <div class="stat">
+                    <span class="label">Precio:</span>
+                    <span class="value">S/ {{producto.precio | number:'1.2-2'}}</span>
+                  </div>
+                  <div class="stat">
+                    <span class="label">Stock:</span>
+                    <span class="value">{{producto.stock}}</span>
+                  </div>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Productos con stock bajo -->
+    <div class="report-card">
+      <div class="report-header">
+        <h3>
+          <i class="fas fa-exclamation-triangle"></i>
+          Productos con Stock Bajo
+        </h3>
+        <span class="badge badge-warning">{{productosStockBajo.length}}</span>
+      </div>
+
+      <div class="report-content" *ngIf="!loading">
+        <div class="productos-list" *ngIf="productosStockBajo.length > 0; else noDataTemplate">
+          <div
+            *ngFor="let producto of productosStockBajo"
+            class="producto-item stock-bajo">
+            <div class="producto-info">
+              <h4>{{producto.nombre}}</h4>
+              <p class="codigo">{{producto.codigo}}</p>
+                <div class="producto-stats">
+                  <div class="stat">
+                    <span class="label">Stock Actual:</span>
+                    <span class="value stock-actual">{{producto.stock}}</span>
+                  </div>
+                  <div class="stat">
+                    <span class="label">Stock Mínimo:</span>
+                    <span class="value">{{producto.stockMinimo}}</span>
+                  </div>
+                  <div class="stat">
+                    <span class="label">Faltan:</span>
+                    <span class="value stock-faltante">{{producto.stockMinimo - producto.stock}}</span>
+                  </div>
+                </div>
+            </div>
+            <div class="producto-actions">
+              <button class="btn btn-warning btn-sm">
+                <i class="fas fa-plus"></i> Reponer
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #loadingTemplate>
+    <div class="loading-container">
+      <div class="spinner"></div>
+      <p>Cargando reportes...</p>
+    </div>
+  </ng-template>
+
+  <ng-template #noDataTemplate>
+    <div class="no-data">
+      <i class="fas fa-inbox"></i>
+      <p>No hay datos disponibles</p>
+    </div>
+  </ng-template>
+</div>

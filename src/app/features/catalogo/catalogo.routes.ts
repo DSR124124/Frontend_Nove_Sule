@@ -18,8 +18,32 @@ export const CATALOGO_ROUTES: Routes = [
         loadComponent: () => import('./components/producto-form/producto-form.component').then(m => m.ProductoFormComponent)
       },
       {
+        path: 'listado',
+        loadComponent: () => import('./components/producto-list/producto-list.component').then(m => m.ProductoListComponent)
+      },
+      {
         path: 'editar/:id',
         loadComponent: () => import('./components/producto-form/producto-form.component').then(m => m.ProductoFormComponent)
+      },
+      {
+        path: 'buscar',
+        loadComponent: () => import('./components/producto-search/producto-search.component').then(m => m.ProductoSearchComponent)
+      },
+      {
+        path: 'stock',
+        loadComponent: () => import('./components/producto-stock/producto-stock.component').then(m => m.ProductoStockComponent)
+      },
+      {
+        path: 'reportes',
+        loadComponent: () => import('./components/producto-reports/producto-reports.component').then(m => m.ProductoReportsComponent)
+      },
+      {
+        path: 'mas-vendidos',
+        loadComponent: () => import('./components/producto-reports/producto-reports.component').then(m => m.ProductoReportsComponent)
+      },
+      {
+        path: 'stock-bajo',
+        loadComponent: () => import('./components/producto-stock/producto-stock.component').then(m => m.ProductoStockComponent)
       }
     ]
   },
