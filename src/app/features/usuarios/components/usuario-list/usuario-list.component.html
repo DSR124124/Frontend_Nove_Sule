@@ -1,1 +1,155 @@
-<p>usuario-list works!</p>
+
+    <!-- Filtros -->
+    <p-toolbar>
+      <ng-template pTemplate="left">
+        <div class="filters-grid">
+          <div class="filter-group">
+            <label for="username-filter">Usuario:</label>
+            <input
+              type="text"
+              pInputText
+              id="username-filter"
+              [(ngModel)]="filters.username"
+              placeholder="Buscar por usuario"
+              class="w-full">
+          </div>
+
+          <div class="filter-group">
+            <label for="email-filter">Email:</label>
+            <input
+              type="email"
+              pInputText
+              id="email-filter"
+              [(ngModel)]="filters.email"
+              placeholder="Buscar por email"
+              class="w-full">
+          </div>
+
+          <div class="filter-group">
+            <label for="rol-filter">Rol:</label>
+            <p-select
+              inputId="rol-filter"
+              [(ngModel)]="filters.rol"
+              [options]="roles"
+              placeholder="Todos los roles"
+              [showClear]="true"
+              class="w-full">
+            </p-select>
+          </div>
+
+          <div class="filter-group">
+            <label for="estado-filter">Estado:</label>
+            <p-select
+              inputId="estado-filter"
+              [(ngModel)]="filters.estado"
+              [options]="estados"
+              placeholder="Todos los estados"
+              [showClear]="true"
+              class="w-full">
+            </p-select>
+          </div>
+        </div>
+      </ng-template>
+
+      <ng-template pTemplate="right">
+        <div class="filter-actions">
+          <p-button
+            label="Buscar"
+            icon="pi pi-search icon-sm"
+            (onClick)="onSearch()"
+            styleClass="btn-primary">
+          </p-button>
+          <p-button
+            label="Limpiar"
+            icon="pi pi-times icon-sm"
+            (onClick)="onClearFilters()"
+            styleClass="btn-secondary">
+          </p-button>
+        </div>
+      </ng-template>
+    </p-toolbar>
+
+
+
+
+
+
+
+
+
+  <!-- Tabla de usuarios -->
+  <p-card *ngIf="!isLoading">
+    <p-table
+      [value]="usuarios"
+      [paginator]="true"
+      [rows]="pageSize"
+      [totalRecords]="totalElements"
+      [lazy]="false"
+      [loading]="isLoading"
+      [showCurrentPageReport]="true"
+      currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} usuarios"
+      [rowsPerPageOptions]="[5, 10, 20, 50]"
+      (onPage)="onPageChange($event)"
+      styleClass="p-datatable-sm">
+
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Usuario</th>
+          <th>Nombre Completo</th>
+          <th>Email</th>
+          <th>Rol</th>
+          <th>Estado</th>
+          <th>Fecha Creación</th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-usuario>
+        <tr>
+          <td>
+            <div class="user-info">
+              <i class="pi pi-user icon-sm"></i>
+              <span>{{ usuario.username }}</span>
+            </div>
+          </td>
+          <td>{{ usuario.nombreCompleto }}</td>
+          <td>{{ usuario.email }}</td>
+          <td>
+            <p-tag
+              [value]="usuario.rol"
+              [styleClass]="getRolStyleClass(usuario.rol)">
+            </p-tag>
+          </td>
+          <td>
+            <p-tag
+              [value]="usuario.estado"
+              [styleClass]="getEstadoStyleClass(usuario.estado)">
+            </p-tag>
+          </td>
+          <td>{{ usuario.fechaCreacion | date:'dd/MM/yyyy' }}</td>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="6" class="text-center">
+            <div class="no-data">
+              <i class="pi pi-users icon-2xl"></i>
+              <h3>No se encontraron usuarios</h3>
+              <p>Intenta ajustar los filtros de búsqueda</p>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </p-card>
+
+
+
+  <!-- Loading Spinner -->
+  <app-loading-spinner
+    *ngIf="isLoading"
+    size="large"
+    color="primary"
+    message="Cargando usuarios..."
+    [fullScreen]="true">
+  </app-loading-spinner>

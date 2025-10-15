@@ -4,7 +4,16 @@
     <p>Información de tu cuenta de usuario</p>
   </div>
 
-  <div class="perfil-content" *ngIf="currentUser">
+  <!-- Loading Spinner -->
+  <app-loading-spinner
+    *ngIf="isLoading"
+    size="large"
+    color="primary"
+    message="Cargando perfil..."
+    [fullScreen]="true">
+  </app-loading-spinner>
+
+  <div class="perfil-content" *ngIf="currentUser && !isLoading">
     <div class="perfil-card">
       <div class="perfil-avatar">
         <i class="pi pi-user"></i>

@@ -71,8 +71,15 @@
     --color-info-disabled: var(--btn-info-disabled);
 
     /* Text Colors */
-    --color-text-light: var(--btn-text-light);
-    --color-text-dark: var(--btn-text-dark);
+    --color-text-light: var(--text-white);
+    --color-text-dark: var(--text-primary);
+    --color-text-on-primary: var(--btn-primary-text);
+    --color-text-on-secondary: var(--btn-secondary-text);
+    --color-text-on-success: var(--btn-success-text);
+    --color-text-on-warning: var(--btn-warning-text);
+    --color-text-on-danger: var(--btn-danger-text);
+    --color-text-on-info: var(--btn-info-text);
+    --color-text-on-export: var(--btn-export-text);
 
     /* ====== LEGACY V2 COLORS (for backward compatibility) ====== */
     /* These are kept for any existing components that might reference them */
@@ -154,7 +161,7 @@
   /* Primary */
   .p-button.btn-primary {
     background: var(--color-primary) !important;
-    color: var(--color-text-light) !important;
+    color: var(--color-text-on-primary) !important;
   }
 
   .p-button.btn-primary:not(.p-disabled):hover {
@@ -173,7 +180,7 @@
   /* Secondary */
   .p-button.btn-secondary {
     background: var(--color-secondary) !important;
-    color: var(--color-text-light) !important;
+    color: var(--color-text-on-secondary) !important;
   }
 
   .p-button.btn-secondary:not(.p-disabled):hover {
@@ -192,7 +199,7 @@
   /* Success */
   .p-button.btn-success {
     background: var(--color-success) !important;
-    color: var(--color-text-dark) !important;
+    color: var(--color-text-on-success) !important;
   }
 
   .p-button.btn-success:not(.p-disabled):hover {
@@ -211,7 +218,7 @@
   /* Export */
   .p-button.btn-export {
     background: var(--color-export) !important;
-    color: var(--color-text-light) !important;
+    color: var(--color-text-on-export) !important;
   }
 
   .p-button.btn-export:not(.p-disabled):hover {
@@ -230,7 +237,7 @@
   /* Warning */
   .p-button.btn-warning {
     background: var(--color-warning) !important;
-    color: #1a1a1a !important;
+    color: var(--color-text-on-warning) !important;
   }
 
   .p-button.btn-warning:not(.p-disabled):hover {
@@ -249,7 +256,7 @@
   /* Danger */
   .p-button.btn-danger {
     background: var(--color-danger) !important;
-    color: var(--color-text-light) !important;
+    color: var(--color-text-on-danger) !important;
   }
 
   .p-button.btn-danger:not(.p-disabled):hover {
@@ -268,7 +275,7 @@
   /* Info */
   .p-button.btn-info {
     background: var(--color-info) !important;
-    color: var(--color-text-light) !important;
+    color: var(--color-text-on-info) !important;
   }
 
   .p-button.btn-info:not(.p-disabled):hover {
@@ -333,22 +340,24 @@
   /* Text Variant */
   .p-button.btn-text {
     background: transparent !important;
-    color: var(--color-secondary) !important;
+    color: var(--primary) !important;
     box-shadow: none !important;
   }
 
   .p-button.btn-text:not(.p-disabled):hover {
-    background: rgba(63, 140, 249, 0.08) !important;
+    background: var(--primary-alpha-10) !important;
+    color: var(--primary-hover) !important;
   }
 
   /* Ghost Variant */
   .p-button.btn-ghost {
-    background: rgba(8, 40, 83, 0.08) !important;
-    color: var(--color-primary) !important;
+    background: var(--primary-alpha-10) !important;
+    color: var(--primary) !important;
   }
 
   .p-button.btn-ghost:not(.p-disabled):hover {
-    background: rgba(8, 40, 83, 0.12) !important;
+    background: var(--primary-alpha-20) !important;
+    color: var(--primary-hover) !important;
   }
 
   /* =====================================================

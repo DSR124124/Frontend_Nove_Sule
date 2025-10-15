@@ -79,7 +79,7 @@ export class SidebarService {
       label: 'Usuarios',
       icon: 'pi pi-users',
       items: [
-        { label: 'Gestión de Usuarios', icon: 'pi pi-user-edit', routerLink: '/usuarios/gestion' }
+        { label: 'Gestión de Usuarios', icon: 'pi pi-user-edit', routerLink: '/usuarios/listado' },
       ]
     }
   ];

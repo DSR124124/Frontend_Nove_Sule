@@ -1,0 +1,133 @@
+/* ===========================================
+   USUARIO LIST COMPONENT STYLES
+   =========================================== */
+
+.usuario-list-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: var(--space-6);
+}
+
+/* Header */
+.list-header {
+  text-align: center;
+  padding: var(--space-4);
+}
+
+.list-header h1 {
+  font-size: var(--text-3xl);
+  font-weight: var(--font-bold);
+  color: var(--text-primary);
+  margin-bottom: var(--space-2);
+}
+
+.list-header p {
+  color: var(--text-secondary);
+  font-size: var(--text-lg);
+}
+
+/* Filtros */
+.filters-grid {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.filter-group label {
+  font-weight: var(--font-semibold);
+  color: var(--text-primary);
+  font-size: var(--text-sm);
+  margin-bottom: var(--space-1);
+}
+
+.filter-actions {
+  display: flex;
+  gap: var(--space-3);
+  align-items: center;
+  margin-left: var(--space-4);
+}
+
+/* User Info */
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.user-info i {
+  color: var(--primary);
+  font-size: var(--text-base);
+}
+
+/* No data */
+.no-data {
+  text-align: center;
+  padding: var(--space-12) var(--space-6);
+  color: var(--text-secondary);
+}
+
+.no-data i {
+  font-size: var(--text-4xl);
+  color: var(--text-tertiary);
+  margin-bottom: var(--space-4);
+}
+
+.no-data h3 {
+  font-size: var(--text-xl);
+  font-weight: var(--font-semibold);
+  margin-bottom: var(--space-2);
+  color: var(--text-primary);
+}
+
+.no-data p {
+  font-size: var(--text-base);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .usuario-list-container {
+    padding: var(--space-4);
+  }
+
+  .filters-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+  }
+
+  .filter-actions {
+    margin-left: 0;
+    margin-top: var(--space-4);
+    justify-content: center;
+  }
+
+  .list-header h1 {
+    font-size: var(--text-2xl);
+  }
+
+  .list-header p {
+    font-size: var(--text-base);
+  }
+}
+
+@media (max-width: 480px) {
+  .usuario-list-container {
+    padding: var(--space-2);
+  }
+
+  .filter-actions {
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .filter-actions p-button {
+    width: 100%;
+  }
+}
