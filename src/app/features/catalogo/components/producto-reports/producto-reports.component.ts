@@ -32,7 +32,6 @@ export class ProductoReportsComponent implements OnInit {
         this.productosMasVendidos = response.data;
       },
       error: (error) => {
-        console.error('Error cargando productos más vendidos:', error);
         this.error = 'Error cargando productos más vendidos';
       }
     });
@@ -44,7 +43,6 @@ export class ProductoReportsComponent implements OnInit {
         this.loading = false;
       },
       error: (error) => {
-        console.error('Error cargando productos con stock bajo:', error);
         this.error = 'Error cargando productos con stock bajo';
         this.loading = false;
       }
@@ -57,7 +55,6 @@ export class ProductoReportsComponent implements OnInit {
 
   exportarCSV(): void {
     // Función de exportación CSV - pendiente de implementar en el backend
-    console.log('Función de exportación CSV pendiente de implementar');
     this.error = 'Función de exportación CSV no disponible aún';
   }
 }
