@@ -22,7 +22,6 @@ import { DatePickerModule } from 'primeng/datepicker';
 
 import { DividerModule } from 'primeng/divider';
 import { DrawerModule } from 'primeng/drawer';
-import { DynamicDialogModule } from 'primeng/dynamicdialog';
 import { FieldsetModule } from 'primeng/fieldset';
 import { FileUploadModule } from 'primeng/fileupload';
 import { FloatLabelModule } from 'primeng/floatlabel';
@@ -82,7 +81,6 @@ import { IftaLabelModule } from 'primeng/iftalabel';
     DialogModule,
     DividerModule,
     DrawerModule,
-    DynamicDialogModule,
     FieldsetModule,
     FileUploadModule,
     FloatLabelModule,
@@ -145,7 +143,6 @@ import { IftaLabelModule } from 'primeng/iftalabel';
     DialogModule,
     DividerModule,
     DrawerModule,
-    DynamicDialogModule,
     FieldsetModule,
     FileUploadModule,
     FloatLabelModule,

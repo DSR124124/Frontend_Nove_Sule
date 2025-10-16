@@ -1,1 +1,191 @@
-<p>proveedor-list works!</p>
+<div class="proveedor-list-container">
+  <!-- Header -->
+  <div class="page-header">
+    <div class="header-content">
+      <h1 class="page-title">Gestión de Proveedores</h1>
+      <p class="page-subtitle">Administra los proveedores de tu tienda</p>
+    </div>
+    <div class="header-actions">
+      <p-button
+        label="Nuevo Proveedor"
+        icon="pi pi-plus"
+        styleClass="btn-primary"
+        [routerLink]="['/catalogo/proveedores/nuevo']">
+      </p-button>
+    </div>
+  </div>
+
+  <!-- Panel de Filtros -->
+  <p-panel header="Filtros de Búsqueda" [toggleable]="true" [collapsed]="!filtrosVisible" class="filters-panel">
+    <div class="filters-content">
+      <div class="filters-grid">
+        <!-- Nombre -->
+        <div class="filter-group">
+          <label for="filtroNombre" class="filter-label">Nombre</label>
+          <input
+            id="filtroNombre"
+            type="text"
+            pInputText
+            [(ngModel)]="filtros.nombre"
+            placeholder="Buscar por nombre..."
+            class="filter-input">
+        </div>
+
+        <!-- RUC -->
+        <div class="filter-group">
+          <label for="filtroRuc" class="filter-label">RUC</label>
+          <input
+            id="filtroRuc"
+            type="text"
+            pInputText
+            [(ngModel)]="filtros.ruc"
+            placeholder="Buscar por RUC..."
+            class="filter-input">
+        </div>
+
+        <!-- Email -->
+        <div class="filter-group">
+          <label for="filtroEmail" class="filter-label">Email</label>
+          <input
+            id="filtroEmail"
+            type="text"
+            pInputText
+            [(ngModel)]="filtros.email"
+            placeholder="Buscar por email..."
+            class="filter-input">
+        </div>
+
+        <!-- Estado -->
+        <div class="filter-group">
+          <label for="filtroEstado" class="filter-label">Estado</label>
+          <p-dropdown
+            id="filtroEstado"
+            [(ngModel)]="filtros.estado"
+            [options]="opcionesEstado"
+            placeholder="Seleccionar estado..."
+            class="filter-dropdown">
+          </p-dropdown>
+        </div>
+      </div>
+
+      <!-- Botones de Filtros -->
+      <div class="filters-actions">
+        <p-button
+          label="Buscar"
+          icon="pi pi-search"
+          styleClass="btn-primary btn-sm"
+          (onClick)="onSearch()">
+        </p-button>
+        <p-button
+          label="Limpiar"
+          icon="pi pi-times"
+          styleClass="btn-secondary btn-sm"
+          (onClick)="onClearSearch()">
+        </p-button>
+      </div>
+    </div>
+  </p-panel>
+
+  <!-- Tabla de Proveedores -->
+  <div class="table-container">
+    <p-table
+      [value]="proveedores"
+      [loading]="loading"
+      [paginator]="true"
+      [rows]="rows"
+      [totalRecords]="totalRecords"
+      [lazy]="true"
+      (onLazyLoad)="onPageChange($event)"
+      [showCurrentPageReport]="true"
+      currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} proveedores"
+      [rowsPerPageOptions]="[5, 10, 20, 50]"
+      styleClass="p-datatable-sm"
+      [scrollable]="true"
+      scrollHeight="400px">
+
+      <!-- Columnas -->
+      <ng-template pTemplate="header">
+        <tr>
+          <th style="width: 3rem">#</th>
+          <th>Nombre</th>
+          <th>RUC</th>
+          <th>Email</th>
+          <th>Teléfono</th>
+          <th>Estado</th>
+          <th style="width: 8rem">Acciones</th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-proveedor let-i="rowIndex">
+        <tr>
+          <td>{{ first + i + 1 }}</td>
+          <td>
+            <div class="proveedor-info">
+              <div class="proveedor-nombre">{{ proveedor.nombre }}</div>
+              <div class="proveedor-razon" *ngIf="proveedor.razonSocial">
+                {{ proveedor.razonSocial }}
+              </div>
+            </div>
+          </td>
+          <td>{{ proveedor.ruc }}</td>
+          <td>{{ proveedor.email }}</td>
+          <td>{{ proveedor.telefono }}</td>
+          <td>
+            <p-tag
+              [value]="getEstadoText(proveedor.estado)"
+              [styleClass]="getEstadoStyleClass(proveedor.estado)">
+            </p-tag>
+          </td>
+          <td>
+            <div class="table-actions">
+              <p-button
+                icon="pi pi-pencil"
+                styleClass="btn-primary btn-outlined btn-sm p-button-icon-only"
+                pTooltip="Editar proveedor"
+                tooltipPosition="top"
+                [routerLink]="['/catalogo/proveedores/editar', proveedor.id]">
+              </p-button>
+              <p-button
+                (onClick)="onCambiarEstado(proveedor)"
+                [icon]="proveedor.estado === 'ACTIVO' ? 'pi pi-pause' : 'pi pi-play'"
+                [styleClass]="proveedor.estado === 'ACTIVO' ? 'btn-warning btn-outlined btn-sm p-button-icon-only' : 'btn-success btn-outlined btn-sm p-button-icon-only'"
+                [pTooltip]="proveedor.estado === 'ACTIVO' ? 'Desactivar proveedor' : 'Activar proveedor'"
+                tooltipPosition="top">
+              </p-button>
+              <p-button
+                (onClick)="onEliminar(proveedor)"
+                icon="pi pi-trash"
+                styleClass="btn-danger btn-outlined btn-sm p-button-icon-only"
+                pTooltip="Eliminar proveedor"
+                tooltipPosition="top">
+              </p-button>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="7" class="text-center">
+            <div class="empty-state">
+              <i class="pi pi-inbox" style="font-size: 3rem; color: var(--text-muted);"></i>
+              <p>No se encontraron proveedores</p>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+
+  <!-- Loading Spinner -->
+  <p-progressSpinner
+    *ngIf="loading"
+    styleClass="loading-spinner"
+    strokeWidth="3"
+    fill="transparent"
+    animationDuration="1s">
+  </p-progressSpinner>
+
+  <!-- Toast para mensajes -->
+  <p-toast></p-toast>
+</div>

@@ -1,23 +1,23 @@
-<div class="categoria-list-container">
+<div class="marca-list-container">
   <!-- Header con acciones -->
   <div class="list-header">
     <div class="header-left">
-      <h2 class="heading-2">Lista de Categorías</h2>
-      <span class="text-caption">{{totalElements}} categorías</span>
+      <h2 class="heading-2">Lista de Marcas</h2>
+      <span class="text-caption">{{totalElements}} marcas</span>
     </div>
     <div class="header-actions">
       <p-button
         (onClick)="onRefresh()"
         [disabled]="loading"
         label="Actualizar"
-        icon="fas fa-sync-alt"
+        icon="pi pi-refresh"
         styleClass="btn-secondary btn-outlined btn-sm"
         [loading]="loading">
       </p-button>
       <p-button
-        routerLink="/catalogo/categorias/nuevo"
-        label="Nueva Categoría"
-        icon="fas fa-plus"
+        routerLink="/catalogo/marcas/nuevo"
+        label="Nueva Marca"
+        icon="pi pi-plus"
         styleClass="btn-primary btn-sm">
       </p-button>
     </div>
@@ -31,9 +31,9 @@
     styleClass="filters-panel">
     <ng-template pTemplate="header">
       <div class="panel-header">
-        <i class="fas fa-search"></i>
+        <i class="pi pi-search"></i>
         <span>Búsqueda y Filtros</span>
-        <i class="fas" [ngClass]="filtrosCollapsed ? 'fa-chevron-down' : 'fa-chevron-up'"></i>
+        <i class="pi" [ngClass]="filtrosCollapsed ? 'pi-chevron-down' : 'pi-chevron-up'"></i>
       </div>
     </ng-template>
 
@@ -67,14 +67,14 @@
             (onClick)="onSearch()"
             [disabled]="loading"
             label="Buscar"
-            icon="fas fa-search"
+            icon="pi pi-search"
             styleClass="btn-primary btn-sm">
           </p-button>
           <p-button
             (onClick)="onClearSearch()"
             [disabled]="loading"
             label="Limpiar"
-            icon="fas fa-times"
+            icon="pi pi-times"
             styleClass="btn-secondary btn-outlined btn-sm">
           </p-button>
         </div>
@@ -85,21 +85,21 @@
   <!-- Loading -->
   <div class="loading-container" *ngIf="loading">
     <p-progressSpinner [style]="{'width': '50px', 'height': '50px'}" styleClass="custom-spinner"
-      ariaLabel="Cargando categorías">
+      ariaLabel="Cargando marcas">
     </p-progressSpinner>
-    <p class="text-body">Cargando categorías...</p>
+    <p class="text-body">Cargando marcas...</p>
   </div>
 
-  <!-- Tabla de categorías -->
+  <!-- Tabla de marcas -->
   <p-table
-    [value]="categorias"
+    [value]="marcas"
     [loading]="loading"
     [paginator]="true"
     [rows]="pageSize"
     [totalRecords]="totalElements"
     [first]="currentPage * pageSize"
     (onPage)="onPageChange($event)"
-    styleClass="p-datatable-sm categories-table"
+    styleClass="p-datatable-sm marcas-table"
     [rowHover]="true"
     dataKey="id">
 
@@ -109,45 +109,41 @@
         <th style="width: 3rem">ID</th>
         <th>Nombre</th>
         <th style="width: 20rem">Descripción</th>
-        <th style="width: 6rem">Color</th>
-        <th style="width: 4rem">Orden</th>
+        <th style="width: 6rem">Logo</th>
         <th style="width: 6rem">Estado</th>
         <th style="width: 8rem">Acciones</th>
       </tr>
     </ng-template>
 
-    <ng-template pTemplate="body" let-categoria>
+    <ng-template pTemplate="body" let-marca>
       <tr>
         <td>
-          <span class="text-caption">{{categoria.id}}</span>
+          <span class="text-caption">{{marca.id}}</span>
         </td>
         <td>
-          <div class="categoria-info">
-            <div class="categoria-name">{{categoria.nombre}}</div>
-            <div class="categoria-image" *ngIf="categoria.imagen">
-              <img [src]="categoria.imagen" [alt]="categoria.nombre" class="categoria-img">
+          <div class="marca-info">
+            <div class="marca-name">{{marca.nombre}}</div>
+            <div class="marca-logo" *ngIf="marca.logo">
+              <img [src]="marca.logo" [alt]="marca.nombre" class="marca-img">
             </div>
           </div>
         </td>
         <td>
-          <span class="text-body" *ngIf="categoria.descripcion">
-            {{categoria.descripcion | slice:0:80}}{{categoria.descripcion.length > 80 ? '...' : ''}}
+          <span class="text-body" *ngIf="marca.descripcion">
+            {{marca.descripcion | slice:0:80}}{{marca.descripcion.length > 80 ? '...' : ''}}
           </span>
-          <span class="text-muted" *ngIf="!categoria.descripcion">Sin descripción</span>
+          <span class="text-muted" *ngIf="!marca.descripcion">Sin descripción</span>
         </td>
         <td>
-          <div class="color-preview" *ngIf="categoria.color" [style.background-color]="categoria.color">
-            <span class="color-text">{{categoria.color}}</span>
+          <div class="logo-preview" *ngIf="marca.logo">
+            <img [src]="marca.logo" [alt]="marca.nombre" class="logo-img">
           </div>
-          <span class="text-muted" *ngIf="!categoria.color">Sin color</span>
-        </td>
-        <td>
-          <span class="text-body">{{categoria.orden || '-'}}</span>
+          <span class="text-muted" *ngIf="!marca.logo">Sin logo</span>
         </td>
         <td>
           <p-tag
-            [value]="getEstadoText(categoria.estado)"
-            [styleClass]="getEstadoStyleClass(categoria.estado)"
+            [value]="getEstadoText(marca.estado)"
+            [styleClass]="getEstadoStyleClass(marca.estado)"
             [rounded]="true">
           </p-tag>
         </td>
@@ -156,22 +152,22 @@
             <p-button
               icon="pi pi-pencil"
               styleClass="btn-primary btn-outlined btn-sm p-button-icon-only"
-              pTooltip="Editar categoría"
+              pTooltip="Editar marca"
               tooltipPosition="top"
-              [routerLink]="['/catalogo/categorias/editar', categoria.id]">
+              [routerLink]="['/catalogo/marcas/editar', marca.id]">
             </p-button>
             <p-button
-              (onClick)="onCambiarEstado(categoria)"
-              [icon]="categoria.estado === 'ACTIVO' ? 'pi pi-pause' : 'pi pi-play'"
-              [styleClass]="categoria.estado === 'ACTIVO' ? 'btn-warning btn-outlined btn-sm p-button-icon-only' : 'btn-success btn-outlined btn-sm p-button-icon-only'"
-              [pTooltip]="categoria.estado === 'ACTIVO' ? 'Desactivar categoría' : 'Activar categoría'"
+              (onClick)="onCambiarEstado(marca)"
+              [icon]="marca.estado === 'ACTIVO' ? 'pi pi-pause' : 'pi pi-play'"
+              [styleClass]="marca.estado === 'ACTIVO' ? 'btn-warning btn-outlined btn-sm p-button-icon-only' : 'btn-success btn-outlined btn-sm p-button-icon-only'"
+              [pTooltip]="marca.estado === 'ACTIVO' ? 'Desactivar marca' : 'Activar marca'"
               tooltipPosition="top">
             </p-button>
             <p-button
-              (onClick)="onEliminar(categoria)"
+              (onClick)="onEliminar(marca)"
               icon="pi pi-trash"
               styleClass="btn-danger btn-outlined btn-sm p-button-icon-only"
-              pTooltip="Eliminar categoría"
+              pTooltip="Eliminar marca"
               tooltipPosition="top">
             </p-button>
           </div>
@@ -181,15 +177,15 @@
 
     <ng-template pTemplate="emptymessage">
       <tr>
-        <td colspan="7" class="text-center">
-          <div class="no-categories-content">
-            <i class="fas fa-folder-open text-6xl text-muted"></i>
-            <h3 class="heading-3">No hay categorías</h3>
-            <p class="text-body">No se encontraron categorías con los filtros aplicados.</p>
+        <td colspan="6" class="text-center">
+          <div class="no-marcas-content">
+            <i class="pi pi-tag text-6xl text-muted"></i>
+            <h3 class="heading-3">No hay marcas</h3>
+            <p class="text-body">No se encontraron marcas con los filtros aplicados.</p>
             <p-button
               (onClick)="onClearSearch()"
               label="Limpiar Filtros"
-              icon="fas fa-refresh"
+              icon="pi pi-refresh"
               styleClass="btn-primary btn-sm">
             </p-button>
           </div>

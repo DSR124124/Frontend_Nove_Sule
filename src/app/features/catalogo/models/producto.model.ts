@@ -16,6 +16,20 @@ export interface Producto {
   fechaCreacion: string;
   fechaModificacion: string;
   imagenUrl?: string;
+  unidad?: string;
+  peso?: number;
+  largo?: number;
+  ancho?: number;
+  alto?: number;
+  afectoIgv?: boolean;
+  tipoIgv?: string;
+  ubicacion?: string;
+  lote?: string;
+  fechaVencimiento?: string;
+  tags?: string[];
+  imagen?: string;
+  imagenes?: string[];
+  observaciones?: string;
 }
 
 export interface ProductoRequest {
@@ -29,9 +43,23 @@ export interface ProductoRequest {
   stockMaximo?: number;
   codigoBarras?: string;
   categoriaId: number;
-  marcaId: number;
-  proveedorId: number;
-  imagenUrl?: string;
+  marcaId?: number;
+  proveedorId?: number;
+  unidad: string;
+  peso?: number;
+  largo?: number;
+  ancho?: number;
+  alto?: number;
+  afectoIgv?: boolean;
+  tipoIgv?: string;
+  ubicacion?: string;
+  lote?: string;
+  fechaVencimiento?: string;
+  tags?: string[];
+  imagen?: string;
+  imagenes?: string[];
+  observaciones?: string;
+  estado?: Estado;
 }
 
 export interface ProductoFiltros {
@@ -41,6 +69,8 @@ export interface ProductoFiltros {
   marcaId?: number;
   proveedorId?: number;
   estado?: Estado;
+  precioMin?: number;
+  precioMax?: number;
   page?: number;
   size?: number;
 }

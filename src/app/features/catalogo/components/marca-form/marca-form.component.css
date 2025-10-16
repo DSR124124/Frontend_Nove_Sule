@@ -1,6 +1,6 @@
-.producto-form-container {
-  padding: var(--space-5);
-  max-width: 1200px;
+.marca-form-container {
+  padding: var(--space-3);
+  max-width: 1000px;
   margin: 0 auto;
 }
 
@@ -9,8 +9,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: var(--space-8);
-  padding-bottom: var(--space-4);
+  margin-bottom: var(--space-4);
+  padding-bottom: var(--space-2);
   border-bottom: 2px solid var(--border-light);
 }
 
@@ -20,28 +20,23 @@
   gap: var(--space-1);
 }
 
-.header-actions {
-  display: flex;
-  gap: var(--space-3);
-}
-
 /* Loading */
 .loading-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: var(--space-16);
+  padding: var(--space-8);
   color: var(--text-muted);
-  gap: var(--space-4);
+  gap: var(--space-2);
 }
 
 /* Formulario */
 .form-grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: var(--space-6);
-  margin-bottom: var(--space-8);
+  gap: var(--space-4);
+  margin-bottom: var(--space-4);
 }
 
 .form-card {
@@ -54,18 +49,19 @@
 .form-card .p-card-header {
   background: var(--surface-50);
   border-bottom: 1px solid var(--border-light);
+  padding: var(--space-3);
   font-weight: var(--font-semibold);
   color: var(--text-primary);
 }
 
 .form-card .p-card-content {
-  padding: var(--space-6);
+  padding: var(--space-4);
 }
 
 /* Filas del formulario */
 .form-row {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: 1fr 1fr;
   gap: var(--space-4);
   margin-bottom: var(--space-4);
 }
@@ -74,15 +70,15 @@
   margin-bottom: 0;
 }
 
-.full-width {
+.input-group.full-width {
   grid-column: 1 / -1;
 }
 
-/* Grupos de input */
+/* Inputs */
 .input-group {
   display: flex;
   flex-direction: column;
-  gap: var(--space-2);
+  gap: var(--space-1);
 }
 
 .input-label {
@@ -96,76 +92,31 @@
   color: var(--danger);
 }
 
-/* Inputs */
 .input-text,
 .input-textarea {
-  width: 100%;
-  padding: var(--space-3);
+  padding: var(--space-2);
   border: 1px solid var(--border-light);
   border-radius: var(--radius-md);
   font-size: var(--text-sm);
-  transition: all var(--transition-normal);
-  background: var(--surface-0);
-  color: var(--text-primary);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  font-family: inherit;
 }
 
 .input-text:focus,
 .input-textarea:focus {
   outline: none;
   border-color: var(--primary);
-  box-shadow: 0 0 0 2px var(--primary-light);
+  box-shadow: 0 0 0 2px var(--primary-alpha-20);
 }
 
 .input-text.error,
 .input-textarea.error {
   border-color: var(--danger);
-  box-shadow: 0 0 0 2px var(--danger-light);
 }
 
 .input-textarea {
   resize: vertical;
   min-height: 80px;
-}
-
-/* PrimeNG InputNumber */
-.p-inputnumber {
-  width: 100%;
-}
-
-.p-inputnumber .p-inputnumber-input {
-  width: 100%;
-  padding: var(--space-3);
-  border: 1px solid var(--border-light);
-  border-radius: var(--radius-md);
-  font-size: var(--text-sm);
-  background: var(--surface-0);
-  color: var(--text-primary);
-}
-
-.p-inputnumber .p-inputnumber-input:focus {
-  outline: none;
-  border-color: var(--primary);
-  box-shadow: 0 0 0 2px var(--primary-light);
-}
-
-.p-inputnumber.error .p-inputnumber-input {
-  border-color: var(--danger);
-  box-shadow: 0 0 0 2px var(--danger-light);
-}
-
-/* PrimeNG Dropdown */
-.p-dropdown {
-  width: 100%;
-}
-
-.p-dropdown .p-dropdown-label {
-  padding: var(--space-3);
-  font-size: var(--text-sm);
-}
-
-.p-dropdown.error .p-dropdown-label {
-  border-color: var(--danger);
-  box-shadow: 0 0 0 2px var(--danger-light);
 }
 
 /* Mensajes de error */
@@ -180,32 +131,26 @@
   display: flex;
   justify-content: flex-end;
   gap: var(--space-3);
-  padding-top: var(--space-6);
+  padding-top: var(--space-4);
   border-top: 1px solid var(--border-light);
 }
 
 /* Responsive */
 @media (max-width: 768px) {
-  .producto-form-container {
-    padding: var(--space-3);
-  }
-
   .form-header {
     flex-direction: column;
-    gap: var(--space-4);
+    gap: var(--space-3);
     align-items: stretch;
-  }
-
-  .header-actions {
-    justify-content: center;
   }
 
   .form-row {
     grid-template-columns: 1fr;
+    gap: var(--space-3);
   }
 
   .form-actions {
     flex-direction: column;
+    gap: var(--space-2);
   }
 
   .form-actions .p-button {
@@ -214,11 +159,11 @@
 }
 
 @media (max-width: 480px) {
-  .form-card .p-card-content {
-    padding: var(--space-4);
+  .marca-form-container {
+    padding: var(--space-2);
   }
 
-  .form-row {
-    gap: var(--space-3);
+  .form-card .p-card-content {
+    padding: var(--space-2);
   }
 }

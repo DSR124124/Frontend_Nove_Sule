@@ -3,21 +3,48 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { ProductoService } from '../../services/producto.service';
-import { Producto, ProductoFiltros } from '../../models/producto.model';
+import { Producto, ProductoFiltros, ProductoBusqueda } from '../../models/producto.model';
 import { ApiResponse, PaginatedResponse } from '../../models/api-response.model';
 import { MessageService } from '../../../../core/services/message.service';
+import { ProductoSearchComponent } from '../producto-search/producto-search.component';
+
+// PrimeNG imports
+import { ButtonModule } from 'primeng/button';
+import { InputTextModule } from 'primeng/inputtext';
+import { DropdownModule } from 'primeng/dropdown';
+import { TagModule } from 'primeng/tag';
+import { MessageModule } from 'primeng/message';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { PaginatorModule } from 'primeng/paginator';
+import { PanelModule } from 'primeng/panel';
+import { TableModule } from 'primeng/table';
+import { TooltipModule } from 'primeng/tooltip';
 
 @Component({
   selector: 'app-producto-list',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    RouterModule,
+    ProductoSearchComponent,
+    ButtonModule,
+    InputTextModule,
+    DropdownModule,
+    TagModule,
+    MessageModule,
+    ProgressSpinnerModule,
+    PaginatorModule,
+    PanelModule,
+    TableModule,
+    TooltipModule
+  ],
   templateUrl: './producto-list.component.html',
   styleUrl: './producto-list.component.css'
 })
 export class ProductoListComponent implements OnInit {
   productos: Producto[] = [];
   loading = false;
-  error: string | null = null;
 
   // Paginación
   currentPage = 0;
@@ -25,17 +52,23 @@ export class ProductoListComponent implements OnInit {
   totalElements = 0;
   totalPages = 0;
 
-  // Filtros
-  filtros: ProductoFiltros = {
-    nombre: '',
-    codigo: '',
+  // Opciones para el componente de búsqueda
+  categoriaOptions: any[] = [];
+  marcaOptions: any[] = [];
+  proveedorOptions: any[] = [];
+
+  // Búsqueda actual
+  busquedaActual: ProductoBusqueda = {
+    texto: '',
+    precioMin: undefined,
+    precioMax: undefined,
     categoriaId: undefined,
     marcaId: undefined,
-    proveedorId: undefined,
-    estado: undefined,
-    page: 0,
-    size: 10
+    proveedorId: undefined
   };
+
+  // Estado del panel de filtros
+  filtrosCollapsed = true;
 
   constructor(
     private productoService: ProductoService,
@@ -49,7 +82,6 @@ export class ProductoListComponent implements OnInit {
 
   cargarProductosSimple(): void {
     this.loading = true;
-    this.error = null;
 
 
     // Llamada simple sin filtros
@@ -67,18 +99,8 @@ export class ProductoListComponent implements OnInit {
         );
       },
       error: (error) => {
-
-        // Usar MessageService para mostrar el error
+        // Usar MessageService para mostrar el error como toast
         this.messageService.handleHttpError(error);
-
-        let errorMessage = 'Error cargando productos';
-        if (error.error && error.error.message) {
-          errorMessage = error.error.message;
-        } else if (error.message) {
-          errorMessage = error.message;
-        }
-
-        this.error = errorMessage;
         this.loading = false;
       }
     });
@@ -86,7 +108,6 @@ export class ProductoListComponent implements OnInit {
 
   cargarProductos(): void {
     this.loading = true;
-    this.error = null;
 
     // Crear filtros limpios solo con valores válidos
     const filtrosLimpios: ProductoFiltros = {
@@ -94,24 +115,24 @@ export class ProductoListComponent implements OnInit {
       size: this.pageSize
     };
 
-    // Solo agregar filtros que tengan valores válidos
-    if (this.filtros.nombre && this.filtros.nombre.trim()) {
-      filtrosLimpios.nombre = this.filtros.nombre.trim();
+    // Agregar filtros de búsqueda
+    if (this.busquedaActual.texto && this.busquedaActual.texto.trim()) {
+      filtrosLimpios.nombre = this.busquedaActual.texto.trim();
     }
-    if (this.filtros.codigo && this.filtros.codigo.trim()) {
-      filtrosLimpios.codigo = this.filtros.codigo.trim();
+    if (this.busquedaActual.precioMin !== undefined && this.busquedaActual.precioMin > 0) {
+      filtrosLimpios.precioMin = this.busquedaActual.precioMin;
     }
-    if (this.filtros.categoriaId && this.filtros.categoriaId > 0) {
-      filtrosLimpios.categoriaId = this.filtros.categoriaId;
+    if (this.busquedaActual.precioMax !== undefined && this.busquedaActual.precioMax > 0) {
+      filtrosLimpios.precioMax = this.busquedaActual.precioMax;
     }
-    if (this.filtros.marcaId && this.filtros.marcaId > 0) {
-      filtrosLimpios.marcaId = this.filtros.marcaId;
+    if (this.busquedaActual.categoriaId && this.busquedaActual.categoriaId > 0) {
+      filtrosLimpios.categoriaId = this.busquedaActual.categoriaId;
     }
-    if (this.filtros.proveedorId && this.filtros.proveedorId > 0) {
-      filtrosLimpios.proveedorId = this.filtros.proveedorId;
+    if (this.busquedaActual.marcaId && this.busquedaActual.marcaId > 0) {
+      filtrosLimpios.marcaId = this.busquedaActual.marcaId;
     }
-    if (this.filtros.estado && this.filtros.estado.trim()) {
-      filtrosLimpios.estado = this.filtros.estado as any;
+    if (this.busquedaActual.proveedorId && this.busquedaActual.proveedorId > 0) {
+      filtrosLimpios.proveedorId = this.busquedaActual.proveedorId;
     }
 
 
@@ -140,52 +161,35 @@ export class ProductoListComponent implements OnInit {
         }
       },
       error: (error) => {
-
-        // Usar MessageService para mostrar el error
+        // Usar MessageService para mostrar el error como toast
         this.messageService.handleHttpError(error);
-
-        let errorMessage = 'Error cargando productos';
-        if (error.error && error.error.message) {
-          errorMessage = error.error.message;
-        } else if (error.message) {
-          errorMessage = error.message;
-        }
-
-        this.error = errorMessage;
         this.loading = false;
       }
     });
   }
 
-  onFiltrar(): void {
+  onSearch(busqueda: ProductoBusqueda): void {
+    this.busquedaActual = busqueda;
     this.currentPage = 0; // Reset a la primera página
     this.cargarProductos();
   }
 
-  onLimpiarFiltros(): void {
-    this.filtros = {
-      nombre: '',
-      codigo: '',
+  onClearSearch(): void {
+    this.busquedaActual = {
+      texto: '',
+      precioMin: undefined,
+      precioMax: undefined,
       categoriaId: undefined,
       marcaId: undefined,
-      proveedorId: undefined,
-      estado: undefined,
-      page: 0,
-      size: 10
+      proveedorId: undefined
     };
     this.currentPage = 0;
-    this.messageService.info('Limpiando filtros y cargando todos los productos...', 'Limpiando Filtros');
+    this.messageService.info('Limpiando búsqueda y cargando todos los productos...', 'Limpiando Búsqueda');
     this.cargarProductos();
   }
 
-  onPageChange(page: number): void {
-    this.currentPage = page;
-    this.cargarProductos();
-  }
-
-  onPageSizeChange(size: number): void {
-    this.pageSize = size;
-    this.currentPage = 0;
+  onPageChange(event: any): void {
+    this.currentPage = event.page;
     this.cargarProductos();
   }
 
@@ -194,19 +198,25 @@ export class ProductoListComponent implements OnInit {
     this.cargarProductos();
   }
 
-  getEstadoClass(estado: string): string {
+  getEstadoStyleClass(estado: string): string {
     switch (estado) {
-      case 'ACTIVO': return 'estado-activo';
-      case 'INACTIVO': return 'estado-inactivo';
-      case 'ELIMINADO': return 'estado-eliminado';
-      default: return 'estado-desconocido';
+      case 'ACTIVO': return 'p-tag tag-success tag-sm';
+      case 'INACTIVO': return 'p-tag tag-warning tag-sm';
+      case 'ELIMINADO': return 'p-tag tag-danger tag-sm';
+      default: return 'p-tag tag-gray tag-sm';
     }
   }
 
-  getStockClass(stock: number, stockMinimo: number): string {
-    if (stock === 0) return 'stock-sin';
-    if (stock <= stockMinimo) return 'stock-bajo';
-    return 'stock-normal';
+  getStockStyleClass(stock: number, stockMinimo: number): string {
+    if (stock === 0) return 'p-tag tag-danger tag-sm';
+    if (stock <= stockMinimo) return 'p-tag tag-warning tag-sm';
+    return 'p-tag tag-success tag-sm';
+  }
+
+  getStockTextClass(stock: number, stockMinimo: number): string {
+    if (stock === 0) return 'text-error';
+    if (stock <= stockMinimo) return 'text-warning';
+    return 'text-success';
   }
 
   getStockText(stock: number, stockMinimo: number): string {
@@ -238,3 +248,4 @@ export class ProductoListComponent implements OnInit {
   // Exponer Math para usar en el template
   Math = Math;
 }
+

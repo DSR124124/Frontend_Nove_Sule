@@ -2,279 +2,180 @@
   <!-- Header con acciones -->
   <div class="list-header">
     <div class="header-left">
-      <h2>Lista de Productos</h2>
-      <span class="total-count">{{totalElements}} productos</span>
+      <h2 class="heading-2">Lista de Productos</h2>
+      <span class="text-caption">{{totalElements}} productos</span>
     </div>
     <div class="header-actions">
-      <button
-        type="button"
-        (click)="onRefresh()"
-        class="btn btn-outline-primary"
-        [disabled]="loading">
-        <i class="fas fa-sync-alt" [class.fa-spin]="loading"></i> Actualizar
-      </button>
-      <a
+      <p-button
+        (onClick)="onRefresh()"
+        [disabled]="loading"
+        label="Actualizar"
+        icon="pi pi-refresh"
+        styleClass="btn-secondary btn-outlined btn-sm"
+        [loading]="loading">
+      </p-button>
+      <p-button
         routerLink="/catalogo/productos/nuevo"
-        class="btn btn-primary">
-        <i class="fas fa-plus"></i> Nuevo Producto
-      </a>
+        label="Nuevo Producto"
+        icon="pi pi-plus"
+        styleClass="btn-primary btn-sm">
+      </p-button>
     </div>
   </div>
 
-  <!-- Filtros -->
-  <div class="filters-section">
-    <div class="filters-grid">
-      <div class="filter-group">
-        <label for="nombre">Nombre:</label>
-        <input
-          type="text"
-          id="nombre"
-          [(ngModel)]="filtros.nombre"
-          placeholder="Buscar por nombre"
-          class="form-control">
+  <!-- Panel de búsqueda y filtros -->
+  <p-panel
+    header="Búsqueda y Filtros"
+    [toggleable]="true"
+    [collapsed]="filtrosCollapsed"
+    styleClass="filters-panel">
+    <ng-template pTemplate="header">
+      <div class="panel-header">
+        <i class="pi pi-search"></i>
+        <span>Búsqueda y Filtros</span>
+        <i class="pi" [ngClass]="filtrosCollapsed ? 'pi-chevron-down' : 'pi-chevron-up'"></i>
       </div>
+    </ng-template>
 
-      <div class="filter-group">
-        <label for="codigo">Código:</label>
-        <input
-          type="text"
-          id="codigo"
-          [(ngModel)]="filtros.codigo"
-          placeholder="Buscar por código"
-          class="form-control">
-      </div>
-
-      <div class="filter-group">
-        <label for="estado">Estado:</label>
-        <select
-          id="estado"
-          [(ngModel)]="filtros.estado"
-          class="form-control">
-          <option value="">Todos</option>
-          <option value="ACTIVO">Activo</option>
-          <option value="INACTIVO">Inactivo</option>
-          <option value="ELIMINADO">Eliminado</option>
-        </select>
-      </div>
-
-      <div class="filter-group">
-        <label for="pageSize">Por página:</label>
-        <select
-          id="pageSize"
-          [(ngModel)]="pageSize"
-          (ngModelChange)="onPageSizeChange($event)"
-          class="form-control">
-          <option value="10">10</option>
-          <option value="20">20</option>
-          <option value="50">50</option>
-          <option value="100">100</option>
-        </select>
-      </div>
-    </div>
-
-    <div class="filter-actions">
-      <button
-        type="button"
-        (click)="onFiltrar()"
-        class="btn btn-primary">
-        <i class="fas fa-search"></i> Filtrar
-      </button>
-      <button
-        type="button"
-        (click)="onLimpiarFiltros()"
-        class="btn btn-secondary">
-        <i class="fas fa-times"></i> Limpiar
-      </button>
-    </div>
-  </div>
-
-  <!-- Error message -->
-  <div class="error-message" *ngIf="error">
-    <div class="alert alert-danger">
-      <i class="fas fa-exclamation-circle"></i> {{error}}
-    </div>
-  </div>
+    <!-- Componente de búsqueda -->
+    <app-producto-search
+      [categoriaOptions]="categoriaOptions"
+      [marcaOptions]="marcaOptions"
+      [proveedorOptions]="proveedorOptions"
+      (searchEvent)="onSearch($event)"
+      (clearEvent)="onClearSearch()">
+    </app-producto-search>
+  </p-panel>
 
   <!-- Loading -->
   <div class="loading-container" *ngIf="loading">
-    <div class="spinner"></div>
-    <p>Cargando productos...</p>
+    <p-progressSpinner [style]="{'width': '50px', 'height': '50px'}" styleClass="custom-spinner"
+      ariaLabel="Cargando productos">
+    </p-progressSpinner>
+    <p class="text-body">Cargando productos...</p>
   </div>
 
-  <!-- Lista de productos -->
-  <div class="productos-grid" *ngIf="!loading && productos.length > 0">
-    <div
-      *ngFor="let producto of productos"
-      class="producto-card"
-      [routerLink]="['/catalogo/productos/editar', producto.id]">
+  <!-- Tabla de productos -->
+  <p-table
+    [value]="productos"
+    [loading]="loading"
+    [paginator]="true"
+    [rows]="pageSize"
+    [totalRecords]="totalElements"
+    [first]="currentPage * pageSize"
+    (onPage)="onPageChange($event)"
+    styleClass="p-datatable-sm products-table"
+    [rowHover]="true"
+    dataKey="id">
 
-      <!-- Header del producto -->
-      <div class="producto-header">
-        <div class="producto-title">
-          <h3>{{producto.nombre}}</h3>
-          <span class="codigo">{{producto.codigo}}</span>
-        </div>
-        <div class="producto-status">
-          <span
-            class="estado-badge"
-            [ngClass]="getEstadoClass(producto.estado)">
-            {{producto.estado}}
+    <!-- Columnas de la tabla -->
+    <ng-template pTemplate="header">
+      <tr>
+        <th style="width: 3rem">ID</th>
+        <th style="width: 4rem">Código</th>
+        <th>Producto</th>
+        <th style="width: 6rem">Categoría</th>
+        <th style="width: 6rem">Marca</th>
+        <th style="width: 6rem">Proveedor</th>
+        <th style="width: 6rem">Precio Venta</th>
+        <th style="width: 6rem">Precio Compra</th>
+        <th style="width: 5rem">Stock</th>
+        <th style="width: 5rem">Estado</th>
+        <th style="width: 8rem">Acciones</th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-producto>
+      <tr [routerLink]="['/catalogo/productos/editar', producto.id]" style="cursor: pointer;">
+        <td>
+          <span class="text-caption">{{producto.id}}</span>
+        </td>
+        <td>
+          <span class="text-body font-mono">{{producto.codigo}}</span>
+        </td>
+        <td>
+          <div class="producto-info">
+            <div class="producto-name">{{producto.nombre}}</div>
+            <div class="producto-desc text-caption" *ngIf="producto.descripcion">
+              {{producto.descripcion | slice:0:50}}{{producto.descripcion.length > 50 ? '...' : ''}}
+            </div>
+          </div>
+        </td>
+        <td>
+          <span class="text-body">{{producto.categoria.nombre}}</span>
+        </td>
+        <td>
+          <span class="text-body">{{producto.marca.nombre}}</span>
+        </td>
+        <td>
+          <span class="text-body">{{producto.proveedor.nombre}}</span>
+        </td>
+        <td>
+          <span class="text-body font-semibold text-success">
+            S/ {{producto.precio | number:'1.2-2'}}
           </span>
-        </div>
-      </div>
-
-      <!-- Imagen del producto (placeholder) -->
-      <div class="producto-image">
-        <div class="image-placeholder">
-          <i class="fas fa-box"></i>
-        </div>
-      </div>
-
-      <!-- Información del producto -->
-      <div class="producto-info">
-        <div class="info-row">
-          <span class="label">Descripción:</span>
-          <span class="value">{{producto.descripcion || 'Sin descripción'}}</span>
-        </div>
-
-        <div class="info-row">
-          <span class="label">Categoría:</span>
-          <span class="value">{{producto.categoria.nombre}}</span>
-        </div>
-
-        <div class="info-row">
-          <span class="label">Marca:</span>
-          <span class="value">{{producto.marca.nombre}}</span>
-        </div>
-
-        <div class="info-row">
-          <span class="label">Proveedor:</span>
-          <span class="value">{{producto.proveedor.nombre}}</span>
-        </div>
-      </div>
-
-      <!-- Precios -->
-      <div class="producto-precios">
-        <div class="precio-venta">
-          <span class="label">Precio Venta:</span>
-          <span class="value">S/ {{producto.precio | number:'1.2-2'}}</span>
-        </div>
-        <div class="precio-compra">
-          <span class="label">Precio Compra:</span>
-          <span class="value">S/ {{producto.precioCompra | number:'1.2-2'}}</span>
-        </div>
-      </div>
-
-      <!-- Stock -->
-      <div class="producto-stock">
-        <div class="stock-info">
-          <span class="label">Stock:</span>
-          <span
-            class="stock-value"
-            [ngClass]="getStockClass(producto.stock, producto.stockMinimo)">
-            {{producto.stock}}
+        </td>
+        <td>
+          <span class="text-body text-muted">
+            S/ {{producto.precioCompra | number:'1.2-2'}}
           </span>
-          <span class="stock-min">(Mín: {{producto.stockMinimo}})</span>
-        </div>
-        <div class="stock-status">
-          <span
-            class="status-badge"
-            [ngClass]="getStockClass(producto.stock, producto.stockMinimo)">
-            {{getStockText(producto.stock, producto.stockMinimo)}}
-          </span>
-        </div>
-      </div>
+        </td>
+        <td>
+          <div class="stock-info">
+            <div class="stock-value" [ngClass]="getStockTextClass(producto.stock, producto.stockMinimo)">
+              {{producto.stock}}
+            </div>
+            <div class="stock-min text-caption">Mín: {{producto.stockMinimo}}</div>
+          </div>
+        </td>
+        <td>
+          <p-tag
+            [value]="producto.estado"
+            [styleClass]="getEstadoStyleClass(producto.estado)"
+            [rounded]="true">
+          </p-tag>
+        </td>
+        <td>
+          <div class="table-actions" (click)="$event.stopPropagation()">
+            <p-button
+              icon="pi pi-eye"
+              styleClass="btn-secondary btn-outlined btn-sm btn-text"
+              pTooltip="Ver detalles"
+              tooltipPosition="top">
+            </p-button>
+            <p-button
+              icon="pi pi-pencil"
+              styleClass="btn-warning btn-outlined btn-sm btn-text"
+              pTooltip="Editar"
+              tooltipPosition="top">
+            </p-button>
+            <p-button
+              icon="pi pi-box"
+              styleClass="btn-info btn-outlined btn-sm btn-text"
+              pTooltip="Gestionar stock"
+              tooltipPosition="top">
+            </p-button>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
 
-      <!-- Acciones -->
-      <div class="producto-actions">
-        <button
-          type="button"
-          class="btn btn-sm btn-outline-primary"
-          (click)="$event.stopPropagation()">
-          <i class="fas fa-eye"></i> Ver
-        </button>
-        <button
-          type="button"
-          class="btn btn-sm btn-outline-warning"
-          (click)="$event.stopPropagation()">
-          <i class="fas fa-edit"></i> Editar
-        </button>
-        <button
-          type="button"
-          class="btn btn-sm btn-outline-info"
-          (click)="$event.stopPropagation()">
-          <i class="fas fa-warehouse"></i> Stock
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- No hay productos -->
-  <div class="no-products" *ngIf="!loading && productos.length === 0">
-    <div class="no-products-content">
-      <i class="fas fa-box-open"></i>
-      <h3>No hay productos</h3>
-      <p>No se encontraron productos con los filtros aplicados.</p>
-      <button
-        type="button"
-        (click)="onLimpiarFiltros()"
-        class="btn btn-primary">
-        <i class="fas fa-refresh"></i> Limpiar Filtros
-      </button>
-    </div>
-  </div>
-
-  <!-- Paginación -->
-  <div class="pagination-container" *ngIf="!loading && totalPages > 1">
-    <div class="pagination-info">
-      <span>
-        Mostrando {{currentPage * pageSize + 1}} -
-        {{Math.min((currentPage + 1) * pageSize, totalElements)}}
-        de {{totalElements}} productos
-      </span>
-    </div>
-
-    <div class="pagination">
-      <button
-        type="button"
-        (click)="onPageChange(0)"
-        [disabled]="!hasPreviousPage"
-        class="btn btn-sm btn-outline-primary">
-        <i class="fas fa-angle-double-left"></i>
-      </button>
-
-      <button
-        type="button"
-        (click)="onPageChange(currentPage - 1)"
-        [disabled]="!hasPreviousPage"
-        class="btn btn-sm btn-outline-primary">
-        <i class="fas fa-angle-left"></i>
-      </button>
-
-      <button
-        *ngFor="let page of pages"
-        type="button"
-        (click)="onPageChange(page)"
-        [class.active]="page === currentPage"
-        class="btn btn-sm btn-outline-primary">
-        {{page + 1}}
-      </button>
-
-      <button
-        type="button"
-        (click)="onPageChange(currentPage + 1)"
-        [disabled]="!hasNextPage"
-        class="btn btn-sm btn-outline-primary">
-        <i class="fas fa-angle-right"></i>
-      </button>
-
-      <button
-        type="button"
-        (click)="onPageChange(totalPages - 1)"
-        [disabled]="!hasNextPage"
-        class="btn btn-sm btn-outline-primary">
-        <i class="fas fa-angle-double-right"></i>
-      </button>
-    </div>
-  </div>
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="11" class="text-center">
+          <div class="no-products-content">
+            <i class="pi pi-box text-6xl text-muted"></i>
+            <h3 class="heading-3">No hay productos</h3>
+            <p class="text-body">No se encontraron productos con los filtros aplicados.</p>
+            <p-button
+              (onClick)="onClearSearch()"
+              label="Limpiar Filtros"
+              icon="pi pi-refresh"
+              styleClass="btn-primary btn-sm">
+            </p-button>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
 </div>

@@ -1,88 +1,91 @@
 <div class="search-container">
   <div class="search-form">
     <!-- Búsqueda por texto -->
-    <div class="form-group">
-      <label for="texto">Buscar por texto:</label>
+    <div class="input-group">
+      <label for="texto" class="input-label">Buscar por texto:</label>
       <input
         type="text"
         id="texto"
         [(ngModel)]="busqueda.texto"
         placeholder="Nombre o descripción del producto"
-        class="form-control">
+        class="input-search">
     </div>
 
     <!-- Rango de precios -->
     <div class="form-row">
-      <div class="form-group">
-        <label for="precioMin">Precio mínimo:</label>
+      <div class="input-group">
+        <label for="precioMin" class="input-label">Precio mínimo:</label>
         <input
           type="number"
           id="precioMin"
           [(ngModel)]="busqueda.precioMin"
           placeholder="0.00"
-          class="form-control"
+          class="input-text"
           step="0.01">
       </div>
-      <div class="form-group">
-        <label for="precioMax">Precio máximo:</label>
+      <div class="input-group">
+        <label for="precioMax" class="input-label">Precio máximo:</label>
         <input
           type="number"
           id="precioMax"
           [(ngModel)]="busqueda.precioMax"
           placeholder="999.99"
-          class="form-control"
+          class="input-text"
           step="0.01">
       </div>
     </div>
 
     <!-- Filtros por categoría, marca y proveedor -->
     <div class="form-row">
-      <div class="form-group">
-        <label for="categoriaId">Categoría:</label>
-        <select
+      <div class="input-group">
+        <label for="categoriaId" class="input-label">Categoría:</label>
+        <p-dropdown
           id="categoriaId"
           [(ngModel)]="busqueda.categoriaId"
-          class="form-control">
-          <option value="">Todas las categorías</option>
-          <!-- Las opciones se cargarán dinámicamente -->
-        </select>
+          [options]="categoriaOptions"
+          placeholder="Todas las categorías"
+          [showClear]="true"
+          styleClass="w-full">
+        </p-dropdown>
       </div>
-      <div class="form-group">
-        <label for="marcaId">Marca:</label>
-        <select
+      <div class="input-group">
+        <label for="marcaId" class="input-label">Marca:</label>
+        <p-dropdown
           id="marcaId"
           [(ngModel)]="busqueda.marcaId"
-          class="form-control">
-          <option value="">Todas las marcas</option>
-          <!-- Las opciones se cargarán dinámicamente -->
-        </select>
+          [options]="marcaOptions"
+          placeholder="Todas las marcas"
+          [showClear]="true"
+          styleClass="w-full">
+        </p-dropdown>
       </div>
-      <div class="form-group">
-        <label for="proveedorId">Proveedor:</label>
-        <select
+      <div class="input-group">
+        <label for="proveedorId" class="input-label">Proveedor:</label>
+        <p-dropdown
           id="proveedorId"
           [(ngModel)]="busqueda.proveedorId"
-          class="form-control">
-          <option value="">Todos los proveedores</option>
-          <!-- Las opciones se cargarán dinámicamente -->
-        </select>
+          [options]="proveedorOptions"
+          placeholder="Todos los proveedores"
+          [showClear]="true"
+          styleClass="w-full">
+        </p-dropdown>
       </div>
     </div>
 
     <!-- Botones de acción -->
     <div class="form-actions">
-      <button
-        type="button"
-        (click)="onSearch()"
-        class="btn btn-primary">
-        <i class="fas fa-search"></i> Buscar
-      </button>
-      <button
-        type="button"
-        (click)="onClear()"
-        class="btn btn-secondary">
-        <i class="fas fa-times"></i> Limpiar
-      </button>
+      <p-button
+        (onClick)="onSearch()"
+        label="Buscar"
+        icon="fas fa-search"
+        styleClass="btn-primary btn-sm">
+      </p-button>
+      <p-button
+        (onClick)="onClear()"
+        label="Limpiar"
+        icon="fas fa-times"
+        styleClass="btn-secondary btn-sm">
+      </p-button>
     </div>
   </div>
 </div>

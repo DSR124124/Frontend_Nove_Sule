@@ -30,21 +30,9 @@ export const CATALOGO_ROUTES: Routes = [
         loadComponent: () => import('./components/producto-search/producto-search.component').then(m => m.ProductoSearchComponent)
       },
       {
-        path: 'stock',
-        loadComponent: () => import('./components/producto-stock/producto-stock.component').then(m => m.ProductoStockComponent)
-      },
-      {
         path: 'reportes',
         loadComponent: () => import('./components/producto-reports/producto-reports.component').then(m => m.ProductoReportsComponent)
       },
-      {
-        path: 'mas-vendidos',
-        loadComponent: () => import('./components/producto-reports/producto-reports.component').then(m => m.ProductoReportsComponent)
-      },
-      {
-        path: 'stock-bajo',
-        loadComponent: () => import('./components/producto-stock/producto-stock.component').then(m => m.ProductoStockComponent)
-      }
     ]
   },
   {
@@ -53,24 +41,49 @@ export const CATALOGO_ROUTES: Routes = [
       {
         path: '',
         loadComponent: () => import('./components/categoria-list/categoria-list.component').then(m => m.CategoriaListComponent)
-      }
-    ]
-  },
-  {
-    path: 'proveedores',
-    children: [
-      {
-        path: '',
-        loadComponent: () => import('./components/proveedor-list/proveedor-list.component').then(m => m.ProveedorListComponent)
       },
       {
         path: 'nuevo',
-        loadComponent: () => import('./components/proveedor-form/proveedor-form.component').then(m => m.ProveedorFormComponent)
+        loadComponent: () => import('./components/categoria-form/categoria-form.component').then(m => m.CategoriaFormComponent)
       },
       {
         path: 'editar/:id',
-        loadComponent: () => import('./components/proveedor-form/proveedor-form.component').then(m => m.ProveedorFormComponent)
+        loadComponent: () => import('./components/categoria-form/categoria-form.component').then(m => m.CategoriaFormComponent)
       }
     ]
-  }
+  },
+      {
+        path: 'marcas',
+        children: [
+          {
+            path: '',
+            loadComponent: () => import('./components/marca-list/marca-list.component').then(m => m.MarcaListComponent)
+          },
+          {
+            path: 'nuevo',
+            loadComponent: () => import('./components/marca-form/marca-form.component').then(m => m.MarcaFormComponent)
+          },
+          {
+            path: 'editar/:id',
+            loadComponent: () => import('./components/marca-form/marca-form.component').then(m => m.MarcaFormComponent)
+          }
+        ]
+      },
+      {
+        path: 'proveedores',
+        children: [
+          {
+            path: '',
+            loadComponent: () => import('./components/proveedor-list/proveedor-list.component').then(m => m.ProveedorListComponent)
+          },
+          {
+            path: 'nuevo',
+            loadComponent: () => import('./components/proveedor-form/proveedor-form.component').then(m => m.ProveedorFormComponent)
+          },
+          {
+            path: 'editar/:id',
+            loadComponent: () => import('./components/proveedor-form/proveedor-form.component').then(m => m.ProveedorFormComponent)
+          }
+        ]
+      }
 ];

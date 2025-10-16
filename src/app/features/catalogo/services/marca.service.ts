@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
-import { Marca, MarcaRequest, MarcaBasica } from '../models/marca.model';
+import { Marca, MarcaRequest, MarcaBasica, MarcaFiltros } from '../models/marca.model';
 import { ApiResponse, PaginatedResponse } from '../models/api-response.model';
 
 @Injectable({
@@ -48,13 +48,22 @@ export class MarcaService {
   /**
    * Listar marcas con filtros y paginación
    */
-  listar(filtros: any = {}): Observable<ApiResponse<PaginatedResponse<Marca>>> {
+  listar(filtros: MarcaFiltros = {}): Observable<ApiResponse<PaginatedResponse<Marca>>> {
     let params = new HttpParams();
 
-    if (filtros.nombre) params = params.set('nombre', filtros.nombre);
-    if (filtros.estado) params = params.set('estado', filtros.estado);
-    if (filtros.page !== undefined) params = params.set('page', filtros.page.toString());
-    if (filtros.size !== undefined) params = params.set('size', filtros.size.toString());
+    // Solo agregar parámetros que no sean undefined, null o vacíos
+    if (filtros.nombre && filtros.nombre.trim()) {
+      params = params.set('nombre', filtros.nombre.trim());
+    }
+    if (filtros.estado && filtros.estado.trim()) {
+      params = params.set('estado', filtros.estado.trim());
+    }
+
+    // Parámetros de paginación con valores por defecto
+    const page = filtros.page !== undefined ? filtros.page : 0;
+    const size = filtros.size !== undefined ? filtros.size : 10;
+    params = params.set('page', page.toString());
+    params = params.set('size', size.toString());
 
     return this.http.get<ApiResponse<PaginatedResponse<Marca>>>(this.baseUrl, { params });
   }
@@ -67,44 +76,10 @@ export class MarcaService {
   }
 
   /**
-   * Listar todas las marcas (sin paginación)
-   */
-  listarTodas(): Observable<ApiResponse<Marca[]>> {
-    return this.http.get<ApiResponse<Marca[]>>(`${this.baseUrl}/todas`);
-  }
-
-  // ===== OPERACIONES ESPECÍFICAS =====
-
-  /**
    * Cambiar estado de una marca
    */
   cambiarEstado(id: number, estado: string): Observable<ApiResponse<Marca>> {
     const params = new HttpParams().set('estado', estado);
     return this.http.patch<ApiResponse<Marca>>(`${this.baseUrl}/${id}/estado`, null, { params });
-  }
-
-  /**
-   * Verificar si un nombre de marca ya existe
-   */
-  verificarNombre(nombre: string): Observable<ApiResponse<boolean>> {
-    const params = new HttpParams().set('nombre', nombre);
-    return this.http.get<ApiResponse<boolean>>(`${this.baseUrl}/verificar-nombre`, { params });
-  }
-
-  // ===== MÉTODOS DE UTILIDAD =====
-
-  /**
-   * Obtener marcas para select/dropdown
-   */
-  obtenerParaSelect(): Observable<MarcaBasica[]> {
-    return this.http.get<MarcaBasica[]>(`${this.baseUrl}/select`);
-  }
-
-  /**
-   * Buscar marcas por texto
-   */
-  buscarPorTexto(texto: string): Observable<ApiResponse<Marca[]>> {
-    const params = new HttpParams().set('texto', texto);
-    return this.http.get<ApiResponse<Marca[]>>(`${this.baseUrl}/buscar`, { params });
   }
 }
