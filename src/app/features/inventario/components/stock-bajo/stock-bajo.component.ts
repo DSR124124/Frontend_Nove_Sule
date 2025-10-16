@@ -10,7 +10,6 @@ import { InputTextModule } from 'primeng/inputtext';
 // import { CalendarModule } from 'primeng/calendar'; // Removed - using native date input
 import { FormsModule } from '@angular/forms';
 import { MessageService } from 'primeng/api';
-import { ToastModule } from 'primeng/toast';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 import { InventarioReportesService } from '../../services/inventario-reportes.service';
@@ -25,7 +24,6 @@ import { PrimeNgModule } from '../../../../prime-ng/prime-ng.module';
     PrimeNgModule,
     ProgressSpinnerModule
   ],
-  providers: [MessageService],
   templateUrl: './stock-bajo.component.html',
   styleUrls: ['./stock-bajo.component.css']
 })

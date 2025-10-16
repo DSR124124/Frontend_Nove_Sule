@@ -39,7 +39,6 @@ import { ApiResponse, PaginatedResponse } from '../../../catalogo/models/api-res
     // CalendarModule, // Removed
     ConfirmDialogModule
   ],
-  providers: [MessageService],
   templateUrl: './movimiento-list.component.html',
   styleUrl: './movimiento-list.component.css'
 })

@@ -17,7 +17,6 @@ import { PrimeNgModule } from '../../../../prime-ng/prime-ng.module';
       FormsModule,
       PrimeNgModule
     ],
-  providers: [MessageService],
   templateUrl: './reporte-movimientos.component.html',
   styleUrls: ['./reporte-movimientos.component.css']
 })

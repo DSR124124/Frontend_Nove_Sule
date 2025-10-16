@@ -16,7 +16,6 @@ import { ResumenInventario, ResumenGeneralInventario } from '../../models/resume
     PrimeNgModule,
     FormsModule
   ],
-  providers: [MessageService],
   templateUrl: './resumen-inventario.component.html',
   styleUrls: ['./resumen-inventario.component.css']
 })

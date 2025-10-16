@@ -3,13 +3,12 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 // PrimeNG
-import { MessageService } from 'primeng/api';
 import { PrimeNgModule } from '../../../../prime-ng/prime-ng.module';
 
 // Services & Models
 import { InventarioReportesService } from '../../services/inventario-reportes.service';
 import { ResumenGeneralInventario } from '../../models/resumen-inventario.model';
-
+import { MessageService } from '../../../../core/services/message.service';
 /**
  * Niveles de alerta para el stock
  */
@@ -34,7 +33,6 @@ interface SeverityConfig {
     FormsModule,
     PrimeNgModule
   ],
-  providers: [MessageService],
   templateUrl: './resumen-general.component.html',
   styleUrls: ['./resumen-general.component.css']
 })

@@ -11,7 +11,6 @@ import { SelectModule } from 'primeng/select';
 import { CardModule } from 'primeng/card';
 import { DividerModule } from 'primeng/divider';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
-import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 
 // Servicios y modelos
@@ -25,9 +24,8 @@ import { ApiResponse } from '../../models/api-response.model';
   imports: [
     CommonModule, ReactiveFormsModule, ButtonModule, InputTextModule,
     InputNumberModule, SelectModule, CardModule, DividerModule,
-    ProgressSpinnerModule, ToastModule
+    ProgressSpinnerModule
   ],
-  providers: [MessageService],
   templateUrl: './proveedor-form.component.html',
   styleUrl: './proveedor-form.component.css'
 })

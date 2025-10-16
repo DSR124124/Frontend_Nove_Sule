@@ -11,7 +11,6 @@ import { SelectModule } from 'primeng/select';
 // import { CalendarModule } from 'primeng/calendar'; // Removed - using native date input
 import { FormsModule } from '@angular/forms';
 import { MessageService } from 'primeng/api';
-import { ToastModule } from 'primeng/toast';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 
@@ -34,11 +33,9 @@ import { HistorialStockRequest } from '../../models/historial-stock.model';
     SelectModule,
     // CalendarModule, // Removed
     FormsModule,
-    ToastModule,
     ProgressSpinnerModule,
     AutoCompleteModule
   ],
-  providers: [MessageService],
   templateUrl: './historial-stock.component.html',
   styleUrls: ['./historial-stock.component.css']
 })

@@ -6,7 +6,6 @@ import { TableModule } from 'primeng/table';
 import { InputTextModule } from 'primeng/inputtext';
 import { FormsModule } from '@angular/forms';
 import { MessageService } from 'primeng/api';
-import { ToastModule } from 'primeng/toast';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { TagModule } from 'primeng/tag';
@@ -24,12 +23,10 @@ import { ValorInventarioResponse, ValorInventarioProductoResponse } from '../../
     TableModule,
     InputTextModule,
     FormsModule,
-    ToastModule,
     ProgressSpinnerModule,
     AutoCompleteModule,
     TagModule
   ],
-  providers: [MessageService],
   templateUrl: './valor-inventario.component.html',
   styleUrls: ['./valor-inventario.component.css']
 })

@@ -34,7 +34,6 @@ import { ApiResponse } from '../../../catalogo/models/api-response.model';
     ProgressSpinnerModule,
     MessageModule
   ],
-  providers: [MessageService],
   templateUrl: './movimiento-form.component.html',
   styleUrl: './movimiento-form.component.css'
 })

@@ -12,9 +12,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { PanelModule } from 'primeng/panel';
 import { TableModule } from 'primeng/table';
 import { TooltipModule } from 'primeng/tooltip';
-import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { MessageService } from 'primeng/api';
 import { MessageService as CoreMessageService } from '../../../../core/services/message.service';
 import { ConfirmationDialogService } from '../../../../shared/services/confirmation-dialog.service';
 
@@ -29,9 +27,8 @@ import { ApiResponse, PaginatedResponse } from '../../models/api-response.model'
   imports: [
     CommonModule, FormsModule, RouterModule, ButtonModule, InputTextModule,
     SelectModule, TagModule, ProgressSpinnerModule, PanelModule, TableModule,
-    TooltipModule, ToastModule, ConfirmDialogModule
+    TooltipModule, ConfirmDialogModule
   ],
-  providers: [MessageService],
   templateUrl: './proveedor-list.component.html',
   styleUrl: './proveedor-list.component.css'
 })
@@ -65,7 +62,6 @@ export class ProveedorListComponent implements OnInit {
 
   constructor(
     private proveedorService: ProveedorService,
-    private messageService: MessageService,
     private coreMessageService: CoreMessageService,
     private router: Router,
     private confirmationDialogService: ConfirmationDialogService

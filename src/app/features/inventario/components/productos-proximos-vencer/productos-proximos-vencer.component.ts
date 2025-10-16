@@ -11,7 +11,6 @@ import { SelectModule } from 'primeng/select';
 // import { CalendarModule } from 'primeng/calendar'; // Removed - using native date input
 import { FormsModule } from '@angular/forms';
 import { MessageService } from 'primeng/api';
-import { ToastModule } from 'primeng/toast';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { InputNumberModule } from 'primeng/inputnumber';
 
@@ -34,11 +33,9 @@ import { ProductosProximosVencerRequest } from '../../models/productos-proximos-
     SelectModule,
     // CalendarModule, // Removed
     FormsModule,
-    ToastModule,
     ProgressSpinnerModule,
     InputNumberModule
   ],
-  providers: [MessageService],
   templateUrl: './productos-proximos-vencer.component.html',
   styleUrls: ['./productos-proximos-vencer.component.css']
 })
