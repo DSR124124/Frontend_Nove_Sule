@@ -201,9 +201,6 @@
     flex-direction: column;
   }
 
-  .form-actions .p-button {
-    width: 100%;
-  }
 }
 
 @media (max-width: 480px) {

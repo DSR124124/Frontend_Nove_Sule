@@ -31,10 +31,14 @@ export class SidebarService {
       label: 'Inventario',
       icon: 'pi pi-warehouse',
       items: [
-        { label: 'Movimientos', icon: 'pi pi-arrows-h', routerLink: '/inventario/movimientos' },
-        { label: 'Stock', icon: 'pi pi-box', routerLink: '/inventario/stock-list' },
-        { label: 'Ajustes', icon: 'pi pi-cog', routerLink: '/inventario/ajuste-form' },
-        { label: 'Kardex', icon: 'pi pi-chart-line', routerLink: '/inventario/kardex-view' }
+        { label: 'Resumen General', icon: 'pi pi-chart-pie', routerLink: '/inventario/resumen-general' },
+        { label: 'Stock Bajo', icon: 'pi pi-exclamation-triangle', routerLink: '/inventario/stock-bajo' },
+        { label: 'Valor Inventario', icon: 'pi pi-dollar', routerLink: '/inventario/valor-inventario' },
+        { label: 'Próximos a Vencer', icon: 'pi pi-clock', routerLink: '/inventario/productos-proximos-vencer' },
+        { label: 'Reporte Movimientos', icon: 'pi pi-chart-line', routerLink: '/inventario/reporte-movimientos' },
+        { label: 'Historial Stock', icon: 'pi pi-history', routerLink: '/inventario/historial-stock' },
+        { label: 'Resumen Detallado', icon: 'pi pi-list', routerLink: '/inventario/resumen-inventario' },
+        { label: 'Movimientos', icon: 'pi pi-arrows-h', routerLink: '/inventario/movimientos' }
       ]
     },
     {

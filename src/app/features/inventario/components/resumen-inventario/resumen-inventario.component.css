@@ -1,0 +1,296 @@
+.p-fluid {
+  background-color: var(--gray-50);
+  min-height: 100vh;
+  padding: 0.5rem;
+}
+
+/* KPIs Container */
+.kpis-container {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  padding-bottom: 0.25rem;
+  scrollbar-width: thin;
+  scrollbar-color: var(--primary-light) var(--gray-100);
+}
+
+/* Custom scrollbar for webkit browsers */
+.kpis-container::-webkit-scrollbar {
+  height: 6px;
+}
+
+.kpis-container::-webkit-scrollbar-track {
+  background: var(--gray-100);
+  border-radius: 3px;
+}
+
+.kpis-container::-webkit-scrollbar-thumb {
+  background: var(--primary-light);
+  border-radius: 3px;
+}
+
+.kpis-container::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
+}
+
+/* Stat Cards */
+.stat-card {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  padding: 1rem;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--gray-200);
+  transition: var(--transition-all);
+  flex: 0 0 auto;
+  min-width: 200px;
+  max-width: 250px;
+}
+
+.stat-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.stat-card-primary {
+  border-left: 4px solid var(--primary);
+}
+
+.stat-card-danger {
+  border-left: 4px solid var(--error);
+}
+
+.stat-card-success {
+  border-left: 4px solid var(--success);
+}
+
+.stat-card-warning {
+  border-left: 4px solid var(--warning);
+}
+
+.p-card {
+  margin: 0;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  transition: var(--transition-all);
+  border: 1px solid var(--gray-200);
+}
+
+.p-card:hover {
+  box-shadow: var(--shadow-lg);
+}
+
+.p-card .p-card-body {
+  padding: 1rem;
+}
+
+.p-toolbar {
+  margin-bottom: 1rem;
+  background-color: var(--gray-50);
+  border-radius: var(--radius-md);
+  padding: 0.75rem;
+  border: 1px solid var(--gray-200);
+  transition: var(--transition-all);
+}
+
+.p-toolbar:hover {
+  border-color: var(--primary-light);
+  box-shadow: var(--shadow-sm);
+}
+
+.p-datatable {
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.p-datatable .p-datatable-header {
+  background-color: var(--primary);
+  color: var(--text-on-primary);
+  border: none;
+}
+
+.p-datatable .p-datatable-thead > tr > th {
+  background-color: var(--primary);
+  color: var(--text-on-primary);
+  border: none;
+  padding: 0.75rem 0.5rem;
+  font-weight: 600;
+  font-family: var(--font-heading);
+}
+
+.p-datatable .p-datatable-tbody > tr > td {
+  padding: 0.5rem;
+  border-bottom: 1px solid var(--gray-200);
+  transition: var(--transition-all);
+}
+
+.p-datatable .p-datatable-tbody > tr:hover > td {
+  background-color: var(--gray-50);
+}
+
+.p-datatable .p-datatable-tbody > tr:nth-child(even) > td {
+  background-color: var(--gray-25);
+}
+
+.p-datatable .p-datatable-tbody > tr:nth-child(even):hover > td {
+  background-color: var(--gray-100);
+}
+
+.font-semibold {
+  font-weight: 600;
+  font-family: var(--font-body);
+  color: var(--text-primary);
+}
+
+.p-input-icon-left {
+  position: relative;
+}
+
+.p-input-icon-left i {
+  position: absolute;
+  left: 0.75rem;
+  top: 50%;
+  margin-top: -0.5rem;
+  color: var(--text-secondary);
+}
+
+.p-input-icon-left input {
+  padding-left: 2.5rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--gray-300);
+  transition: var(--transition-all);
+}
+
+.p-input-icon-left input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 0.2rem var(--primary-light);
+}
+
+.card {
+  padding: 1rem;
+  border-radius: var(--radius-md);
+  border: 1px solid;
+  transition: var(--transition-all);
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.bg-blue-50 {
+  background-color: var(--info-light);
+}
+
+.border-blue-200 {
+  border-color: var(--info);
+}
+
+.bg-red-50 {
+  background-color: var(--error-light);
+}
+
+.border-red-200 {
+  border-color: var(--error);
+}
+
+.bg-green-50 {
+  background-color: var(--success-light);
+}
+
+.border-green-200 {
+  border-color: var(--success);
+}
+
+.bg-orange-50 {
+  background-color: var(--warning-light);
+}
+
+.border-orange-200 {
+  border-color: var(--warning);
+}
+
+.text-blue-500 {
+  color: var(--info);
+  font-weight: 600;
+}
+
+.text-red-500 {
+  color: var(--error);
+  font-weight: 600;
+}
+
+.text-green-500 {
+  color: var(--success);
+  font-weight: 600;
+}
+
+.text-orange-500 {
+  color: var(--warning);
+  font-weight: 600;
+}
+
+.text-900 {
+  color: var(--text-primary);
+  font-family: var(--font-body);
+}
+
+.text-600 {
+  color: var(--text-secondary);
+  font-family: var(--font-body);
+}
+
+.text-400 {
+  color: var(--text-muted);
+}
+
+.text-500 {
+  color: var(--text-secondary);
+}
+
+/* Paginator */
+.p-paginator {
+  background-color: var(--gray-50);
+  border: 1px solid var(--gray-200);
+  border-top: none;
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+}
+
+.p-paginator .p-paginator-page,
+.p-paginator .p-paginator-first,
+.p-paginator .p-paginator-prev,
+.p-paginator .p-paginator-next,
+.p-paginator .p-paginator-last {
+  border-radius: var(--radius-sm);
+  margin: 0 0.125rem;
+  transition: var(--transition-all);
+}
+
+.p-paginator .p-paginator-page:hover,
+.p-paginator .p-paginator-first:hover,
+.p-paginator .p-paginator-prev:hover,
+.p-paginator .p-paginator-next:hover,
+.p-paginator .p-paginator-last:hover {
+  background-color: var(--primary-light);
+  color: var(--text-on-primary);
+}
+
+.p-paginator .p-paginator-page.p-highlight {
+  background-color: var(--primary);
+  color: var(--text-on-primary);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .kpis-container {
+    gap: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+
+  .stat-card {
+    min-width: 180px;
+    max-width: 200px;
+    padding: 0.75rem;
+  }
+}
