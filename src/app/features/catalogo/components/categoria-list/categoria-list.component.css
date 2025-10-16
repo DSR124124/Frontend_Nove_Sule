@@ -241,28 +241,14 @@
     gap: var(--space-4);
     align-items: stretch;
   }
-
-  .header-actions {
-    justify-content: center;
-  }
-
+  .header-actions { justify-content: center; }
   .filters-row {
     grid-template-columns: 1fr;
     gap: var(--space-3);
   }
-
-  .filter-actions {
-    justify-content: center;
-  }
-
-  .panel-header {
-    font-size: var(--text-sm);
-  }
-
-  .categoria-info {
-    gap: var(--space-1);
-  }
-
+  .filter-actions { justify-content: center; }
+  .panel-header { font-size: var(--text-sm); }
+  .categoria-info { gap: var(--space-1); }
   .categoria-img {
     width: 24px;
     height: 24px;
@@ -273,7 +259,4 @@
   .categoria-list-container {
     padding: var(--space-3);
   }
-
-
-
 }
