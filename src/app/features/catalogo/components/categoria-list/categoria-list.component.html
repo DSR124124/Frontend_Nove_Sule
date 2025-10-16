@@ -1,4 +1,6 @@
 <div class="categoria-list-container">
+  <!-- Diálogo de confirmación -->
+  <p-confirmDialog></p-confirmDialog>
   <!-- Header con acciones -->
   <div class="list-header">
     <div class="header-left">
@@ -27,13 +29,13 @@
   <p-panel
     header="Búsqueda y Filtros"
     [toggleable]="true"
-    [collapsed]="filtrosCollapsed"
+    [collapsed]="true"
     styleClass="filters-panel">
     <ng-template pTemplate="header">
       <div class="panel-header">
         <i class="fas fa-search"></i>
         <span>Búsqueda y Filtros</span>
-        <i class="fas" [ngClass]="filtrosCollapsed ? 'fa-chevron-down' : 'fa-chevron-up'"></i>
+        <i class="fas fa-chevron-down"></i>
       </div>
     </ng-template>
 

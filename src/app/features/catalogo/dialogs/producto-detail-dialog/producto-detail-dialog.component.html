@@ -1,0 +1,147 @@
+<p-dialog
+  header="Detalles del Producto"
+  [(visible)]="visible"
+  [modal]="true"
+  [style]="{width: '600px'}"
+  [closable]="true"
+  (onHide)="onHide()">
+
+  <div *ngIf="producto" class="producto-details">
+    <!-- Información básica -->
+    <div class="detail-section">
+      <h4 class="detail-title">Información Básica</h4>
+      <div class="detail-grid">
+        <div class="detail-item">
+          <label>Código:</label>
+          <span>{{producto.codigo}}</span>
+        </div>
+        <div class="detail-item">
+          <label>Nombre:</label>
+          <span>{{producto.nombre}}</span>
+        </div>
+        <div class="detail-item">
+          <label>Descripción:</label>
+          <span>{{producto.descripcion || 'Sin descripción'}}</span>
+        </div>
+        <div class="detail-item">
+          <label>Estado:</label>
+          <p-tag
+            [value]="producto.estado"
+            [styleClass]="getEstadoStyleClass(producto.estado)"
+            [rounded]="true">
+          </p-tag>
+        </div>
+      </div>
+    </div>
+
+    <!-- Información comercial -->
+    <div class="detail-section">
+      <h4 class="detail-title">Información Comercial</h4>
+      <div class="detail-grid">
+        <div class="detail-item">
+          <label>Precio de Venta:</label>
+          <span class="text-success font-semibold">S/ {{producto.precio | number:'1.2-2'}}</span>
+        </div>
+        <div class="detail-item">
+          <label>Precio de Compra:</label>
+          <span class="text-muted">S/ {{producto.precioCompra | number:'1.2-2'}}</span>
+        </div>
+        <div class="detail-item">
+          <label>Stock Actual:</label>
+          <span [ngClass]="getStockTextClass(producto.stock, producto.stockMinimo)">
+            {{producto.stock}} unidades
+          </span>
+        </div>
+        <div class="detail-item">
+          <label>Stock Mínimo:</label>
+          <span>{{producto.stockMinimo}} unidades</span>
+        </div>
+        <div class="detail-item" *ngIf="producto.stockMaximo">
+          <label>Stock Máximo:</label>
+          <span>{{producto.stockMaximo}} unidades</span>
+        </div>
+        <div class="detail-item" *ngIf="producto.codigoBarras">
+          <label>Código de Barras:</label>
+          <span class="font-mono">{{producto.codigoBarras}}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Información de categorización -->
+    <div class="detail-section">
+      <h4 class="detail-title">Categorización</h4>
+      <div class="detail-grid">
+        <div class="detail-item">
+          <label>Categoría:</label>
+          <span>{{producto.categoria.nombre}}</span>
+        </div>
+        <div class="detail-item" *ngIf="producto.marca">
+          <label>Marca:</label>
+          <span>{{producto.marca.nombre}}</span>
+        </div>
+        <div class="detail-item" *ngIf="producto.proveedor">
+          <label>Proveedor:</label>
+          <span>{{producto.proveedor.nombre}}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Información adicional -->
+    <div class="detail-section" *ngIf="producto.unidad || producto.peso || producto.ubicacion">
+      <h4 class="detail-title">Información Adicional</h4>
+      <div class="detail-grid">
+        <div class="detail-item" *ngIf="producto.unidad">
+          <label>Unidad:</label>
+          <span>{{producto.unidad}}</span>
+        </div>
+        <div class="detail-item" *ngIf="producto.peso">
+          <label>Peso:</label>
+          <span>{{producto.peso}} kg</span>
+        </div>
+        <div class="detail-item" *ngIf="producto.ubicacion">
+          <label>Ubicación:</label>
+          <span>{{producto.ubicacion}}</span>
+        </div>
+        <div class="detail-item" *ngIf="producto.lote">
+          <label>Lote:</label>
+          <span>{{producto.lote}}</span>
+        </div>
+        <div class="detail-item" *ngIf="producto.fechaVencimiento">
+          <label>Fecha de Vencimiento:</label>
+          <span>{{producto.fechaVencimiento | date:'dd/MM/yyyy'}}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Fechas -->
+    <div class="detail-section">
+      <h4 class="detail-title">Fechas</h4>
+      <div class="detail-grid">
+        <div class="detail-item">
+          <label>Fecha de Creación:</label>
+          <span>{{producto.fechaCreacion | date:'dd/MM/yyyy HH:mm'}}</span>
+        </div>
+        <div class="detail-item">
+          <label>Última Modificación:</label>
+          <span>{{producto.fechaModificacion | date:'dd/MM/yyyy HH:mm'}}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <p-button
+      label="Cerrar"
+      icon="pi pi-times"
+      styleClass="btn-secondary"
+      (onClick)="onHide()">
+    </p-button>
+    <p-button
+      label="Editar"
+      icon="pi pi-pencil"
+      styleClass="btn-primary"
+      [routerLink]="['/catalogo/productos/editar', producto?.id]"
+      (onClick)="onEdit()">
+    </p-button>
+  </ng-template>
+</p-dialog>

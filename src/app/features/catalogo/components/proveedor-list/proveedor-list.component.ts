@@ -13,7 +13,10 @@ import { PanelModule } from 'primeng/panel';
 import { TableModule } from 'primeng/table';
 import { TooltipModule } from 'primeng/tooltip';
 import { ToastModule } from 'primeng/toast';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { MessageService } from 'primeng/api';
+import { MessageService as CoreMessageService } from '../../../../core/services/message.service';
+import { ConfirmationDialogService } from '../../../../shared/services/confirmation-dialog.service';
 
 // Servicios y modelos
 import { ProveedorService } from '../../services/proveedor.service';
@@ -26,7 +29,7 @@ import { ApiResponse, PaginatedResponse } from '../../models/api-response.model'
   imports: [
     CommonModule, FormsModule, RouterModule, ButtonModule, InputTextModule,
     DropdownModule, TagModule, ProgressSpinnerModule, PanelModule, TableModule,
-    TooltipModule, ToastModule
+    TooltipModule, ToastModule, ConfirmDialogModule
   ],
   providers: [MessageService],
   templateUrl: './proveedor-list.component.html',
@@ -63,7 +66,9 @@ export class ProveedorListComponent implements OnInit {
   constructor(
     private proveedorService: ProveedorService,
     private messageService: MessageService,
-    private router: Router
+    private coreMessageService: CoreMessageService,
+    private router: Router,
+    private confirmationDialogService: ConfirmationDialogService
   ) { }
 
   ngOnInit(): void {
@@ -78,41 +83,14 @@ export class ProveedorListComponent implements OnInit {
 
     this.proveedorService.listar(filtrosLimpios).subscribe({
       next: (response: ApiResponse<PaginatedResponse<Proveedor>>) => {
-        if (response.success && response.data) {
-          this.proveedores = response.data.content || [];
-          this.totalRecords = response.data.totalElements || 0;
-          this.first = (response.data.number || 0) * (response.data.size || 10);
-          this.rows = response.data.size || 10;
-
-          // Mostrar mensaje de éxito
-          const filtrosAplicados = this.obtenerFiltrosAplicados();
-          if (filtrosAplicados.length > 0) {
-            this.messageService.add({
-              severity: 'success', summary: 'Búsqueda Exitosa',
-              detail: `Se encontraron ${this.proveedores.length} proveedores con los filtros aplicados`
-            });
-          } else {
-            this.messageService.add({
-              severity: 'success', summary: 'Proveedores Cargados',
-              detail: `Se cargaron ${this.proveedores.length} proveedores correctamente`
-            });
-          }
-        } else {
-          this.proveedores = [];
-          this.totalRecords = 0;
-          this.messageService.add({
-            severity: 'warn', summary: 'Sin Datos',
-            detail: 'No se encontraron proveedores'
-          });
-        }
+        this.proveedores = response.data?.content || [];
+        this.totalRecords = response.data?.totalElements || 0;
+        this.first = (response.data?.number || 0) * (response.data?.size || 10);
+        this.rows = response.data?.size || 10;
         this.loading = false;
       },
       error: (error) => {
-        console.error('Error al cargar proveedores:', error);
-        this.messageService.add({
-          severity: 'error', summary: 'Error',
-          detail: 'Error al cargar los proveedores'
-        });
+        this.coreMessageService.handleHttpError(error);
         this.loading = false;
       }
     });
@@ -140,43 +118,16 @@ export class ProveedorListComponent implements OnInit {
   }
 
   limpiarFiltros(): ProveedorFiltros {
-    const filtrosLimpios: ProveedorFiltros = {
+    return {
       page: this.filtros.page,
-      size: this.filtros.size
+      size: this.filtros.size,
+      nombre: this.filtros.nombre?.trim() || undefined,
+      ruc: this.filtros.ruc?.trim() || undefined,
+      email: this.filtros.email?.trim() || undefined,
+      estado: this.filtros.estado
     };
-
-    if (this.filtros.nombre && this.filtros.nombre.trim()) {
-      filtrosLimpios.nombre = this.filtros.nombre.trim();
-    }
-    if (this.filtros.ruc && this.filtros.ruc.trim()) {
-      filtrosLimpios.ruc = this.filtros.ruc.trim();
-    }
-    if (this.filtros.email && this.filtros.email.trim()) {
-      filtrosLimpios.email = this.filtros.email.trim();
-    }
-    if (this.filtros.estado) {
-      filtrosLimpios.estado = this.filtros.estado;
-    }
-
-    return filtrosLimpios;
   }
 
-  obtenerFiltrosAplicados(): string[] {
-    const filtros: string[] = [];
-    if (this.filtros.nombre && this.filtros.nombre.trim()) {
-      filtros.push(`Nombre: ${this.filtros.nombre.trim()}`);
-    }
-    if (this.filtros.ruc && this.filtros.ruc.trim()) {
-      filtros.push(`RUC: ${this.filtros.ruc.trim()}`);
-    }
-    if (this.filtros.email && this.filtros.email.trim()) {
-      filtros.push(`Email: ${this.filtros.email.trim()}`);
-    }
-    if (this.filtros.estado) {
-      filtros.push(`Estado: ${this.filtros.estado}`);
-    }
-    return filtros;
-  }
 
   // ===== MÉTODOS DE PAGINACIÓN =====
 
@@ -194,60 +145,43 @@ export class ProveedorListComponent implements OnInit {
 
   // ===== MÉTODOS DE ACCIONES =====
 
-  onEliminar(proveedor: Proveedor): void {
-    if (confirm(`¿Estás seguro de que deseas eliminar el proveedor "${proveedor.nombre}"?`)) {
+  async onEliminar(proveedor: Proveedor): Promise<void> {
+    const confirmed = await this.confirmationDialogService.showDeleteConfirmation(
+      proveedor.nombre,
+      'proveedor'
+    );
+
+    if (confirmed) {
       this.proveedorService.eliminar(proveedor.id).subscribe({
         next: (response: ApiResponse<string>) => {
-          if (response.success) {
-            this.messageService.add({
-              severity: 'success', summary: 'Eliminado',
-              detail: 'Proveedor eliminado exitosamente'
-            });
-            this.cargarProveedores();
-          } else {
-            this.messageService.add({
-              severity: 'error', summary: 'Error',
-              detail: response.message || 'Error al eliminar el proveedor'
-            });
-          }
+          this.coreMessageService.success('Proveedor eliminado exitosamente', 'Eliminación Exitosa');
+          this.cargarProveedores();
         },
         error: (error) => {
-          console.error('Error al eliminar proveedor:', error);
-          this.messageService.add({
-            severity: 'error', summary: 'Error',
-            detail: 'Error al eliminar el proveedor'
-          });
+          this.coreMessageService.handleHttpError(error);
         }
       });
     }
   }
 
-  onCambiarEstado(proveedor: Proveedor): void {
+  async onCambiarEstado(proveedor: Proveedor): Promise<void> {
     const nuevoEstado = proveedor.estado === Estado.ACTIVO ? Estado.INACTIVO : Estado.ACTIVO;
     const accion = nuevoEstado === Estado.ACTIVO ? 'activar' : 'desactivar';
 
-    if (confirm(`¿Estás seguro de que deseas ${accion} el proveedor "${proveedor.nombre}"?`)) {
+    const confirmed = await this.confirmationDialogService.showStatusChangeConfirmation(
+      proveedor.nombre,
+      accion,
+      'proveedor'
+    );
+
+    if (confirmed) {
       this.proveedorService.cambiarEstado(proveedor.id, nuevoEstado).subscribe({
         next: (response: ApiResponse<Proveedor>) => {
-          if (response.success) {
-            this.messageService.add({
-              severity: 'success', summary: 'Estado Actualizado',
-              detail: `Proveedor ${accion}do exitosamente`
-            });
-            this.cargarProveedores();
-          } else {
-            this.messageService.add({
-              severity: 'error', summary: 'Error',
-              detail: response.message || 'Error al cambiar el estado del proveedor'
-            });
-          }
+          this.coreMessageService.success(`Proveedor ${accion}do exitosamente`, 'Estado Actualizado');
+          this.cargarProveedores();
         },
         error: (error) => {
-          console.error('Error al cambiar estado:', error);
-          this.messageService.add({
-            severity: 'error', summary: 'Error',
-            detail: 'Error al cambiar el estado del proveedor'
-          });
+          this.coreMessageService.handleHttpError(error);
         }
       });
     }

@@ -27,21 +27,18 @@
   <p-panel
     header="Búsqueda y Filtros"
     [toggleable]="true"
-    [collapsed]="filtrosCollapsed"
+    [collapsed]="true"
     styleClass="filters-panel">
     <ng-template pTemplate="header">
       <div class="panel-header">
         <i class="pi pi-search"></i>
         <span>Búsqueda y Filtros</span>
-        <i class="pi" [ngClass]="filtrosCollapsed ? 'pi-chevron-down' : 'pi-chevron-up'"></i>
+        <i class="pi pi-chevron-down"></i>
       </div>
     </ng-template>
 
     <!-- Componente de búsqueda -->
     <app-producto-search
-      [categoriaOptions]="categoriaOptions"
-      [marcaOptions]="marcaOptions"
-      [proveedorOptions]="proveedorOptions"
       (searchEvent)="onSearch($event)"
       (clearEvent)="onClearSearch()">
     </app-producto-search>
@@ -122,7 +119,7 @@
         </td>
         <td>
           <div class="stock-info">
-            <div class="stock-value" [ngClass]="getStockTextClass(producto.stock, producto.stockMinimo)">
+            <div class="stock-value" [ngClass]="producto.stock === 0 ? 'text-error' : producto.stock <= producto.stockMinimo ? 'text-warning' : 'text-success'">
               {{producto.stock}}
             </div>
             <div class="stock-min text-caption">Mín: {{producto.stockMinimo}}</div>
@@ -141,13 +138,16 @@
               icon="pi pi-eye"
               styleClass="btn-secondary btn-outlined btn-sm btn-text"
               pTooltip="Ver detalles"
-              tooltipPosition="top">
+              tooltipPosition="top"
+              (onClick)="onVerDetalles(producto)">
             </p-button>
             <p-button
               icon="pi pi-pencil"
               styleClass="btn-warning btn-outlined btn-sm btn-text"
               pTooltip="Editar"
-              tooltipPosition="top">
+              tooltipPosition="top"
+              [routerLink]="['/catalogo/productos/editar', producto.id]"
+              (click)="$event.stopPropagation()">
             </p-button>
             <p-button
               icon="pi pi-box"
@@ -178,4 +178,13 @@
       </tr>
     </ng-template>
   </p-table>
+
+  <!-- Diálogo de detalles del producto -->
+  <app-producto-detail-dialog
+    [(visible)]="showDetailsDialog"
+    [producto]="selectedProducto"
+    [loading]="loading"
+    (visibleChange)="onCerrarDetalles()"
+    (edit)="onEditProducto($event)">
+  </app-producto-detail-dialog>
 </div>

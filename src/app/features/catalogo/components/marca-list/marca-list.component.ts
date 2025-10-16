@@ -11,6 +11,9 @@ import { PanelModule } from 'primeng/panel';
 import { TableModule } from 'primeng/table';
 import { TooltipModule } from 'primeng/tooltip';
 import { MessageService } from 'primeng/api';
+import { MessageService as CoreMessageService } from '../../../../core/services/message.service';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ConfirmationDialogService } from '../../../../shared/services/confirmation-dialog.service';
 
 import { Marca, MarcaFiltros, Estado } from '../../models/marca.model';
 import { MarcaService } from '../../services/marca.service';
@@ -30,7 +33,8 @@ import { ApiResponse, PaginatedResponse } from '../../models/api-response.model'
     ProgressSpinnerModule,
     PanelModule,
     TableModule,
-    TooltipModule
+    TooltipModule,
+    ConfirmDialogModule
   ],
   templateUrl: './marca-list.component.html',
   styleUrl: './marca-list.component.css'
@@ -61,7 +65,9 @@ export class MarcaListComponent implements OnInit {
 
   constructor(
     private marcaService: MarcaService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private coreMessageService: CoreMessageService,
+    private confirmationDialogService: ConfirmationDialogService
   ) { }
 
   ngOnInit(): void {
@@ -71,25 +77,19 @@ export class MarcaListComponent implements OnInit {
   cargarMarcas(): void {
     this.loading = true;
 
-    // Crear filtros limpios solo con valores válidos
+    // Crear filtros limpios
     const filtrosLimpios: MarcaFiltros = {
       page: this.currentPage,
-      size: this.pageSize
+      size: this.pageSize,
+      nombre: this.filtros.nombre?.trim() || undefined,
+      estado: this.filtros.estado
     };
-
-    // Agregar filtros de búsqueda
-    if (this.filtros.nombre && this.filtros.nombre.trim()) {
-      filtrosLimpios.nombre = this.filtros.nombre.trim();
-    }
-    if (this.filtros.estado && this.filtros.estado.trim()) {
-      filtrosLimpios.estado = this.filtros.estado;
-    }
 
     this.marcaService.listar(filtrosLimpios).subscribe({
       next: (response: ApiResponse<PaginatedResponse<Marca>>) => {
-        this.marcas = response.data.content;
-        this.totalElements = response.data.totalElements;
-        this.totalPages = response.data.totalPages;
+        this.marcas = response.data?.content || [];
+        this.totalElements = response.data?.totalElements || 0;
+        this.totalPages = response.data?.totalPages || 0;
         this.loading = false;
 
         // Mostrar mensaje de éxito con filtros
@@ -98,25 +98,19 @@ export class MarcaListComponent implements OnInit {
         );
 
         if (filtrosAplicados.length > 0) {
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Búsqueda Exitosa',
-            detail: `Se encontraron ${this.marcas.length} marcas con los filtros aplicados`
-          });
+          this.coreMessageService.success(
+            `Se encontraron ${this.marcas.length} marcas con los filtros aplicados`,
+            'Búsqueda Exitosa'
+          );
         } else {
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Marcas Cargadas',
-            detail: `Se cargaron ${this.marcas.length} marcas correctamente`
-          });
+          this.coreMessageService.success(
+            `Se cargaron ${this.marcas.length} marcas correctamente`,
+            'Marcas Cargadas'
+          );
         }
       },
       error: (error) => {
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'Error al cargar las marcas'
-        });
+        this.coreMessageService.handleHttpError(error);
         this.loading = false;
       }
     });
@@ -146,48 +140,43 @@ export class MarcaListComponent implements OnInit {
     this.cargarMarcas();
   }
 
-  onEliminar(marca: Marca): void {
-    if (confirm(`¿Está seguro de que desea eliminar la marca "${marca.nombre}"?`)) {
+  async onEliminar(marca: Marca): Promise<void> {
+    const confirmed = await this.confirmationDialogService.showDeleteConfirmation(
+      marca.nombre,
+      'marca'
+    );
+
+    if (confirmed) {
       this.marcaService.eliminar(marca.id).subscribe({
         next: () => {
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Eliminación Exitosa',
-            detail: 'Marca eliminada exitosamente'
-          });
+          this.coreMessageService.success('Marca eliminada exitosamente', 'Eliminación Exitosa');
           this.cargarMarcas();
         },
         error: (error) => {
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Error',
-            detail: 'Error al eliminar la marca'
-          });
+          this.coreMessageService.handleHttpError(error);
         }
       });
     }
   }
 
-  onCambiarEstado(marca: Marca): void {
+  async onCambiarEstado(marca: Marca): Promise<void> {
     const nuevoEstado = marca.estado === 'ACTIVO' ? 'INACTIVO' : 'ACTIVO';
     const accion = nuevoEstado === 'ACTIVO' ? 'activar' : 'desactivar';
 
-    if (confirm(`¿Está seguro de que desea ${accion} la marca "${marca.nombre}"?`)) {
+    const confirmed = await this.confirmationDialogService.showStatusChangeConfirmation(
+      marca.nombre,
+      accion,
+      'marca'
+    );
+
+    if (confirmed) {
       this.marcaService.cambiarEstado(marca.id, nuevoEstado).subscribe({
         next: () => {
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Estado Actualizado',
-            detail: `Marca ${accion}da exitosamente`
-          });
+          this.coreMessageService.success(`Marca ${accion}da exitosamente`, 'Estado Actualizado');
           this.cargarMarcas();
         },
         error: (error) => {
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Error',
-            detail: 'Error al cambiar el estado de la marca'
-          });
+          this.coreMessageService.handleHttpError(error);
         }
       });
     }

@@ -57,6 +57,7 @@ export interface ProductoRequest {
   fechaVencimiento?: string;
   tags?: string[];
   imagen?: string;
+  imagenUrl?: string;
   imagenes?: string[];
   observaciones?: string;
   estado?: Estado;

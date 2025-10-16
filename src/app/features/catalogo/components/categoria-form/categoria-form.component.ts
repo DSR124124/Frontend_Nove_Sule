@@ -10,7 +10,7 @@ import { CategoriaRequest, Categoria } from '../../models/categoria.model';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputNumberModule } from 'primeng/inputnumber';
-import { DropdownModule } from 'primeng/dropdown';
+import { SelectModule } from 'primeng/select';
 import { CardModule } from 'primeng/card';
 import { DividerModule } from 'primeng/divider';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
@@ -24,7 +24,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
     ButtonModule,
     InputTextModule,
     InputNumberModule,
-    DropdownModule,
+    SelectModule,
     CardModule,
     DividerModule,
     ProgressSpinnerModule

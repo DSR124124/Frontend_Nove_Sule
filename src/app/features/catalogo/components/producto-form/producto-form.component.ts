@@ -13,9 +13,8 @@ import { ProductoRequest, CategoriaBasica, MarcaBasica, ProveedorBasico } from '
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputNumberModule } from 'primeng/inputnumber';
-import { DropdownModule } from 'primeng/dropdown';
+import { SelectModule } from 'primeng/select';
 import { CardModule } from 'primeng/card';
-import { DividerModule } from 'primeng/divider';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 @Component({
@@ -27,9 +26,8 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
     ButtonModule,
     InputTextModule,
     InputNumberModule,
-    DropdownModule,
+    SelectModule,
     CardModule,
-    DividerModule,
     ProgressSpinnerModule
   ],
   templateUrl: './producto-form.component.html',
@@ -90,6 +88,7 @@ export class ProductoFormComponent implements OnInit {
       fechaVencimiento: [null],
       tags: [[]],
       imagen: ['', [Validators.maxLength(255)]],
+      imagenUrl: ['', [Validators.maxLength(500)]],
       imagenes: [[]],
       observaciones: [''],
       estado: ['ACTIVO']

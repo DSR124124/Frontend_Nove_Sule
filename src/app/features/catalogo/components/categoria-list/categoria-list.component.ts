@@ -6,6 +6,7 @@ import { CategoriaService } from '../../services/categoria.service';
 import { Categoria, CategoriaFiltros } from '../../models/categoria.model';
 import { ApiResponse, PaginatedResponse } from '../../models/api-response.model';
 import { MessageService } from '../../../../core/services/message.service';
+import { ConfirmationDialogService } from '../../../../shared/services/confirmation-dialog.service';
 
 // PrimeNG imports
 import { ButtonModule } from 'primeng/button';
@@ -16,6 +17,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { PanelModule } from 'primeng/panel';
 import { TableModule } from 'primeng/table';
 import { TooltipModule } from 'primeng/tooltip';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 @Component({
   selector: 'app-categoria-list',
@@ -31,7 +33,8 @@ import { TooltipModule } from 'primeng/tooltip';
     ProgressSpinnerModule,
     PanelModule,
     TableModule,
-    TooltipModule
+    TooltipModule,
+    ConfirmDialogModule
   ],
   templateUrl: './categoria-list.component.html',
   styleUrl: './categoria-list.component.css'
@@ -62,12 +65,11 @@ export class CategoriaListComponent implements OnInit {
     { label: 'Eliminado', value: 'ELIMINADO' }
   ];
 
-  // Estado del panel de filtros
-  filtrosCollapsed = true;
 
   constructor(
     private categoriaService: CategoriaService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private confirmationDialogService: ConfirmationDialogService
   ) { }
 
   ngOnInit(): void {
@@ -77,25 +79,19 @@ export class CategoriaListComponent implements OnInit {
   cargarCategorias(): void {
     this.loading = true;
 
-    // Crear filtros limpios solo con valores válidos
+    // Crear filtros limpios
     const filtrosLimpios: CategoriaFiltros = {
       page: this.currentPage,
-      size: this.pageSize
+      size: this.pageSize,
+      nombre: this.filtros.nombre?.trim() || undefined,
+      estado: this.filtros.estado
     };
-
-    // Agregar filtros de búsqueda
-    if (this.filtros.nombre && this.filtros.nombre.trim()) {
-      filtrosLimpios.nombre = this.filtros.nombre.trim();
-    }
-    if (this.filtros.estado && this.filtros.estado.trim()) {
-      filtrosLimpios.estado = this.filtros.estado;
-    }
 
     this.categoriaService.listar(filtrosLimpios).subscribe({
       next: (response: ApiResponse<PaginatedResponse<Categoria>>) => {
-        this.categorias = response.data.content;
-        this.totalElements = response.data.totalElements;
-        this.totalPages = response.data.totalPages;
+        this.categorias = response.data?.content || [];
+        this.totalElements = response.data?.totalElements || 0;
+        this.totalPages = response.data?.totalPages || 0;
         this.loading = false;
 
         // Mostrar mensaje de éxito con filtros
@@ -135,7 +131,6 @@ export class CategoriaListComponent implements OnInit {
       size: 10
     };
     this.currentPage = 0;
-    this.messageService.info('Limpiando búsqueda y cargando todas las categorías...', 'Limpiando Búsqueda');
     this.cargarCategorias();
   }
 
@@ -145,12 +140,16 @@ export class CategoriaListComponent implements OnInit {
   }
 
   onRefresh(): void {
-    this.messageService.info('Actualizando lista de categorías...', 'Actualizando');
     this.cargarCategorias();
   }
 
-  onEliminar(categoria: Categoria): void {
-    if (confirm(`¿Está seguro de que desea eliminar la categoría "${categoria.nombre}"?`)) {
+  async onEliminar(categoria: Categoria): Promise<void> {
+    const confirmed = await this.confirmationDialogService.showDeleteConfirmation(
+      categoria.nombre,
+      'categoría'
+    );
+
+    if (confirmed) {
       this.categoriaService.eliminar(categoria.id).subscribe({
         next: (response) => {
           this.messageService.success('Categoría eliminada exitosamente', 'Eliminación Exitosa');
@@ -163,11 +162,17 @@ export class CategoriaListComponent implements OnInit {
     }
   }
 
-  onCambiarEstado(categoria: Categoria): void {
+  async onCambiarEstado(categoria: Categoria): Promise<void> {
     const nuevoEstado = categoria.estado === 'ACTIVO' ? 'INACTIVO' : 'ACTIVO';
     const accion = nuevoEstado === 'ACTIVO' ? 'activar' : 'desactivar';
 
-    if (confirm(`¿Está seguro de que desea ${accion} la categoría "${categoria.nombre}"?`)) {
+    const confirmed = await this.confirmationDialogService.showStatusChangeConfirmation(
+      categoria.nombre,
+      accion,
+      'categoría'
+    );
+
+    if (confirmed) {
       this.categoriaService.cambiarEstado(categoria.id, nuevoEstado).subscribe({
         next: (response) => {
           this.messageService.success(`Categoría ${accion}da exitosamente`, 'Estado Actualizado');

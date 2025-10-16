@@ -213,7 +213,7 @@
         <div class="form-row">
           <div class="input-group">
             <label for="categoriaId" class="input-label required">Categoría:</label>
-            <p-dropdown
+            <p-select
               id="categoriaId"
               formControlName="categoriaId"
               [options]="categoriaOptions"
@@ -221,7 +221,7 @@
               [showClear]="true"
               styleClass="w-full"
               [class.error]="categoriaId?.invalid && categoriaId?.touched">
-            </p-dropdown>
+            </p-select>
             <div class="error-message" *ngIf="categoriaId?.invalid && categoriaId?.touched">
               <span *ngIf="categoriaId?.errors?.['required']">La categoría es requerida</span>
             </div>
@@ -229,26 +229,26 @@
 
           <div class="input-group">
             <label for="marcaId" class="input-label">Marca:</label>
-            <p-dropdown
+            <p-select
               id="marcaId"
               formControlName="marcaId"
               [options]="marcaOptions"
               placeholder="Seleccione una marca"
               [showClear]="true"
               styleClass="w-full">
-            </p-dropdown>
+            </p-select>
           </div>
 
           <div class="input-group">
             <label for="proveedorId" class="input-label">Proveedor:</label>
-            <p-dropdown
+            <p-select
               id="proveedorId"
               formControlName="proveedorId"
               [options]="proveedorOptions"
               placeholder="Seleccione un proveedor"
               [showClear]="true"
               styleClass="w-full">
-            </p-dropdown>
+            </p-select>
           </div>
         </div>
       </p-card>
