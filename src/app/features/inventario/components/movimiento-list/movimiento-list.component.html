@@ -1,0 +1,221 @@
+<div class="movimiento-list-container">
+  <!-- Diálogo de confirmación -->
+  <p-confirmDialog></p-confirmDialog>
+
+  <!-- Header -->
+  <div class="list-header">
+    <div class="header-left">
+      <h2 class="heading-2">Lista de Movimientos de Inventario</h2>
+      <span class="text-caption">{{totalElements}} movimientos</span>
+    </div>
+    <div class="header-actions">
+      <p-button
+        (onClick)="onRefresh()"
+        [disabled]="loading"
+        label="Actualizar"
+        icon="pi pi-refresh"
+        styleClass="btn-secondary btn-outlined btn-sm"
+        [loading]="loading">
+      </p-button>
+      <p-button
+        routerLink="/inventario/movimientos/nuevo"
+        label="Nuevo Movimiento"
+        icon="pi pi-plus"
+        styleClass="btn-primary btn-sm">
+      </p-button>
+    </div>
+  </div>
+
+  <!-- Panel de filtros -->
+  <p-panel
+    header="Búsqueda y Filtros"
+    [toggleable]="true"
+    [collapsed]="true"
+    styleClass="filters-panel">
+    <ng-template pTemplate="header">
+      <div class="panel-header">
+        <i class="pi pi-search"></i>
+        <span>Búsqueda y Filtros</span>
+        <i class="pi pi-chevron-down"></i>
+      </div>
+    </ng-template>
+
+    <!-- Filtros -->
+    <div class="filters-content">
+      <div class="filters-row">
+        <div class="input-group">
+          <label class="input-label">ID del Producto</label>
+          <input
+            type="number"
+            pInputText
+            [(ngModel)]="filtros.productoId"
+            placeholder="Ingrese ID del producto"
+            class="input-text">
+        </div>
+
+        <div class="input-group">
+          <label class="input-label">Tipo de Movimiento</label>
+          <p-dropdown
+            [(ngModel)]="filtros.tipoMovimiento"
+            [options]="tipoMovimientoOptions"
+            placeholder="Seleccione tipo"
+            styleClass="w-full">
+          </p-dropdown>
+        </div>
+
+        <div class="input-group">
+          <label class="input-label">Fecha Inicio</label>
+          <p-calendar
+            [(ngModel)]="filtros.fechaInicio"
+            [showTime]="true"
+            placeholder="Seleccione fecha inicio"
+            styleClass="w-full">
+          </p-calendar>
+        </div>
+
+        <div class="input-group">
+          <label class="input-label">Fecha Fin</label>
+          <p-calendar
+            [(ngModel)]="filtros.fechaFin"
+            [showTime]="true"
+            placeholder="Seleccione fecha fin"
+            styleClass="w-full">
+          </p-calendar>
+        </div>
+
+        <div class="filter-actions">
+          <p-button
+            (onClick)="onSearch()"
+            [disabled]="loading"
+            label="Buscar"
+            icon="pi pi-search"
+            styleClass="btn-primary btn-sm">
+          </p-button>
+          <p-button
+            (onClick)="onClearSearch()"
+            [disabled]="loading"
+            label="Limpiar"
+            icon="pi pi-refresh"
+            styleClass="btn-secondary btn-outlined btn-sm">
+          </p-button>
+        </div>
+      </div>
+    </div>
+  </p-panel>
+
+  <!-- Loading -->
+  <div class="loading-container" *ngIf="loading">
+    <p-progressSpinner [style]="{'width': '50px', 'height': '50px'}" styleClass="custom-spinner"
+      ariaLabel="Cargando movimientos">
+    </p-progressSpinner>
+    <p class="text-body">Cargando movimientos...</p>
+  </div>
+
+  <!-- Tabla de movimientos -->
+  <p-table
+    [value]="movimientos"
+    [loading]="loading"
+    [paginator]="true"
+    [rows]="pageSize"
+    [totalRecords]="totalElements"
+    [first]="currentPage * pageSize"
+    (onPage)="onPageChange($event)"
+    styleClass="p-datatable-sm movimientos-table"
+    [rowHover]="true"
+    dataKey="id">
+
+    <!-- Columnas de la tabla -->
+    <ng-template pTemplate="header">
+      <tr>
+        <th style="width: 3rem">ID</th>
+        <th style="width: 4rem">Producto</th>
+        <th style="width: 6rem">Tipo</th>
+        <th style="width: 5rem">Cantidad</th>
+        <th style="width: 6rem">Precio Unit.</th>
+        <th style="width: 6rem">Total</th>
+        <th style="width: 8rem">Motivo</th>
+        <th style="width: 6rem">Fecha</th>
+        <th style="width: 6rem">Usuario</th>
+        <th style="width: 5rem">Acciones</th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-movimiento>
+      <tr>
+        <td>
+          <span class="text-caption">{{movimiento.id}}</span>
+        </td>
+        <td>
+          <div class="producto-info">
+            <div class="producto-name">{{movimiento.producto.nombre}}</div>
+            <div class="producto-code text-caption">{{movimiento.producto.codigo}}</div>
+          </div>
+        </td>
+        <td>
+          <p-tag
+            [value]="getTipoMovimientoText(movimiento.tipoMovimiento)"
+            [styleClass]="getTipoMovimientoStyleClass(movimiento.tipoMovimiento)"
+            [rounded]="true">
+          </p-tag>
+        </td>
+        <td>
+          <span class="text-body font-semibold"
+                [ngClass]="movimiento.tipoMovimiento === 'ENTRADA' ? 'text-success' : 'text-danger'">
+            {{movimiento.tipoMovimiento === 'ENTRADA' ? '+' : '-'}}{{movimiento.cantidad}}
+          </span>
+        </td>
+        <td>
+          <span class="text-body">
+            {{formatCurrency(movimiento.precioUnitario)}}
+          </span>
+        </td>
+        <td>
+          <span class="text-body font-semibold text-primary">
+            {{formatCurrency(movimiento.total)}}
+          </span>
+        </td>
+        <td>
+          <span class="text-body" [title]="movimiento.motivo">
+            {{movimiento.motivo | slice:0:30}}{{movimiento.motivo.length > 30 ? '...' : ''}}
+          </span>
+        </td>
+        <td>
+          <span class="text-caption">
+            {{formatDate(movimiento.fechaMovimiento)}}
+          </span>
+        </td>
+        <td>
+          <span class="text-body">{{movimiento.usuario.nombre}}</span>
+        </td>
+        <td>
+          <div class="table-actions">
+            <p-button
+              icon="pi pi-eye"
+              styleClass="btn-secondary btn-outlined btn-sm btn-text"
+              pTooltip="Ver detalles"
+              tooltipPosition="top">
+            </p-button>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="10" class="text-center">
+          <div class="no-movimientos-content">
+            <i class="pi pi-box text-6xl text-muted"></i>
+            <h3 class="heading-3">No hay movimientos</h3>
+            <p class="text-body">No se encontraron movimientos con los filtros aplicados.</p>
+            <p-button
+              (onClick)="onClearSearch()"
+              label="Limpiar Filtros"
+              icon="pi pi-refresh"
+              styleClass="btn-primary btn-sm">
+            </p-button>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

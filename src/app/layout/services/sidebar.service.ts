@@ -31,10 +31,10 @@ export class SidebarService {
       label: 'Inventario',
       icon: 'pi pi-warehouse',
       items: [
-        { label: 'Stock', icon: 'pi pi-box', routerLink: '/inventario/stock' },
-        { label: 'Ajustes', icon: 'pi pi-cog', routerLink: '/inventario/ajustes' },
-        { label: 'Traslados', icon: 'pi pi-arrows-h', routerLink: '/inventario/traslados' },
-        { label: 'Kardex', icon: 'pi pi-chart-line', routerLink: '/inventario/kardex' }
+        { label: 'Movimientos', icon: 'pi pi-arrows-h', routerLink: '/inventario/movimientos' },
+        { label: 'Stock', icon: 'pi pi-box', routerLink: '/inventario/stock-list' },
+        { label: 'Ajustes', icon: 'pi pi-cog', routerLink: '/inventario/ajuste-form' },
+        { label: 'Kardex', icon: 'pi pi-chart-line', routerLink: '/inventario/kardex-view' }
       ]
     },
     {
