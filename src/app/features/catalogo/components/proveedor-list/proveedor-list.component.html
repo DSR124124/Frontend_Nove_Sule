@@ -60,13 +60,15 @@
         <!-- Estado -->
         <div class="filter-group">
           <label for="filtroEstado" class="filter-label">Estado</label>
-          <p-dropdown
+          <p-select
             id="filtroEstado"
             [(ngModel)]="filtros.estado"
             [options]="opcionesEstado"
+            optionLabel="label"
+            optionValue="value"
             placeholder="Seleccionar estado..."
             class="filter-dropdown">
-          </p-dropdown>
+          </p-select>
         </div>
       </div>
 

@@ -7,8 +7,8 @@ import { TagModule } from 'primeng/tag';
 import { ToolbarModule } from 'primeng/toolbar';
 import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
-import { DropdownModule } from 'primeng/dropdown';
-import { CalendarModule } from 'primeng/calendar';
+import { SelectModule } from 'primeng/select';
+// import { CalendarModule } from 'primeng/calendar'; // Removed - using native date input
 import { FormsModule } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
@@ -31,8 +31,8 @@ import { HistorialStockRequest } from '../../models/historial-stock.model';
     ToolbarModule,
     DialogModule,
     InputTextModule,
-    DropdownModule,
-    CalendarModule,
+    SelectModule,
+    // CalendarModule, // Removed
     FormsModule,
     ToastModule,
     ProgressSpinnerModule,
@@ -48,6 +48,8 @@ export class HistorialStockComponent implements OnInit {
   productoId: number | null = null;
   fechaInicio: Date | null = null;
   fechaFin: Date | null = null;
+  fechaInicioInput: string = '';
+  fechaFinInput: string = '';
   productos: any[] = []; // Lista de productos para autocompletado
   productoSeleccionado: any = null;
 
@@ -58,6 +60,12 @@ export class HistorialStockComponent implements OnInit {
 
   ngOnInit(): void {
     this.cargarProductos();
+    // Initialize date inputs
+    const today = new Date().toISOString().split('T')[0];
+    this.fechaInicioInput = today;
+    this.fechaFinInput = today;
+    this.fechaInicio = new Date();
+    this.fechaFin = new Date();
   }
 
   cargarProductos(): void {
@@ -154,6 +162,18 @@ export class HistorialStockComponent implements OnInit {
       summary: 'Exportar',
       detail: 'Funcionalidad de exportación en desarrollo'
     });
+  }
+
+  onFechaInicioChange(): void {
+    if (this.fechaInicioInput) {
+      this.fechaInicio = new Date(this.fechaInicioInput);
+    }
+  }
+
+  onFechaFinChange(): void {
+    if (this.fechaFinInput) {
+      this.fechaFin = new Date(this.fechaFinInput);
+    }
   }
 
   exportarPDF(): void {

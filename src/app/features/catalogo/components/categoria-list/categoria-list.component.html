@@ -54,14 +54,16 @@
 
         <div class="input-group">
           <label for="estado" class="input-label">Estado:</label>
-          <p-dropdown
+          <p-select
             id="estado"
             [(ngModel)]="filtros.estado"
             [options]="estadoOptions"
+            optionLabel="label"
+            optionValue="value"
             placeholder="Seleccionar estado"
             [showClear]="true"
             styleClass="w-full">
-          </p-dropdown>
+          </p-select>
         </div>
 
         <div class="filter-actions">

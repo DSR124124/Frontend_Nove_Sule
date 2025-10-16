@@ -1,14 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CardModule } from 'primeng/card';
-import { ButtonModule } from 'primeng/button';
-import { CalendarModule } from 'primeng/calendar';
 import { FormsModule } from '@angular/forms';
+
+// PrimeNG Module
 import { MessageService } from 'primeng/api';
-import { ToastModule } from 'primeng/toast';
-import { ProgressSpinnerModule } from 'primeng/progressspinner';
-import { TagModule } from 'primeng/tag';
-import { DividerModule } from 'primeng/divider';
+import { PrimeNgModule } from '../../../../prime-ng/prime-ng.module';
 
 import { InventarioReportesService } from '../../services/inventario-reportes.service';
 import { ResumenGeneralInventario } from '../../models/resumen-inventario.model';
@@ -18,14 +14,8 @@ import { ResumenGeneralInventario } from '../../models/resumen-inventario.model'
   standalone: true,
   imports: [
     CommonModule,
-    CardModule,
-    ButtonModule,
-    CalendarModule,
     FormsModule,
-    ToastModule,
-    ProgressSpinnerModule,
-    TagModule,
-    DividerModule
+    PrimeNgModule
   ],
   providers: [MessageService],
   templateUrl: './resumen-general.component.html',
@@ -35,6 +25,7 @@ export class ResumenGeneralComponent implements OnInit {
   resumenGeneral: ResumenGeneralInventario | null = null;
   loading = false;
   fechaSeleccionada: Date = new Date();
+  fechaInput: string = new Date().toISOString().split('T')[0];
 
   constructor(
     private inventarioReportesService: InventarioReportesService,
@@ -67,7 +58,10 @@ export class ResumenGeneralComponent implements OnInit {
   }
 
   onFechaChange(): void {
-    this.cargarResumenGeneral();
+    if (this.fechaInput) {
+      this.fechaSeleccionada = new Date(this.fechaInput);
+      this.cargarResumenGeneral();
+    }
   }
 
   formatCurrency(value: number): string {
@@ -89,9 +83,9 @@ export class ResumenGeneralComponent implements OnInit {
   }
 
   getSeverityClass(porcentaje: number): string {
-    if (porcentaje > 20) return 'p-tag tag-sm tag-error';
-    if (porcentaje > 10) return 'p-tag tag-sm tag-warning';
-    return 'p-tag tag-sm tag-success';
+    if (porcentaje > 20) return 'p-tag-danger p-tag-rounded';
+    if (porcentaje > 10) return 'p-tag-warning p-tag-rounded';
+    return 'p-tag-success p-tag-rounded';
   }
 
   exportarPDF(): void {

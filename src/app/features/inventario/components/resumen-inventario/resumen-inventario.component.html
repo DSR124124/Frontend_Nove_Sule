@@ -1,83 +1,109 @@
 <div class="p-fluid">
-  <p-card header="Resumen General del Inventario">
-    <p-toolbar>
+  <p-card>
+    <ng-template pTemplate="header">
+      <div class="card-header">
+        <p-avatar icon="pi pi-chart-bar" styleClass="mr-2"></p-avatar>
+        <span>Resumen General del Inventario</span>
+      </div>
+    </ng-template>
+
+    <p-toolbar styleClass="mb-3">
       <ng-template pTemplate="left">
-        <h5>Resumen del Inventario</h5>
+        <div class="toolbar-left">
+          <h5 class="toolbar-title">Resumen del Inventario</h5>
+        </div>
       </ng-template>
       <ng-template pTemplate="right">
-        <div class="flex align-items-center gap-2">
-          <label for="fecha" class="font-semibold">Fecha:</label>
-          <p-calendar
-            id="fecha"
-            [(ngModel)]="fechaSeleccionada"
-            (onSelect)="onFechaChange()"
-            dateFormat="dd/mm/yy"
-            [showIcon]="true"
-            placeholder="Seleccionar fecha">
-          </p-calendar>
+        <div class="toolbar-actions">
+          <div class="date-filter">
+            <label for="fecha" class="date-label">Fecha:</label>
+            <input
+              type="date"
+              id="fecha"
+              [(ngModel)]="fechaInput"
+              (change)="onFechaChange()"
+              class="p-inputtext p-component date-input"
+              pInputText>
+          </div>
+          <p-button
+            label="Actualizar"
+            icon="pi pi-refresh"
+            (onClick)="cargarResumenGeneral()"
+            [loading]="loading"
+            styleClass="p-button-primary">
+          </p-button>
+          <p-button
+            label="Excel"
+            icon="pi pi-file-excel"
+            (onClick)="exportarExcel()"
+            styleClass="p-button-success">
+          </p-button>
+          <p-button
+            label="PDF"
+            icon="pi pi-file-pdf"
+            (onClick)="exportarPDF()"
+            styleClass="p-button-outlined">
+          </p-button>
         </div>
-        <p-button
-          label="Actualizar"
-          icon="pi pi-refresh"
-          (onClick)="cargarResumenGeneral()"
-          [loading]="loading"
-          styleClass="btn btn-secondary ml-3">
-        </p-button>
-        <p-button
-          label="Exportar Excel"
-          icon="pi pi-file-excel"
-          (onClick)="exportarExcel()"
-          styleClass="btn btn-success ml-2">
-        </p-button>
-        <p-button
-          label="Exportar PDF"
-          icon="pi pi-file-pdf"
-          (onClick)="exportarPDF()"
-          styleClass="btn btn-export ml-2">
-        </p-button>
       </ng-template>
     </p-toolbar>
 
-    <!-- Resumen de estadísticas -->
-    <div class="kpis-container mb-3">
+    <!-- KPIs de Estadísticas -->
+    <div class="kpis-container">
+      <!-- Total Productos -->
       <div class="stat-card stat-card-primary">
-        <div class="flex align-items-center">
-          <i class="pi pi-box text-2xl mr-3" style="color: var(--primary);"></i>
-          <div>
-            <div class="font-semibold text-xl" style="color: var(--text-primary);">{{ totalProductos }}</div>
-            <div style="color: var(--text-secondary);">Total Productos</div>
+        <div class="stat-content">
+          <div class="stat-icon primary-icon">
+            <i class="pi pi-box"></i>
+          </div>
+          <div class="stat-details">
+            <div class="stat-value">{{ totalProductos }}</div>
+            <div class="stat-label">Total Productos</div>
           </div>
         </div>
       </div>
+
+      <!-- Stock Bajo -->
       <div class="stat-card stat-card-danger">
-        <div class="flex align-items-center">
-          <i class="pi pi-exclamation-triangle text-2xl mr-3" style="color: var(--error);"></i>
-          <div>
-            <div class="font-semibold text-xl" style="color: var(--text-primary);">{{ productosConStockBajo }}</div>
-            <div style="color: var(--text-secondary);">Stock Bajo</div>
+        <div class="stat-content">
+          <div class="stat-icon danger-icon">
+            <i class="pi pi-exclamation-triangle"></i>
+          </div>
+          <div class="stat-details">
+            <div class="stat-value">{{ productosConStockBajo }}</div>
+            <div class="stat-label">Stock Bajo</div>
           </div>
         </div>
       </div>
+
+      <!-- Valor Total -->
       <div class="stat-card stat-card-success">
-        <div class="flex align-items-center">
-          <i class="pi pi-dollar text-2xl mr-3" style="color: var(--success);"></i>
-          <div>
-            <div class="font-semibold text-xl" style="color: var(--text-primary);">{{ formatCurrency(valorTotalInventario) }}</div>
-            <div style="color: var(--text-secondary);">Valor Total</div>
+        <div class="stat-content">
+          <div class="stat-icon success-icon">
+            <i class="pi pi-wallet"></i>
+          </div>
+          <div class="stat-details">
+            <div class="stat-value">{{ formatCurrency(valorTotalInventario) }}</div>
+            <div class="stat-label">Valor Total</div>
           </div>
         </div>
       </div>
+
+      <!-- Productos Activos -->
       <div class="stat-card stat-card-warning">
-        <div class="flex align-items-center">
-          <i class="pi pi-chart-line text-2xl mr-3" style="color: var(--warning);"></i>
-          <div>
-            <div class="font-semibold text-xl" style="color: var(--text-primary);">{{ resumenes.length }}</div>
-            <div style="color: var(--text-secondary);">Productos Activos</div>
+        <div class="stat-content">
+          <div class="stat-icon warning-icon">
+            <i class="pi pi-chart-line"></i>
+          </div>
+          <div class="stat-details">
+            <div class="stat-value">{{ resumenes.length }}</div>
+            <div class="stat-label">Productos Activos</div>
           </div>
         </div>
       </div>
     </div>
 
+    <!-- Tabla de Productos -->
     <p-table
       [value]="resumenes"
       [loading]="loading"
@@ -87,19 +113,22 @@
       currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} productos"
       [rowsPerPageOptions]="[10, 25, 50]"
       [globalFilterFields]="['productoNombre', 'productoCodigo']"
+      styleClass="p-datatable-striped"
       #dt>
 
       <ng-template pTemplate="caption">
-        <div class="flex justify-content-between align-items-center">
-          <span class="p-input-icon-left">
-            <i class="pi pi-search"></i>
-            <input
-              pInputText
-              type="text"
-              placeholder="Buscar productos..."
-              (input)="onFilterGlobal($event, dt)"
-              class="p-inputtext-sm">
-          </span>
+        <div class="table-header">
+          <div class="search-container">
+            <span class="p-input-icon-left">
+              <i class="pi pi-search"></i>
+              <input
+                pInputText
+                type="text"
+                placeholder="Buscar productos..."
+                (input)="onFilterGlobal($event, dt)"
+                class="search-input">
+            </span>
+          </div>
         </div>
       </ng-template>
 
@@ -123,45 +152,48 @@
       <ng-template pTemplate="body" let-resumen>
         <tr>
           <td>
-            <span class="font-semibold">{{ resumen.productoCodigo }}</span>
+            <span class="product-code">{{ resumen.productoCodigo }}</span>
           </td>
           <td>
-            <div class="flex flex-column">
-              <span class="font-semibold">{{ resumen.productoNombre }}</span>
+            <div class="product-info">
+              <span class="product-name">{{ resumen.productoNombre }}</span>
             </div>
           </td>
           <td>
-            <span class="font-semibold">{{ resumen.stockActual }}</span>
+            <span class="stock-current">{{ resumen.stockActual }}</span>
           </td>
-          <td>{{ resumen.stockMinimo }}</td>
-          <td>{{ resumen.stockMaximo }}</td>
+          <td class="text-600">{{ resumen.stockMinimo }}</td>
+          <td class="text-600">{{ resumen.stockMaximo }}</td>
           <td>
-              <p-tag
-                [value]="resumen.estadoStock"
-                [styleClass]="getSeverityClass(resumen.estadoStock)">
-              </p-tag>
+            <p-tag
+              [value]="resumen.estadoStock"
+              [styleClass]="getSeverityClass(resumen.estadoStock)">
+            </p-tag>
           </td>
-          <td>{{ formatCurrency(resumen.valorInventario) }}</td>
-          <td>{{ resumen.totalEntradas }}</td>
-          <td>{{ resumen.totalSalidas }}</td>
-          <td>{{ formatDate(resumen.fechaUltimoMovimiento) }}</td>
-          <td>{{ formatCurrency(resumen.precioPromedio) }}</td>
-          <td>{{ resumen.movimientosMes }}</td>
+          <td class="currency-cell">{{ formatCurrency(resumen.valorInventario) }}</td>
+          <td class="text-green-500">{{ resumen.totalEntradas }}</td>
+          <td class="text-red-500">{{ resumen.totalSalidas }}</td>
+          <td class="date-cell">{{ formatDate(resumen.fechaUltimoMovimiento) }}</td>
+          <td class="currency-cell">{{ formatCurrency(resumen.precioPromedio) }}</td>
+          <td class="text-blue-500">{{ resumen.movimientosMes }}</td>
         </tr>
       </ng-template>
 
       <ng-template pTemplate="emptymessage">
         <tr>
-          <td colspan="12" class="text-center">
-            <div class="flex flex-column align-items-center py-4">
-              <i class="pi pi-inbox text-4xl mb-3" style="color: var(--text-muted);"></i>
-              <span style="color: var(--text-secondary);">No se encontraron productos</span>
+          <td colspan="12">
+            <div class="empty-state">
+              <div class="empty-icon">
+                <i class="pi pi-inbox"></i>
+              </div>
+              <h4 class="empty-title">No hay productos</h4>
+              <p class="empty-message">No se encontraron productos para mostrar</p>
             </div>
           </td>
         </tr>
       </ng-template>
     </p-table>
   </p-card>
-</div>
 
-<p-toast></p-toast>
+  <p-toast></p-toast>
+</div>

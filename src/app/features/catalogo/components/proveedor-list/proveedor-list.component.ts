@@ -6,7 +6,7 @@ import { RouterModule, Router } from '@angular/router';
 // PrimeNG
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
-import { DropdownModule } from 'primeng/dropdown';
+import { SelectModule } from 'primeng/select';
 import { TagModule } from 'primeng/tag';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { PanelModule } from 'primeng/panel';
@@ -28,7 +28,7 @@ import { ApiResponse, PaginatedResponse } from '../../models/api-response.model'
   standalone: true,
   imports: [
     CommonModule, FormsModule, RouterModule, ButtonModule, InputTextModule,
-    DropdownModule, TagModule, ProgressSpinnerModule, PanelModule, TableModule,
+    SelectModule, TagModule, ProgressSpinnerModule, PanelModule, TableModule,
     TooltipModule, ToastModule, ConfirmDialogModule
   ],
   providers: [MessageService],

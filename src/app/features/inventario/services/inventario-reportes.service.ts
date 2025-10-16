@@ -30,7 +30,7 @@ import { StockBajoResponse } from '../models/stock-bajo.model';
   providedIn: 'root'
 })
 export class InventarioReportesService {
-  private readonly baseUrl = `${environment.apiUrl}/api/inventario`;
+  private readonly baseUrl = `${environment.apiUrl}/inventario`;
 
   constructor(private http: HttpClient) { }
 

@@ -11,7 +11,7 @@ import { ConfirmationDialogService } from '../../../../shared/services/confirmat
 // PrimeNG imports
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
-import { DropdownModule } from 'primeng/dropdown';
+import { SelectModule } from 'primeng/select';
 import { TagModule } from 'primeng/tag';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { PanelModule } from 'primeng/panel';
@@ -28,7 +28,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
     RouterModule,
     ButtonModule,
     InputTextModule,
-    DropdownModule,
+    SelectModule,
     TagModule,
     ProgressSpinnerModule,
     PanelModule,

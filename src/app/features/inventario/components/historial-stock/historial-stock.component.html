@@ -39,25 +39,23 @@
         </div>
         <div class="filtro-item">
           <label for="fechaInicio" class="form-label">Fecha Inicio</label>
-          <p-calendar
+          <input
+            type="date"
             id="fechaInicio"
-            [(ngModel)]="fechaInicio"
-            dateFormat="dd/mm/yy"
-            [showIcon]="true"
-            placeholder="Seleccionar fecha inicio"
-            class="w-100">
-          </p-calendar>
+            [(ngModel)]="fechaInicioInput"
+            (change)="onFechaInicioChange()"
+            class="p-inputtext p-component w-100"
+            pInputText>
         </div>
         <div class="filtro-item">
           <label for="fechaFin" class="form-label">Fecha Fin</label>
-          <p-calendar
+          <input
+            type="date"
             id="fechaFin"
-            [(ngModel)]="fechaFin"
-            dateFormat="dd/mm/yy"
-            [showIcon]="true"
-            placeholder="Seleccionar fecha fin"
-            class="w-100">
-          </p-calendar>
+            [(ngModel)]="fechaFinInput"
+            (change)="onFechaFinChange()"
+            class="p-inputtext p-component w-100"
+            pInputText>
         </div>
         <div class="filtro-item">
           <p-button

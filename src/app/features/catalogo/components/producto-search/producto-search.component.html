@@ -39,36 +39,42 @@
     <div class="form-row">
       <div class="input-group">
         <label for="categoriaId" class="input-label">Categoría:</label>
-        <p-dropdown
+        <p-select
           id="categoriaId"
           [(ngModel)]="busqueda.categoriaId"
           [options]="categoriaOptions"
+          optionLabel="label"
+          optionValue="value"
           placeholder="Todas las categorías"
           [showClear]="true"
           styleClass="w-full">
-        </p-dropdown>
+        </p-select>
       </div>
       <div class="input-group">
         <label for="marcaId" class="input-label">Marca:</label>
-        <p-dropdown
+        <p-select
           id="marcaId"
           [(ngModel)]="busqueda.marcaId"
           [options]="marcaOptions"
+          optionLabel="label"
+          optionValue="value"
           placeholder="Todas las marcas"
           [showClear]="true"
           styleClass="w-full">
-        </p-dropdown>
+        </p-select>
       </div>
       <div class="input-group">
         <label for="proveedorId" class="input-label">Proveedor:</label>
-        <p-dropdown
+        <p-select
           id="proveedorId"
           [(ngModel)]="busqueda.proveedorId"
           [options]="proveedorOptions"
+          optionLabel="label"
+          optionValue="value"
           placeholder="Todos los proveedores"
           [showClear]="true"
           styleClass="w-full">
-        </p-dropdown>
+        </p-select>
       </div>
     </div>
 

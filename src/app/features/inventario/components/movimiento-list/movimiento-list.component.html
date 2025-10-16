@@ -55,32 +55,34 @@
 
         <div class="input-group">
           <label class="input-label">Tipo de Movimiento</label>
-          <p-dropdown
+          <p-select
             [(ngModel)]="filtros.tipoMovimiento"
             [options]="tipoMovimientoOptions"
+            optionLabel="label"
+            optionValue="value"
             placeholder="Seleccione tipo"
             styleClass="w-full">
-          </p-dropdown>
+          </p-select>
         </div>
 
         <div class="input-group">
           <label class="input-label">Fecha Inicio</label>
-          <p-calendar
-            [(ngModel)]="filtros.fechaInicio"
-            [showTime]="true"
-            placeholder="Seleccione fecha inicio"
-            styleClass="w-full">
-          </p-calendar>
+          <input
+            type="date"
+            [(ngModel)]="fechaInicioInput"
+            (change)="onFechaInicioChange()"
+            class="p-inputtext p-component w-full"
+            pInputText>
         </div>
 
         <div class="input-group">
           <label class="input-label">Fecha Fin</label>
-          <p-calendar
-            [(ngModel)]="filtros.fechaFin"
-            [showTime]="true"
-            placeholder="Seleccione fecha fin"
-            styleClass="w-full">
-          </p-calendar>
+          <input
+            type="date"
+            [(ngModel)]="fechaFinInput"
+            (change)="onFechaFinChange()"
+            class="p-inputtext p-component w-full"
+            pInputText>
         </div>
 
         <div class="filter-actions">

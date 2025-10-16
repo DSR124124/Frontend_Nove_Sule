@@ -7,13 +7,13 @@ import { MessageService as CoreMessageService } from '../../../../core/services/
 // PrimeNG imports
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
-import { DropdownModule } from 'primeng/dropdown';
+import { SelectModule } from 'primeng/select';
 import { TagModule } from 'primeng/tag';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { PanelModule } from 'primeng/panel';
 import { TableModule } from 'primeng/table';
 import { TooltipModule } from 'primeng/tooltip';
-import { CalendarModule } from 'primeng/calendar';
+// import { CalendarModule } from 'primeng/calendar'; // Removed - using native date input
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { MessageService } from 'primeng/api';
 
@@ -30,13 +30,13 @@ import { ApiResponse, PaginatedResponse } from '../../../catalogo/models/api-res
     RouterModule,
     ButtonModule,
     InputTextModule,
-    DropdownModule,
+    SelectModule,
     TagModule,
     ProgressSpinnerModule,
     PanelModule,
     TableModule,
     TooltipModule,
-    CalendarModule,
+    // CalendarModule, // Removed
     ConfirmDialogModule
   ],
   providers: [MessageService],
@@ -71,6 +71,9 @@ export class MovimientoListComponent implements OnInit {
     { label: 'Ajuste', value: TipoMovimiento.AJUSTE },
     { label: 'Transferencia', value: TipoMovimiento.TRANSFERENCIA }
   ];
+
+  fechaInicioInput: string = '';
+  fechaFinInput: string = '';
 
   constructor(
     private movimientoService: MovimientoInventarioService,
@@ -188,6 +191,18 @@ export class MovimientoListComponent implements OnInit {
       style: 'currency',
       currency: 'PEN'
     }).format(value);
+  }
+
+  onFechaInicioChange(): void {
+    if (this.fechaInicioInput) {
+      this.filtros.fechaInicio = this.fechaInicioInput;
+    }
+  }
+
+  onFechaFinChange(): void {
+    if (this.fechaFinInput) {
+      this.filtros.fechaFin = this.fechaFinInput;
+    }
   }
 
   formatDate(dateString: string): string {

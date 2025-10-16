@@ -7,8 +7,7 @@ import { TagModule } from 'primeng/tag';
 import { ToolbarModule } from 'primeng/toolbar';
 import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
-import { DropdownModule } from 'primeng/dropdown';
-import { CalendarModule } from 'primeng/calendar';
+// import { CalendarModule } from 'primeng/calendar'; // Removed - using native date input
 import { FormsModule } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
@@ -16,23 +15,14 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 import { InventarioReportesService } from '../../services/inventario-reportes.service';
 import { StockBajo } from '../../models/stock-bajo.model';
-
+import { PrimeNgModule } from '../../../../prime-ng/prime-ng.module';
 @Component({
   selector: 'app-stock-bajo',
   standalone: true,
   imports: [
     CommonModule,
-    TableModule,
-    ButtonModule,
-    CardModule,
-    TagModule,
-    ToolbarModule,
-    DialogModule,
-    InputTextModule,
-    DropdownModule,
-    CalendarModule,
-    FormsModule,
-    ToastModule,
+
+    PrimeNgModule,
     ProgressSpinnerModule
   ],
   providers: [MessageService],

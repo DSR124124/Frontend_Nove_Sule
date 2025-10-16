@@ -6,7 +6,7 @@ import { ProductoBusqueda } from '../../models/producto.model';
 // PrimeNG imports
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
-import { DropdownModule } from 'primeng/dropdown';
+import { SelectModule } from 'primeng/select';
 
 @Component({
   selector: 'app-producto-search',
@@ -16,7 +16,7 @@ import { DropdownModule } from 'primeng/dropdown';
     FormsModule,
     ButtonModule,
     InputTextModule,
-    DropdownModule
+    SelectModule
   ],
   templateUrl: './producto-search.component.html',
   styleUrl: './producto-search.component.css'

@@ -37,13 +37,15 @@
 
           <div class="input-group">
             <label class="input-label required">Tipo de Movimiento</label>
-            <p-dropdown
+            <p-select
               formControlName="tipoMovimiento"
               [options]="tipoMovimientoOptions"
+              optionLabel="label"
+              optionValue="value"
               placeholder="Seleccione tipo"
               styleClass="w-full"
               [class.error]="isFieldInvalid('tipoMovimiento')">
-            </p-dropdown>
+            </p-select>
             <small class="error-message" *ngIf="getFieldError('tipoMovimiento')">
               {{getFieldError('tipoMovimiento')}}
             </small>

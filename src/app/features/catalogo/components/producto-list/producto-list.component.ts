@@ -11,7 +11,7 @@ import { ProductoSearchComponent } from '../producto-search/producto-search.comp
 // PrimeNG imports
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
-import { DropdownModule } from 'primeng/dropdown';
+import { SelectModule } from 'primeng/select';
 import { TagModule } from 'primeng/tag';
 import { MessageModule } from 'primeng/message';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
@@ -31,7 +31,7 @@ import { ProductoDetailDialogComponent } from '../../dialogs/producto-detail-dia
     ProductoSearchComponent,
     ButtonModule,
     InputTextModule,
-    DropdownModule,
+    SelectModule,
     TagModule,
     MessageModule,
     ProgressSpinnerModule,

@@ -7,8 +7,8 @@ import { TagModule } from 'primeng/tag';
 import { ToolbarModule } from 'primeng/toolbar';
 import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
-import { DropdownModule } from 'primeng/dropdown';
-import { CalendarModule } from 'primeng/calendar';
+import { SelectModule } from 'primeng/select';
+// import { CalendarModule } from 'primeng/calendar'; // Removed - using native date input
 import { FormsModule } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
@@ -31,8 +31,8 @@ import { ProductosProximosVencerRequest } from '../../models/productos-proximos-
     ToolbarModule,
     DialogModule,
     InputTextModule,
-    DropdownModule,
-    CalendarModule,
+    SelectModule,
+    // CalendarModule, // Removed
     FormsModule,
     ToastModule,
     ProgressSpinnerModule,

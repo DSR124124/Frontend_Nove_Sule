@@ -1,19 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TableModule } from 'primeng/table';
-import { ButtonModule } from 'primeng/button';
-import { CardModule } from 'primeng/card';
-import { TagModule } from 'primeng/tag';
-import { ToolbarModule } from 'primeng/toolbar';
-import { DialogModule } from 'primeng/dialog';
-import { InputTextModule } from 'primeng/inputtext';
-import { DropdownModule } from 'primeng/dropdown';
-import { CalendarModule } from 'primeng/calendar';
 import { FormsModule } from '@angular/forms';
+
 import { MessageService } from 'primeng/api';
-import { ToastModule } from 'primeng/toast';
-import { ProgressSpinnerModule } from 'primeng/progressspinner';
-import { TabViewModule } from 'primeng/tabview';
+import { PrimeNgModule } from '../../../../prime-ng/prime-ng.module';
 
 import { InventarioReportesService } from '../../services/inventario-reportes.service';
 import { ResumenInventario, ResumenGeneralInventario } from '../../models/resumen-inventario.model';
@@ -23,19 +13,8 @@ import { ResumenInventario, ResumenGeneralInventario } from '../../models/resume
   standalone: true,
   imports: [
     CommonModule,
-    TableModule,
-    ButtonModule,
-    CardModule,
-    TagModule,
-    ToolbarModule,
-    DialogModule,
-    InputTextModule,
-    DropdownModule,
-    CalendarModule,
-    FormsModule,
-    ToastModule,
-    ProgressSpinnerModule,
-    TabViewModule
+    PrimeNgModule,
+    FormsModule
   ],
   providers: [MessageService],
   templateUrl: './resumen-inventario.component.html',
@@ -46,6 +25,7 @@ export class ResumenInventarioComponent implements OnInit {
   resumenes: ResumenInventario[] = [];
   loading = false;
   fechaSeleccionada: Date = new Date();
+  fechaInput: string = new Date().toISOString().split('T')[0];
   valorTotalInventario = 0;
   totalProductos = 0;
   productosConStockBajo = 0;
@@ -101,7 +81,10 @@ export class ResumenInventarioComponent implements OnInit {
   }
 
   onFechaChange(): void {
-    this.cargarResumenGeneral();
+    if (this.fechaInput) {
+      this.fechaSeleccionada = new Date(this.fechaInput);
+      this.cargarResumenGeneral();
+    }
   }
 
   onFilterGlobal(event: any, dt: any): void {

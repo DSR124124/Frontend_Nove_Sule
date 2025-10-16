@@ -1,43 +1,22 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TableModule } from 'primeng/table';
-import { ButtonModule } from 'primeng/button';
-import { CardModule } from 'primeng/card';
-import { TagModule } from 'primeng/tag';
-import { ToolbarModule } from 'primeng/toolbar';
-import { DialogModule } from 'primeng/dialog';
-import { InputTextModule } from 'primeng/inputtext';
-import { DropdownModule } from 'primeng/dropdown';
-import { CalendarModule } from 'primeng/calendar';
-import { FormsModule } from '@angular/forms';
+
 import { MessageService } from 'primeng/api';
-import { ToastModule } from 'primeng/toast';
-import { ProgressSpinnerModule } from 'primeng/progressspinner';
-import { AutoCompleteModule } from 'primeng/autocomplete';
+import { FormsModule } from '@angular/forms';
 
 import { InventarioReportesService } from '../../services/inventario-reportes.service';
 import { MovimientoInventario } from '../../models/movimiento-inventario.model';
 import { ReporteMovimientosRequest } from '../../models/reporte-movimientos.model';
+import { PrimeNgModule } from '../../../../prime-ng/prime-ng.module';
 
 @Component({
   selector: 'app-reporte-movimientos',
   standalone: true,
-  imports: [
-    CommonModule,
-    TableModule,
-    ButtonModule,
-    CardModule,
-    TagModule,
-    ToolbarModule,
-    DialogModule,
-    InputTextModule,
-    DropdownModule,
-    CalendarModule,
-    FormsModule,
-    ToastModule,
-    ProgressSpinnerModule,
-    AutoCompleteModule
-  ],
+    imports: [
+      CommonModule,
+      FormsModule,
+      PrimeNgModule
+    ],
   providers: [MessageService],
   templateUrl: './reporte-movimientos.component.html',
   styleUrls: ['./reporte-movimientos.component.css']
@@ -49,6 +28,8 @@ export class ReporteMovimientosComponent implements OnInit {
   tipoMovimiento: string | null = null;
   fechaInicio: Date | null = null;
   fechaFin: Date | null = null;
+  fechaInicioInput: string = '';
+  fechaFinInput: string = '';
   productos: any[] = []; // Lista de productos para autocompletado
   productoSeleccionado: any = null;
   tiposMovimiento = [
@@ -65,6 +46,12 @@ export class ReporteMovimientosComponent implements OnInit {
 
   ngOnInit(): void {
     this.cargarProductos();
+    // Initialize date inputs with current date
+    const today = new Date().toISOString().split('T')[0];
+    this.fechaInicioInput = today;
+    this.fechaFinInput = today;
+    this.fechaInicio = new Date();
+    this.fechaFin = new Date();
   }
 
   cargarProductos(): void {
@@ -158,6 +145,18 @@ export class ReporteMovimientosComponent implements OnInit {
   formatDateTime(dateString: string): string {
     if (!dateString) return 'N/A';
     return new Date(dateString).toLocaleString('es-PE');
+  }
+
+  onFechaInicioChange(): void {
+    if (this.fechaInicioInput) {
+      this.fechaInicio = new Date(this.fechaInicioInput);
+    }
+  }
+
+  onFechaFinChange(): void {
+    if (this.fechaFinInput) {
+      this.fechaFin = new Date(this.fechaFinInput);
+    }
   }
 
   exportarExcel(): void {
