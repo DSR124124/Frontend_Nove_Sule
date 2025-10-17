@@ -61,7 +61,7 @@ export class LoadingService {
    */
   hide(id: string = 'default'): void {
     this.activeLoaders.delete(id);
-    
+
     if (this.activeLoaders.size === 0) {
       this.loadingSubject$.next({
         isLoading: false

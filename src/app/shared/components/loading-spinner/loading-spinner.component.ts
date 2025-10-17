@@ -37,7 +37,7 @@ export class LoadingSpinnerComponent implements OnInit, OnDestroy {
         (state: LoadingState) => {
           this.currentState = state;
           this.isVisible = state.isLoading;
-          
+
           // Actualiza las propiedades con los valores del servicio
           if (state.isLoading) {
             this.size = state.size || this.size;

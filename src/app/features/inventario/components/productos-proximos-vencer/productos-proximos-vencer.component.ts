@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ProgressSpinnerModule } from 'primeng/progressspinner';
-import { MessageService } from '../../../../core/services/message.service';
+import { firstValueFrom } from 'rxjs';
 
+import { MessageService } from '../../../../core/services/message.service';
+import { LoadingService } from '../../../../shared/services/loading.service';
 import { InventarioReportesService } from '../../services/inventario-reportes.service';
 import { ResumenInventario } from '../../models/resumen-inventario.model';
 import { ProductosProximosVencerRequest } from '../../models/productos-proximos-vencer.model';
@@ -13,7 +14,6 @@ import { PrimeNgModule } from '../../../../prime-ng/prime-ng.module';
   standalone: true,
   imports: [
     CommonModule,
-    ProgressSpinnerModule,
     PrimeNgModule
   ],
   templateUrl: './productos-proximos-vencer.component.html',
@@ -21,62 +21,91 @@ import { PrimeNgModule } from '../../../../prime-ng/prime-ng.module';
 })
 export class ProductosProximosVencerComponent implements OnInit {
   productos: ResumenInventario[] = [];
-  loading = false;
   dias = 30;
 
   constructor(
     private inventarioReportesService: InventarioReportesService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private loadingService: LoadingService
   ) { }
 
-  ngOnInit(): void {
-    this.cargarProductosProximosVencerSilencioso();
+  async ngOnInit(): Promise<void> {
+    await this.cargarProductosIniciales();
   }
 
-  cargarProductosProximosVencer(): void {
-    this.loading = true;
+  async cargarProductosProximosVencer(): Promise<void> {
     const request: ProductosProximosVencerRequest = {
       dias: this.dias
     };
 
-    this.inventarioReportesService.getProductosProximosVencer(request).subscribe({
-      next: (response) => {
-        this.productos = response.data;
-        this.loading = false;
+    try {
+      await this.loadingService.withLoading(
+        async () => {
+          const response = await firstValueFrom(
+            this.inventarioReportesService.getProductosProximosVencer(request)
+          );
+          this.productos = response.data;
+          return response;
+        },
+        {
+          id: 'consulta-productos-vencer',
+          message: `Consultando productos próximos a vencer...`,
+          size: 'medium',
+          overlay: true
+        }
+      );
 
-        // Mostrar mensaje de éxito
+      // Mostrar mensaje de éxito
+      this.messageService.success(
+        `Se encontraron ${this.productos.length} productos próximos a vencer en ${this.dias} días`,
+        'Consulta Exitosa'
+      );
+    } catch (error) {
+      this.messageService.handleHttpError(error);
+    }
+  }
+
+  private async cargarProductosIniciales(): Promise<void> {
+    const request: ProductosProximosVencerRequest = {
+      dias: this.dias
+    };
+
+    try {
+      await this.loadingService.withLoading(
+        async () => {
+          const response = await firstValueFrom(
+            this.inventarioReportesService.getProductosProximosVencer(request)
+          );
+          this.productos = response.data;
+          return response;
+        },
+        {
+          id: 'carga-inicial-productos-vencer',
+          message: 'Cargando productos próximos a vencer...',
+          size: 'medium',
+          overlay: true
+        }
+      );
+
+      // Mensaje de carga exitosa
+      if (this.productos.length > 0) {
         this.messageService.success(
-          `Se encontraron ${this.productos.length} productos próximos a vencer en ${this.dias} días`,
-          'Consulta Exitosa'
+          `Se cargaron ${this.productos.length} productos próximos a vencer en ${this.dias} días`,
+          'Carga Exitosa'
         );
-      },
-      error: (error) => {
-        this.messageService.handleHttpError(error);
-        this.loading = false;
+      } else {
+        this.messageService.info(
+          'No se encontraron productos próximos a vencer',
+          'Sin Resultados'
+        );
       }
-    });
+    } catch (error) {
+      this.messageService.handleHttpError(error);
+    }
   }
 
-  private cargarProductosProximosVencerSilencioso(): void {
-    this.loading = true;
-    const request: ProductosProximosVencerRequest = {
-      dias: this.dias
-    };
-
-    this.inventarioReportesService.getProductosProximosVencer(request).subscribe({
-      next: (response) => {
-        this.productos = response.data;
-        this.loading = false;
-      },
-      error: (error) => {
-        this.messageService.handleHttpError(error);
-        this.loading = false;
-      }
-    });
-  }
-
-  onDiasChange(): void {
-    this.cargarProductosProximosVencer();
+  async onDiasChange(): Promise<void> {
+    await this.cargarProductosProximosVencer();
   }
 
   onFilterGlobal(event: any, dt: any): void {
@@ -122,5 +151,10 @@ export class ProductosProximosVencerComponent implements OnInit {
       'Funcionalidad de exportación a PDF en desarrollo',
       'Exportar PDF'
     );
+  }
+
+  // Getter para verificar si está cargando
+  get isLoading(): boolean {
+    return this.loadingService.isLoading;
   }
 }

@@ -38,7 +38,11 @@ export class SidebarService {
         { label: 'Reporte Movimientos', icon: 'pi pi-chart-line', routerLink: '/inventario/reporte-movimientos' },
         { label: 'Historial Stock', icon: 'pi pi-history', routerLink: '/inventario/historial-stock' },
         { label: 'Resumen Detallado', icon: 'pi pi-list', routerLink: '/inventario/resumen-inventario' },
-        { label: 'Movimientos', icon: 'pi pi-arrows-h', routerLink: '/inventario/movimientos' }
+        { label: 'Movimientos', icon: 'pi pi-arrows-h', routerLink: '/inventario/movimientos' },
+        // Movimientos Relacionados - Nuevos componentes implementados
+        { label: 'Movimientos Orden Compra', icon: 'pi pi-truck', routerLink: '/inventario/movimientos-orden-compra' },
+        { label: 'Movimientos Comprobante Venta', icon: 'pi pi-receipt', routerLink: '/inventario/movimientos-comprobante-venta' },
+        { label: 'Último Movimiento Producto', icon: 'pi pi-clock', routerLink: '/inventario/ultimo-movimiento-producto' }
       ]
     },
     {

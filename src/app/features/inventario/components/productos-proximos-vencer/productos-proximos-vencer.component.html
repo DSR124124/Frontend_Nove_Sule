@@ -28,7 +28,8 @@
           label="Actualizar"
           icon="pi pi-refresh"
           (onClick)="cargarProductosProximosVencer()"
-          [loading]="loading"
+          [loading]="isLoading"
+          [disabled]="isLoading"
           styleClass="btn btn-primary btn-sm btn-outlined">
         </p-button>
         <p-button
@@ -55,7 +56,6 @@
     <ng-template pTemplate="body">
       <p-table
         [value]="productos"
-        [loading]="loading"
         [paginator]="true"
         [rows]="10"
         [showCurrentPageReport]="true"
@@ -133,5 +133,4 @@
   </p-card>
 </div>
 
-<p-toast></p-toast>
 

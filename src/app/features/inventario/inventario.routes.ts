@@ -48,4 +48,29 @@ export const INVENTARIO_ROUTES: Routes = [
     path: 'movimientos/editar/:id',
     loadComponent: () => import('./components/movimiento-form/movimiento-form.component').then(m => m.MovimientoFormComponent)
   },
+  // Movimientos Relacionados - Nuevos componentes implementados
+  {
+    path: 'movimientos-orden-compra',
+    loadComponent: () => import('./components/movimientos-orden-compra/movimientos-orden-compra.component').then(m => m.MovimientosOrdenCompraComponent)
+  },
+  {
+    path: 'movimientos-orden-compra/:ordenCompraId',
+    loadComponent: () => import('./components/movimientos-orden-compra/movimientos-orden-compra.component').then(m => m.MovimientosOrdenCompraComponent)
+  },
+  {
+    path: 'movimientos-comprobante-venta',
+    loadComponent: () => import('./components/movimientos-comprobante-venta/movimientos-comprobante-venta.component').then(m => m.MovimientosComprobanteVentaComponent)
+  },
+  {
+    path: 'movimientos-comprobante-venta/:comprobanteVentaId',
+    loadComponent: () => import('./components/movimientos-comprobante-venta/movimientos-comprobante-venta.component').then(m => m.MovimientosComprobanteVentaComponent)
+  },
+  {
+    path: 'ultimo-movimiento-producto',
+    loadComponent: () => import('./components/ultimo-movimiento-producto/ultimo-movimiento-producto.component').then(m => m.UltimoMovimientoProductoComponent)
+  },
+  {
+    path: 'ultimo-movimiento-producto/:productoId',
+    loadComponent: () => import('./components/ultimo-movimiento-producto/ultimo-movimiento-producto.component').then(m => m.UltimoMovimientoProductoComponent)
+  },
 ];

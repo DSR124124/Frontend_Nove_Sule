@@ -77,4 +77,21 @@ export class MovimientoInventarioService {
     const params = new HttpParams().set('limite', limite.toString());
     return this.http.get<ApiResponse<MovimientoInventario[]>>(`${this.baseUrl}/movimientos/recientes`, { params });
   }
+
+  // ===== MOVIMIENTOS RELACIONADOS =====
+
+  // GET /api/inventario/ordenes-compra/{ordenCompraId}/movimientos
+  listarMovimientosOrdenCompra(ordenCompraId: number): Observable<ApiResponse<MovimientoInventario[]>> {
+    return this.http.get<ApiResponse<MovimientoInventario[]>>(`${this.baseUrl}/ordenes-compra/${ordenCompraId}/movimientos`);
+  }
+
+  // GET /api/inventario/comprobantes-venta/{comprobanteVentaId}/movimientos
+  listarMovimientosComprobanteVenta(comprobanteVentaId: number): Observable<ApiResponse<MovimientoInventario[]>> {
+    return this.http.get<ApiResponse<MovimientoInventario[]>>(`${this.baseUrl}/comprobantes-venta/${comprobanteVentaId}/movimientos`);
+  }
+
+  // GET /api/inventario/productos/{productoId}/ultimo-movimiento
+  obtenerUltimoMovimientoProducto(productoId: number): Observable<ApiResponse<MovimientoInventario | null>> {
+    return this.http.get<ApiResponse<MovimientoInventario | null>>(`${this.baseUrl}/productos/${productoId}/ultimo-movimiento`);
+  }
 }

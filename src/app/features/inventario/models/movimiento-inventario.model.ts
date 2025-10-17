@@ -1,28 +1,23 @@
 export interface MovimientoInventario {
   id: number;
   productoId: number;
-  producto: {
-    id: number;
-    nombre: string;
-    codigo: string;
-  };
+  productoCodigo: string;
+  productoNombre: string;
   tipoMovimiento: TipoMovimiento;
   cantidad: number;
   precioUnitario: number;
-  total: number;
-  motivo: string;
+  concepto: string;
   observaciones?: string;
-  fechaMovimiento: string;
-  usuarioId: number;
-  usuario: {
-    id: number;
-    nombre: string;
-    email: string;
-  };
+  usuarioNombre: string;
   ordenCompraId?: number;
+  ordenCompraNumero?: string;
   comprobanteVentaId?: number;
-  createdAt: string;
-  updatedAt: string;
+  comprobanteVentaNumero?: string;
+  fechaMovimiento: string;
+  stockAnterior: number;
+  stockNuevo: number;
+  fechaCreacion: string;
+  fechaModificacion: string;
 }
 
 export interface MovimientoInventarioRequest {
@@ -30,7 +25,7 @@ export interface MovimientoInventarioRequest {
   tipoMovimiento: TipoMovimiento;
   cantidad: number;
   precioUnitario: number;
-  motivo: string;
+  concepto: string;
   observaciones?: string;
   ordenCompraId?: number;
   comprobanteVentaId?: number;
