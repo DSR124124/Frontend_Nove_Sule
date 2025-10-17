@@ -69,8 +69,7 @@ const PRIMENG_MODULES = [
   CommonModule,
   FormsModule,
   ReactiveFormsModule,
-
-  // PrimeNG Components (alfabético)
+  DividerModule,
   AccordionModule,
   AutoCompleteModule,
   AvatarModule,
@@ -128,11 +127,11 @@ const PRIMENG_MODULES = [
   ToolbarModule,
   TooltipModule,
   TreeModule,
-  TreeSelectModule
+  TreeSelectModule,
 ];
 
 @NgModule({
   imports: PRIMENG_MODULES,
-  exports: PRIMENG_MODULES
+  exports: PRIMENG_MODULES,
 })
-export class PrimeNgModule { }
+export class PrimeNgModule {}

@@ -1,128 +1,137 @@
-<div class="p-fluid">
-  <p-card header="Productos Próximos a Vencer">
-    <p-toolbar>
-      <ng-template pTemplate="left">
-        <h5>Productos Próximos a Vencer</h5>
-      </ng-template>
-      <ng-template pTemplate="right">
-        <div class="flex align-items-center gap-2">
-          <label for="dias" class="font-semibold">Días:</label>
-          <p-inputNumber
-            id="dias"
-            [(ngModel)]="dias"
-            (onInput)="onDiasChange()"
-            [min]="1"
-            [max]="365"
-            placeholder="Días"
-            [showButtons]="true"
-            [suffix]="' días'">
-          </p-inputNumber>
-        </div>
+<p-toolbar>
+  <ng-template pTemplate="left">
+    <p-inputgroup>
+      <input pInputText placeholder="Buscar productos..." (input)="onFilterGlobal($event, globalFilter)" #globalFilter />
+      <p-inputgroup-addon>
+        <p-button icon="pi pi-search" severity="secondary" variant="text" (click)="onFilterGlobal($event, globalFilter)" />
+      </p-inputgroup-addon>
+    </p-inputgroup>
+  </ng-template>
+  <ng-template pTemplate="right">
+    <div class="d-flex gap-2 align-items-center flex-wrap">
+      <div class="d-flex align-items-center gap-2">
+        <label for="dias" class="fw-semibold text-nowrap">Días:</label>
+        <p-inputNumber
+          id="dias"
+          [(ngModel)]="dias"
+          (onInput)="onDiasChange()"
+          [min]="1"
+          [max]="365"
+          placeholder="30"
+          [showButtons]="true"
+          [suffix]="' días'"
+          styleClass="w-auto">
+        </p-inputNumber>
+      </div>
+      <div class="d-flex gap-2">
         <p-button
           label="Actualizar"
           icon="pi pi-refresh"
           (onClick)="cargarProductosProximosVencer()"
           [loading]="loading"
-          styleClass="btn btn-secondary ml-3">
+          styleClass="btn btn-primary btn-sm btn-outlined">
         </p-button>
         <p-button
-          label="Exportar Excel"
+          label="Excel"
           icon="pi pi-file-excel"
           (onClick)="exportarExcel()"
-          styleClass="btn btn-success ml-2">
+          styleClass="btn btn-success btn-sm btn-outlined">
         </p-button>
         <p-button
-          label="Exportar PDF"
+          label="PDF"
           icon="pi pi-file-pdf"
           (onClick)="exportarPDF()"
-          styleClass="btn btn-export ml-2">
+          styleClass="btn btn-danger btn-sm btn-outlined">
         </p-button>
-      </ng-template>
-    </p-toolbar>
+      </div>
+    </div>
+  </ng-template>
+</p-toolbar>
 
-    <p-table
-      [value]="productos"
-      [loading]="loading"
-      [paginator]="true"
-      [rows]="10"
-      [showCurrentPageReport]="true"
-      currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} productos"
-      [rowsPerPageOptions]="[10, 25, 50]"
-      [globalFilterFields]="['productoNombre', 'productoCodigo']"
-      #dt>
+<div class="container-fluid">
 
-      <ng-template pTemplate="caption">
-        <div class="flex justify-content-between align-items-center">
-          <span class="p-input-icon-left">
-            <i class="pi pi-search"></i>
-            <input
-              pInputText
-              type="text"
-              placeholder="Buscar productos..."
-              (input)="onFilterGlobal($event, dt)"
-              class="p-inputtext-sm">
-          </span>
-        </div>
-      </ng-template>
+  <!-- Data Table Card -->
+  <p-card>
+    <ng-template pTemplate="body">
+      <p-table
+        [value]="productos"
+        [loading]="loading"
+        [paginator]="true"
+        [rows]="10"
+        [showCurrentPageReport]="true"
+        currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} productos"
+        [rowsPerPageOptions]="[10, 25, 50]"
+        [globalFilterFields]="['productoNombre', 'productoCodigo']"
+        styleClass="p-datatable-sm"
+        #dt>
 
-      <ng-template pTemplate="header">
-        <tr>
-          <th>Código</th>
-          <th>Producto</th>
-          <th>Stock Actual</th>
-          <th>Stock Mínimo</th>
-          <th>Stock Máximo</th>
-          <th>Estado</th>
-          <th>Valor Inventario</th>
-          <th>Entradas</th>
-          <th>Salidas</th>
-          <th>Último Movimiento</th>
-          <th>Precio Promedio</th>
-          <th>Movimientos Mes</th>
-        </tr>
-      </ng-template>
+        <ng-template pTemplate="header">
+          <tr>
+            <th class="text-center">Código</th>
+            <th>Producto</th>
+            <th class="text-center">Stock Actual</th>
+            <th class="text-center d-none d-md-table-cell">Stock Mín.</th>
+            <th class="text-center d-none d-lg-table-cell">Stock Máx.</th>
+            <th class="text-center">Estado</th>
+            <th class="text-end d-none d-xl-table-cell">Valor Inventario</th>
+            <th class="text-center d-none d-lg-table-cell">Entradas</th>
+            <th class="text-center d-none d-lg-table-cell">Salidas</th>
+            <th class="d-none d-xl-table-cell">Último Movimiento</th>
+            <th class="text-end d-none d-xl-table-cell">Precio Prom.</th>
+            <th class="text-center d-none d-lg-table-cell">Mov. Mes</th>
+          </tr>
+        </ng-template>
 
-      <ng-template pTemplate="body" let-producto>
-        <tr>
-          <td>
-            <span class="font-semibold">{{ producto.productoCodigo }}</span>
-          </td>
-          <td>
-            <div class="flex flex-column">
-              <span class="font-semibold">{{ producto.productoNombre }}</span>
-            </div>
-          </td>
-          <td>
-            <span class="font-semibold">{{ producto.stockActual }}</span>
-          </td>
-          <td>{{ producto.stockMinimo }}</td>
-          <td>{{ producto.stockMaximo }}</td>
-          <td>
+        <ng-template pTemplate="body" let-producto>
+          <tr>
+            <td class="text-center">
+              <code class="fw-bold text-primary">{{ producto.productoCodigo }}</code>
+            </td>
+            <td>
+              <div>
+                <div class="fw-semibold text-dark">{{ producto.productoNombre }}</div>
+                <small class="text-muted d-md-none d-lg-none d-xl-none d-block">
+                  Stock: {{ producto.stockActual }} | Estado: {{ producto.estadoStock }}
+                </small>
+              </div>
+            </td>
+            <td class="text-center">
+              <span class="fw-bold">{{ producto.stockActual }}</span>
+            </td>
+            <td class="text-center text-muted d-none d-md-table-cell">{{ producto.stockMinimo }}</td>
+            <td class="text-center text-muted d-none d-lg-table-cell">{{ producto.stockMaximo }}</td>
+            <td class="text-center">
               <p-tag
                 [value]="producto.estadoStock"
                 [styleClass]="getSeverityClass(producto.estadoStock)">
               </p-tag>
-          </td>
-          <td>{{ formatCurrency(producto.valorInventario) }}</td>
-          <td>{{ producto.totalEntradas }}</td>
-          <td>{{ producto.totalSalidas }}</td>
-          <td>{{ formatDate(producto.fechaUltimoMovimiento) }}</td>
-          <td>{{ formatCurrency(producto.precioPromedio) }}</td>
-          <td>{{ producto.movimientosMes }}</td>
-        </tr>
-      </ng-template>
+            </td>
+            <td class="text-end d-none d-xl-table-cell">{{ formatCurrency(producto.valorInventario) }}</td>
+            <td class="text-center d-none d-lg-table-cell">{{ producto.totalEntradas }}</td>
+            <td class="text-center d-none d-lg-table-cell">{{ producto.totalSalidas }}</td>
+            <td class="d-none d-xl-table-cell">
+              <small class="text-muted">{{ formatDate(producto.fechaUltimoMovimiento) }}</small>
+            </td>
+            <td class="text-end d-none d-xl-table-cell">{{ formatCurrency(producto.precioPromedio) }}</td>
+            <td class="text-center d-none d-lg-table-cell">{{ producto.movimientosMes }}</td>
+          </tr>
+        </ng-template>
 
-      <ng-template pTemplate="emptymessage">
-        <tr>
-          <td colspan="12" class="text-center">
-            <div class="flex flex-column align-items-center py-4">
-              <i class="pi pi-inbox text-4xl text-400 mb-3"></i>
-              <span class="text-500">No se encontraron productos próximos a vencer</span>
-            </div>
-          </td>
-        </tr>
-      </ng-template>
-    </p-table>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="12" class="text-center py-5">
+              <div class="d-flex flex-column align-items-center">
+                <p-avatar icon="pi pi-clock" styleClass="bg-light text-muted mb-3" size="xlarge"></p-avatar>
+                <h6 class="text-muted mb-2">No se encontraron productos</h6>
+                <small class="text-muted">No hay productos próximos a vencer en {{ dias }} días</small>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </ng-template>
   </p-card>
 </div>
+
+<p-toast></p-toast>
 

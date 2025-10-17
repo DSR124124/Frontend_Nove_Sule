@@ -1,199 +1,193 @@
-<div class="p-fluid">
-  <p-card>
-    <ng-template pTemplate="header">
-      <div class="card-header">
-        <p-avatar icon="pi pi-chart-bar" styleClass="mr-2"></p-avatar>
-        <span>Resumen General del Inventario</span>
-      </div>
-    </ng-template>
+<!-- Toolbar principal -->
+<p-toolbar>
+  <ng-template pTemplate="left">
+    <div class="d-flex gap-2">
+      <p-inputgroup>
+        <input pInputText placeholder="Buscar productos..." (input)="onFilterGlobal($event, globalFilter)"
+          #globalFilter />
+        <p-inputgroup-addon>
+          <p-button icon="pi pi-search" severity="secondary" variant="text" />
+        </p-inputgroup-addon>
+      </p-inputgroup>
 
-    <p-toolbar styleClass="mb-3">
-      <ng-template pTemplate="left">
-        <div class="toolbar-left">
-          <h5 class="toolbar-title">Resumen del Inventario</h5>
-        </div>
-      </ng-template>
-      <ng-template pTemplate="right">
-        <div class="toolbar-actions">
-          <div class="date-filter">
-            <label for="fecha" class="date-label">Fecha:</label>
-            <input
-              type="date"
-              id="fecha"
-              [(ngModel)]="fechaInput"
-              (change)="onFechaChange()"
-              class="p-inputtext p-component date-input"
-              pInputText>
-          </div>
-          <p-button
-            label="Actualizar"
-            icon="pi pi-refresh"
-            (onClick)="cargarResumenGeneral()"
-            [loading]="loading"
-            styleClass="p-button-primary">
-          </p-button>
-          <p-button
-            label="Excel"
-            icon="pi pi-file-excel"
-            (onClick)="exportarExcel()"
-            styleClass="p-button-success">
-          </p-button>
-          <p-button
-            label="PDF"
-            icon="pi pi-file-pdf"
-            (onClick)="exportarPDF()"
-            styleClass="p-button-outlined">
-          </p-button>
-        </div>
-      </ng-template>
-    </p-toolbar>
+      <p-button label="Limpiar" icon="pi pi-times" (onClick)="limpiarFiltros()"
+        styleClass="btn btn-secondary btn-md btn-outline">
+      </p-button>
+      <p-button label="Actualizar" icon="pi pi-refresh" (onClick)="cargarResumenGeneral()" [loading]="loading"
+        styleClass="btn btn-primary btn-md btn-outline">
+      </p-button>
+    </div>
+  </ng-template>
+  <ng-template pTemplate="right">
+    <div class="d-flex gap-2">
 
-    <!-- KPIs de Estadísticas -->
-    <div class="kpis-container">
-      <!-- Total Productos -->
-      <div class="stat-card stat-card-primary">
-        <div class="stat-content">
-          <div class="stat-icon primary-icon">
-            <i class="pi pi-box"></i>
-          </div>
-          <div class="stat-details">
-            <div class="stat-value">{{ totalProductos }}</div>
-            <div class="stat-label">Total Productos</div>
-          </div>
-        </div>
-      </div>
+      <p-button label="Excel" icon="pi pi-file-excel" (onClick)="exportarExcel()"
+        styleClass="btn btn-success btn-md btn-outline">
+      </p-button>
+      <p-button label="PDF" icon="pi pi-file-pdf" (onClick)="exportarPDF()"
+        styleClass="btn btn-danger btn-md btn-outline">
+      </p-button>
+    </div>
+  </ng-template>
+</p-toolbar>
 
-      <!-- Stock Bajo -->
-      <div class="stat-card stat-card-danger">
-        <div class="stat-content">
-          <div class="stat-icon danger-icon">
-            <i class="pi pi-exclamation-triangle"></i>
-          </div>
-          <div class="stat-details">
-            <div class="stat-value">{{ productosConStockBajo }}</div>
-            <div class="stat-label">Stock Bajo</div>
-          </div>
-        </div>
-      </div>
+<p-divider></p-divider>
 
-      <!-- Valor Total -->
-      <div class="stat-card stat-card-success">
-        <div class="stat-content">
-          <div class="stat-icon success-icon">
-            <i class="pi pi-wallet"></i>
-          </div>
-          <div class="stat-details">
-            <div class="stat-value">{{ formatCurrency(valorTotalInventario) }}</div>
-            <div class="stat-label">Valor Total</div>
-          </div>
-        </div>
-      </div>
+<div class="container-fluid">
 
-      <!-- Productos Activos -->
-      <div class="stat-card stat-card-warning">
-        <div class="stat-content">
-          <div class="stat-icon warning-icon">
-            <i class="pi pi-chart-line"></i>
+  <!-- KPIs de Estadísticas -->
+  <div class="row g-2 mb-3">
+    <!-- Total Productos -->
+    <div class="col-md-6 col-xl-3">
+      <p-card styleClass="h-90 border-start border-4 border-primary compact-card">
+        <ng-template pTemplate="header">
+          <div class="d-flex align-items-center gap-2 p-0">
+            <p-avatar icon="pi pi-box" styleClass="bg-primary"></p-avatar>
+            <small class="text-muted fw-semibold">TOTAL PRODUCTOS</small>
           </div>
-          <div class="stat-details">
-            <div class="stat-value">{{ resumenes.length }}</div>
-            <div class="stat-label">Productos Activos</div>
+        </ng-template>
+        <ng-template pTemplate="body">
+          <div class="text-center p-0">
+            <h3 class="text-primary fw-bold mb-0">{{ totalProductos || 0 }}</h3>
+            <small class="text-muted">Productos en inventario</small>
           </div>
-        </div>
-      </div>
+        </ng-template>
+      </p-card>
     </div>
 
-    <!-- Tabla de Productos -->
-    <p-table
-      [value]="resumenes"
-      [loading]="loading"
-      [paginator]="true"
-      [rows]="10"
-      [showCurrentPageReport]="true"
-      currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} productos"
-      [rowsPerPageOptions]="[10, 25, 50]"
-      [globalFilterFields]="['productoNombre', 'productoCodigo']"
-      styleClass="p-datatable-striped"
-      #dt>
-
-      <ng-template pTemplate="caption">
-        <div class="table-header">
-          <div class="search-container">
-            <span class="p-input-icon-left">
-              <i class="pi pi-search"></i>
-              <input
-                pInputText
-                type="text"
-                placeholder="Buscar productos..."
-                (input)="onFilterGlobal($event, dt)"
-                class="search-input">
-            </span>
+    <!-- Stock Bajo -->
+    <div class="col-md-6 col-xl-3">
+      <p-card styleClass="h-90 border-start border-4 border-danger compact-card">
+        <ng-template pTemplate="header">
+          <div class="d-flex align-items-center gap-2 p-0">
+            <p-avatar icon="pi pi-exclamation-triangle" styleClass="bg-danger"></p-avatar>
+            <small class="text-muted fw-semibold">STOCK BAJO</small>
           </div>
-        </div>
-      </ng-template>
+        </ng-template>
+        <ng-template pTemplate="body">
+          <div class="text-center p-0">
+            <h3 class="text-danger fw-bold mb-0">{{ productosConStockBajo || 0 }}</h3>
+            <small class="text-muted">Productos con stock bajo</small>
+          </div>
+        </ng-template>
+      </p-card>
+    </div>
 
-      <ng-template pTemplate="header">
-        <tr>
-          <th>Código</th>
-          <th>Producto</th>
-          <th>Stock Actual</th>
-          <th>Stock Mínimo</th>
-          <th>Stock Máximo</th>
-          <th>Estado</th>
-          <th>Valor Inventario</th>
-          <th>Entradas</th>
-          <th>Salidas</th>
-          <th>Último Movimiento</th>
-          <th>Precio Promedio</th>
-          <th>Movimientos Mes</th>
-        </tr>
-      </ng-template>
+    <!-- Valor Total -->
+    <div class="col-md-6 col-xl-3">
+      <p-card styleClass="h-90 border-start border-4 border-success compact-card">
+        <ng-template pTemplate="header">
+          <div class="d-flex align-items-center gap-2 p-0">
+            <p-avatar icon="pi pi-wallet" styleClass="bg-success"></p-avatar>
+            <small class="text-muted fw-semibold">VALOR TOTAL</small>
+          </div>
+        </ng-template>
+        <ng-template pTemplate="body">
+          <div class="text-center p-0">
+            <h3 class="text-success fw-bold mb-0">{{ formatCurrency(valorTotalInventario) }}</h3>
+            <small class="text-muted">Valor del inventario</small>
+          </div>
+        </ng-template>
+      </p-card>
+    </div>
 
-      <ng-template pTemplate="body" let-resumen>
-        <tr>
-          <td>
-            <span class="product-code">{{ resumen.productoCodigo }}</span>
-          </td>
-          <td>
-            <div class="product-info">
-              <span class="product-name">{{ resumen.productoNombre }}</span>
-            </div>
-          </td>
-          <td>
-            <span class="stock-current">{{ resumen.stockActual }}</span>
-          </td>
-          <td class="text-600">{{ resumen.stockMinimo }}</td>
-          <td class="text-600">{{ resumen.stockMaximo }}</td>
-          <td>
-            <p-tag
-              [value]="resumen.estadoStock"
-              [styleClass]="getSeverityClass(resumen.estadoStock)">
-            </p-tag>
-          </td>
-          <td class="currency-cell">{{ formatCurrency(resumen.valorInventario) }}</td>
-          <td class="text-green-500">{{ resumen.totalEntradas }}</td>
-          <td class="text-red-500">{{ resumen.totalSalidas }}</td>
-          <td class="date-cell">{{ formatDate(resumen.fechaUltimoMovimiento) }}</td>
-          <td class="currency-cell">{{ formatCurrency(resumen.precioPromedio) }}</td>
-          <td class="text-blue-500">{{ resumen.movimientosMes }}</td>
-        </tr>
-      </ng-template>
+    <!-- Productos Activos -->
+    <div class="col-md-6 col-xl-3">
+      <p-card styleClass="h-90 border-start border-4 border-warning compact-card">
+        <ng-template pTemplate="header">
+          <div class="d-flex align-items-center gap-2 p-0">
+            <p-avatar icon="pi pi-chart-line" styleClass="bg-warning"></p-avatar>
+            <small class="text-muted fw-semibold">PRODUCTOS ACTIVOS</small>
+          </div>
+        </ng-template>
+        <ng-template pTemplate="body">
+          <div class="text-center p-0">
+            <h3 class="text-warning fw-bold mb-0">{{ resumenes.length || 0 }}</h3>
+            <small class="text-muted">Productos con movimientos</small>
+          </div>
+        </ng-template>
+      </p-card>
+    </div>
+  </div>
 
-      <ng-template pTemplate="emptymessage">
-        <tr>
-          <td colspan="12">
-            <div class="empty-state">
-              <div class="empty-icon">
-                <i class="pi pi-inbox"></i>
+
+      <p-table [value]="resumenes" [loading]="loading" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+        currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} productos"
+        [rowsPerPageOptions]="[10, 25, 50]" [globalFilterFields]="['productoNombre', 'productoCodigo']"
+        styleClass="p-datatable-sm" #dt>
+
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Código</th>
+            <th>Producto</th>
+            <th>Stock Actual</th>
+            <th>Stock Mínimo</th>
+            <th>Stock Máximo</th>
+            <th>Estado</th>
+            <th>Valor Inventario</th>
+            <th>Entradas</th>
+            <th>Salidas</th>
+            <th>Último Movimiento</th>
+            <th>Precio Promedio</th>
+            <th>Movimientos Mes</th>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-resumen>
+          <tr>
+            <td>
+              <span class="product-code">{{ resumen.productoCodigo }}</span>
+            </td>
+            <td>
+              <div class="product-info">
+                <span class="product-name">{{ resumen.productoNombre }}</span>
               </div>
-              <h4 class="empty-title">No hay productos</h4>
-              <p class="empty-message">No se encontraron productos para mostrar</p>
-            </div>
-          </td>
-        </tr>
-      </ng-template>
-    </p-table>
-  </p-card>
+            </td>
+            <td>
+              <span class="stock-current">{{ resumen.stockActual }}</span>
+            </td>
+            <td class="text-600">{{ resumen.stockMinimo }}</td>
+            <td class="text-600">{{ resumen.stockMaximo }}</td>
+            <td>
+              <p-tag [value]="resumen.estadoStock" [styleClass]="getSeverityClass(resumen.estadoStock)">
+              </p-tag>
+            </td>
+            <td class="currency-cell">{{ formatCurrency(resumen.valorInventario) }}</td>
+            <td class="text-green-500">{{ resumen.totalEntradas }}</td>
+            <td class="text-red-500">{{ resumen.totalSalidas }}</td>
+            <td class="date-cell">{{ formatDate(resumen.fechaUltimoMovimiento) }}</td>
+            <td class="currency-cell">{{ formatCurrency(resumen.precioPromedio) }}</td>
+            <td class="text-blue-500">{{ resumen.movimientosMes }}</td>
+          </tr>
+        </ng-template>
 
-  <p-toast></p-toast>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="12" class="text-center py-5">
+              <div class="d-flex flex-column align-items-center gap-3">
+                <div class="empty-state-container">
+                  <p-avatar
+                    icon="pi pi-box"
+                    styleClass="empty-state-avatar"
+                    size="xlarge">
+                  </p-avatar>
+                </div>
+                <div class="empty-state-content">
+                  <h5 class="empty-state-title mb-2">No hay productos en el inventario</h5>
+                  <p class="empty-state-message text-muted mb-3">
+                    No se encontraron productos para la fecha seleccionada
+                  </p>
+                  <small class="empty-state-suggestion">
+                    <i class="pi pi-info-circle me-1"></i>
+                    Intenta cambiar la fecha o verificar que existan productos registrados
+                  </small>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+
 </div>
+
+<p-toast></p-toast>

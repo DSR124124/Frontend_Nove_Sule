@@ -97,6 +97,50 @@ export class ResumenGeneralComponent implements OnInit {
     );
   }
 
+  /**
+   * Navega a la vista de productos con stock bajo
+   */
+  verProductosStockBajo(): void {
+    this.messageService.info(
+      'Navegando a productos con stock bajo...',
+      'Navegación'
+    );
+    // TODO: Implementar navegación a productos con stock bajo
+  }
+
+  /**
+   * Navega a la vista de productos próximos a vencer
+   */
+  verProductosProximosVencer(): void {
+    this.messageService.info(
+      'Navegando a productos próximos a vencer...',
+      'Navegación'
+    );
+    // TODO: Implementar navegación a productos próximos a vencer
+  }
+
+  /**
+   * Navega a la vista de productos sin movimientos
+   */
+  verProductosSinMovimientos(): void {
+    this.messageService.info(
+      'Navegando a productos sin movimientos...',
+      'Navegación'
+    );
+    // TODO: Implementar navegación a productos sin movimientos
+  }
+
+  /**
+   * Genera un reporte completo del inventario
+   */
+  generarReporteCompleto(): void {
+    this.messageService.info(
+      'Generando reporte completo del inventario...',
+      'Reporte'
+    );
+    // TODO: Implementar generación de reporte completo
+  }
+
   // ===============================
   // MÉTODOS PRIVADOS (LÓGICA DE NEGOCIO)
   // ===============================

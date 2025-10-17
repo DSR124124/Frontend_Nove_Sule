@@ -28,5 +28,6 @@ export const appConfig: ApplicationConfig = {
     }),
     MessageService,
     ConfirmationService
+
   ]
 };

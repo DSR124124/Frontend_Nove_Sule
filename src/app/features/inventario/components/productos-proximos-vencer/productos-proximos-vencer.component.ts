@@ -1,40 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TableModule } from 'primeng/table';
-import { ButtonModule } from 'primeng/button';
-import { CardModule } from 'primeng/card';
-import { TagModule } from 'primeng/tag';
-import { ToolbarModule } from 'primeng/toolbar';
-import { DialogModule } from 'primeng/dialog';
-import { InputTextModule } from 'primeng/inputtext';
-import { SelectModule } from 'primeng/select';
-// import { CalendarModule } from 'primeng/calendar'; // Removed - using native date input
-import { FormsModule } from '@angular/forms';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { MessageService } from '../../../../core/services/message.service';
-import { InputNumberModule } from 'primeng/inputnumber';
 
 import { InventarioReportesService } from '../../services/inventario-reportes.service';
 import { ResumenInventario } from '../../models/resumen-inventario.model';
 import { ProductosProximosVencerRequest } from '../../models/productos-proximos-vencer.model';
+import { PrimeNgModule } from '../../../../prime-ng/prime-ng.module';
 
 @Component({
   selector: 'app-productos-proximos-vencer',
   standalone: true,
   imports: [
     CommonModule,
-    TableModule,
-    ButtonModule,
-    CardModule,
-    TagModule,
-    ToolbarModule,
-    DialogModule,
-    InputTextModule,
-    SelectModule,
-    // CalendarModule, // Removed
-    FormsModule,
     ProgressSpinnerModule,
-    InputNumberModule
+    PrimeNgModule
   ],
   templateUrl: './productos-proximos-vencer.component.html',
   styleUrls: ['./productos-proximos-vencer.component.css']

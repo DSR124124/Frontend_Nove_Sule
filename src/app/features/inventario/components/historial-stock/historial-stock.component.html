@@ -1,149 +1,201 @@
-<div class="p-fluid">
-  <p-card header="Historial de Stock">
-    <p-toolbar>
-      <ng-template pTemplate="left">
-        <h5>Historial de Movimientos de Stock</h5>
-      </ng-template>
-      <ng-template pTemplate="right">
-        <p-button
-          label="Exportar Excel"
-          icon="pi pi-file-excel"
-          (onClick)="exportarExcel()"
-          styleClass="btn btn-success mr-2">
-        </p-button>
-        <p-button
-          label="Exportar PDF"
-          icon="pi pi-file-pdf"
-          (onClick)="exportarPDF()"
-          styleClass="btn btn-export">
-        </p-button>
-      </ng-template>
-    </p-toolbar>
+<p-toolbar>
+  <ng-template pTemplate="left">
+    <p-inputgroup>
+      <input pInputText placeholder="Buscar movimientos..." (input)="onFilterGlobal($event, globalFilter)" #globalFilter />
+      <p-inputgroup-addon>
+        <p-button icon="pi pi-search" severity="secondary" variant="text" (click)="onFilterGlobal($event, globalFilter)" />
+      </p-inputgroup-addon>
+    </p-inputgroup>
+  </ng-template>
+  <ng-template pTemplate="right">
+    <div class="d-flex gap-2">
+      <p-button
+        label="Excel"
+        icon="pi pi-file-excel"
+        (onClick)="exportarExcel()"
+        styleClass="btn btn-success btn-sm btn-outlined">
+      </p-button>
+      <p-button
+        label="PDF"
+        icon="pi pi-file-pdf"
+        (onClick)="exportarPDF()"
+        styleClass="btn btn-danger btn-sm btn-outlined">
+      </p-button>
+      <p-button
+        label="Limpiar"
+        icon="pi pi-times"
+        (onClick)="limpiarFiltros()"
+        styleClass="btn btn-secondary btn-sm btn-outlined">
+      </p-button>
+    </div>
+  </ng-template>
+</p-toolbar>
 
-    <!-- Filtros de búsqueda -->
-    <div class="filtros-section mb-4">
-      <div class="filtros-container">
-        <div class="filtro-item">
-          <label for="producto" class="form-label">Producto</label>
-          <p-autoComplete
-            id="producto"
-            [(ngModel)]="productoSeleccionado"
-            [suggestions]="productos"
-            (completeMethod)="cargarProductos()"
-            (onSelect)="onProductoSelect($event)"
-            field="nombre"
-            placeholder="Seleccionar producto"
-            [dropdown]="true"
-            class="w-100">
-          </p-autoComplete>
-        </div>
-        <div class="filtro-item">
-          <label for="fechaInicio" class="form-label">Fecha Inicio</label>
-          <input
-            type="date"
-            id="fechaInicio"
-            [(ngModel)]="fechaInicioInput"
-            (change)="onFechaInicioChange()"
-            class="p-inputtext p-component w-100"
-            pInputText>
-        </div>
-        <div class="filtro-item">
-          <label for="fechaFin" class="form-label">Fecha Fin</label>
-          <input
-            type="date"
-            id="fechaFin"
-            [(ngModel)]="fechaFinInput"
-            (change)="onFechaFinChange()"
-            class="p-inputtext p-component w-100"
-            pInputText>
-        </div>
-        <div class="filtro-item">
-          <p-button
-            label="Buscar"
-            icon="pi pi-search"
-            (onClick)="buscarHistorial()"
-            [loading]="loading"
-            styleClass="btn btn-primary w-100">
-          </p-button>
-        </div>
+<p-divider></p-divider>
+
+<!-- Toolbar de filtros -->
+<p-toolbar styleClass="mb-3">
+  <ng-template pTemplate="left">
+    <div class="d-flex align-items-center gap-2">
+      <p-avatar icon="pi pi-filter" styleClass="bg-info"></p-avatar>
+      <span class="fw-semibold">Filtros de Búsqueda</span>
+    </div>
+  </ng-template>
+  <ng-template pTemplate="center">
+    <div class="d-flex align-items-center gap-3 flex-wrap">
+      <div class="d-flex flex-column">
+        <label for="producto" class="form-label fw-semibold mb-1" style="font-size: 0.875rem;">Producto</label>
+        <p-autoComplete
+          id="producto"
+          [(ngModel)]="productoSeleccionado"
+          [suggestions]="productos"
+          (completeMethod)="cargarProductos()"
+          (onSelect)="onProductoSelect($event)"
+          field="nombre"
+          placeholder="Seleccionar producto"
+          [dropdown]="true"
+          styleClass="w-auto"
+          [style]="{'min-width': '250px'}">
+        </p-autoComplete>
+      </div>
+      <div class="d-flex flex-column">
+        <label for="fechaInicio" class="form-label fw-semibold mb-1" style="font-size: 0.875rem;">Fecha Inicio</label>
+        <input
+          type="date"
+          id="fechaInicio"
+          [(ngModel)]="fechaInicioInput"
+          (change)="onFechaInicioChange()"
+          class="form-control form-control-sm">
+      </div>
+      <div class="d-flex flex-column">
+        <label for="fechaFin" class="form-label fw-semibold mb-1" style="font-size: 0.875rem;">Fecha Fin</label>
+        <input
+          type="date"
+          id="fechaFin"
+          [(ngModel)]="fechaFinInput"
+          (change)="onFechaFinChange()"
+          class="form-control form-control-sm">
       </div>
     </div>
+  </ng-template>
+  <ng-template pTemplate="right">
+    <div class="d-flex gap-2">
+      <p-button
+        label="Buscar"
+        icon="pi pi-search"
+        (onClick)="buscarHistorial()"
+        [loading]="loading"
+        styleClass="btn btn-primary  btn-md btn-outline">
+      </p-button>
+      <p-button
+        label="Limpiar Filtros"
+        icon="pi pi-filter-slash"
+        (onClick)="limpiarFiltros()"
+        styleClass="btn btn-secondary  btn-md btn-outline">
+      </p-button>
+    </div>
+  </ng-template>
+</p-toolbar>
 
-    <p-table
-      [value]="movimientos"
-      [loading]="loading"
-      [paginator]="true"
-      [rows]="10"
-      [showCurrentPageReport]="true"
-      currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} movimientos"
-      [rowsPerPageOptions]="[10, 25, 50]"
-      [globalFilterFields]="['concepto', 'observaciones']"
-      #dt>
+<div class="container-fluid">
 
-      <ng-template pTemplate="caption">
-        <div class="flex justify-content-between align-items-center">
-          <span class="p-input-icon-left">
-            <i class="pi pi-search"></i>
-            <input
-              pInputText
-              type="text"
-              placeholder="Buscar movimientos..."
-              (input)="onFilterGlobal($event, dt)"
-              class="p-inputtext-sm">
-          </span>
-        </div>
-      </ng-template>
+  <!-- Data Table Card -->
+  <p-card>
+    <ng-template pTemplate="body">
+      <p-table
+        [value]="movimientos"
+        [loading]="loading"
+        [paginator]="true"
+        [rows]="10"
+        [showCurrentPageReport]="true"
+        currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} movimientos"
+        [rowsPerPageOptions]="[10, 25, 50]"
+        [globalFilterFields]="['concepto', 'observaciones']"
+        styleClass="p-datatable-sm"
+        #dt>
 
-      <ng-template pTemplate="header">
-        <tr>
-          <th>Fecha</th>
-          <th>Tipo</th>
-          <th>Cantidad</th>
-          <th>Stock Anterior</th>
-          <th>Stock Nuevo</th>
-          <th>Precio Unitario</th>
-          <th>Concepto</th>
-          <th>Observaciones</th>
-          <th>Usuario</th>
-        </tr>
-      </ng-template>
+        <ng-template pTemplate="header">
+          <tr>
+            <th class="d-none d-md-table-cell">Fecha</th>
+            <th class="text-center">Tipo</th>
+            <th class="text-center">Cantidad</th>
+            <th class="text-center d-none d-lg-table-cell">Stock Ant.</th>
+            <th class="text-center">Stock Nuevo</th>
+            <th class="text-end d-none d-xl-table-cell">Precio Unit.</th>
+            <th>Concepto</th>
+            <th class="d-none d-lg-table-cell">Observaciones</th>
+            <th class="d-none d-xl-table-cell">Usuario</th>
+          </tr>
+        </ng-template>
 
-      <ng-template pTemplate="body" let-movimiento>
-        <tr>
-          <td>{{ formatDateTime(movimiento.fechaMovimiento) }}</td>
-          <td>
+        <ng-template pTemplate="body" let-movimiento>
+          <tr>
+            <td class="d-none d-md-table-cell">
+              <small class="text-muted">{{ formatDateTime(movimiento.fechaMovimiento) }}</small>
+            </td>
+            <td class="text-center">
               <p-tag
                 [value]="movimiento.tipoMovimiento"
                 [styleClass]="getSeverityClass(movimiento.tipoMovimiento)">
               </p-tag>
-          </td>
-          <td>
-            <span [style.color]="movimiento.tipoMovimiento === 'ENTRADA' ? 'var(--success)' : 'var(--error)'" class="font-semibold">
-              {{ movimiento.tipoMovimiento === 'ENTRADA' ? '+' : '-' }}{{ movimiento.cantidad }}
-            </span>
-          </td>
-          <td>{{ movimiento.stockAnterior }}</td>
-          <td>
-            <span class="font-semibold">{{ movimiento.stockNuevo }}</span>
-          </td>
-          <td>{{ formatCurrency(movimiento.precioUnitario) }}</td>
-          <td>{{ movimiento.concepto }}</td>
-          <td>{{ movimiento.observaciones || 'N/A' }}</td>
-          <td>{{ movimiento.usuario?.nombre || 'N/A' }}</td>
-        </tr>
-      </ng-template>
+            </td>
+            <td class="text-center">
+              <span [class]="movimiento.tipoMovimiento === 'ENTRADA' ? 'text-success fw-bold' : 'text-danger fw-bold'">
+                {{ movimiento.tipoMovimiento === 'ENTRADA' ? '+' : '-' }}{{ movimiento.cantidad }}
+              </span>
+            </td>
+            <td class="text-center text-muted d-none d-lg-table-cell">{{ movimiento.stockAnterior }}</td>
+            <td class="text-center">
+              <span class="fw-bold">{{ movimiento.stockNuevo }}</span>
+            </td>
+            <td class="text-end d-none d-xl-table-cell">{{ formatCurrency(movimiento.precioUnitario) }}</td>
+            <td>
+              <div>
+                <div class="fw-semibold text-dark">{{ movimiento.concepto }}</div>
+                <small class="text-muted d-md-block d-lg-none d-xl-none">
+                  {{ formatDateTime(movimiento.fechaMovimiento) }}
+                  <br>{{ movimiento.observaciones || 'Sin observaciones' }}
+                </small>
+              </div>
+            </td>
+            <td class="d-none d-lg-table-cell">
+              <small class="text-muted">{{ movimiento.observaciones || 'N/A' }}</small>
+            </td>
+            <td class="d-none d-xl-table-cell">
+              <small class="text-muted">{{ movimiento.usuario?.nombre || 'N/A' }}</small>
+            </td>
+          </tr>
+        </ng-template>
 
-      <ng-template pTemplate="emptymessage">
-        <tr>
-          <td colspan="9" class="text-center">
-            <div class="flex flex-column align-items-center py-4">
-              <i class="pi pi-inbox text-4xl mb-3" style="color: var(--text-muted);"></i>
-              <span style="color: var(--text-secondary);">No se encontraron movimientos</span>
-            </div>
-          </td>
-        </tr>
-      </ng-template>
-    </p-table>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="9" class="text-center py-5">
+              <div class="d-flex flex-column align-items-center gap-3">
+                <div class="empty-state-container">
+                  <p-avatar
+                    icon="pi pi-history"
+                    styleClass="empty-state-avatar"
+                    size="xlarge">
+                  </p-avatar>
+                </div>
+                <div class="empty-state-content">
+                  <h5 class="empty-state-title mb-2">No hay movimientos de stock</h5>
+                  <p class="empty-state-message text-muted mb-3">
+                    No se encontraron registros para los filtros seleccionados
+                  </p>
+                  <small class="empty-state-suggestion">
+                    <i class="pi pi-info-circle me-1"></i>
+                    Intenta ajustar los filtros de búsqueda o selecciona un período diferente
+                  </small>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </ng-template>
   </p-card>
 </div>
+
+<p-toast></p-toast>
 

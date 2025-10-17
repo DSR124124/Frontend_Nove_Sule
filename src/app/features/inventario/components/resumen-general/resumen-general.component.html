@@ -1,246 +1,251 @@
-<div class="resumen-general">
-  <!-- ============================= -->
-  <!-- FILTERS SECTION -->
-  <!-- ============================= -->
-  <div class="resumen-general__filters">
-    <p-card styleClass="resumen-general__filters-card mb-4">
-      <ng-template pTemplate="header">
-        <div class="resumen-general__card-header">
-          <p-avatar icon="pi pi-filter" styleClass="mr-2"></p-avatar>
-          <span>Filtros y Acciones</span>
-        </div>
-      </ng-template>
+<p-toolbar>
+  <ng-template pTemplate="left">
+    <div class="p-col-12 p-md-4">
+      <label for="fecha" class="d-block mb-2">Fecha de Consulta</label>
+      <input type="date" id="fecha" [(ngModel)]="fechaInput" (change)="onFechaChange()"
+        class="p-inputtext p-component w-full" pInputText>
+    </div>
 
-      <div class="p-grid p-align-end">
-        <div class="p-col-12 p-md-4">
-          <label for="fecha" class="block mb-2">Fecha de Consulta</label>
-          <input
-            type="date"
-            id="fecha"
-            [(ngModel)]="fechaInput"
-            (change)="onFechaChange()"
-            class="p-inputtext p-component w-full"
-            pInputText>
-        </div>
+  </ng-template>
+  <ng-template pTemplate="right">
+    <div class="d-flex gap-2">
+      <p-button label="Actualizar" icon="pi pi-refresh" (onClick)="cargarResumenGeneral()" [loading]="loading"
+        styleClass="btn btn-primary w-full">
+      </p-button>
+      <p-button label="Exportar PDF" icon="pi pi-file-pdf" styleClass="btn btn-secondary w-full"
+        (onClick)="exportarPDF()">
+      </p-button>
+    </div>
+  </ng-template>
+</p-toolbar>
 
-        <div class="p-col-12 p-md-4">
-          <p-button
-            label="Actualizar"
-            icon="pi pi-refresh"
-            (onClick)="cargarResumenGeneral()"
-            [loading]="loading"
-            styleClass="p-button-primary w-full">
-          </p-button>
-        </div>
+<p-divider></p-divider>
 
-        <div class="p-col-12 p-md-4">
-          <p-button
-            label="Exportar PDF"
-            icon="pi pi-file-pdf"
-            styleClass="p-button-outlined w-full"
-            (onClick)="exportarPDF()">
-          </p-button>
-        </div>
-      </div>
-    </p-card>
-  </div>
+<!-- Main Dashboard -->
+<div *ngIf="resumenGeneral && !loading" class="container-fluid">
 
-  <!-- ============================= -->
-  <!-- MAIN CONTENT -->
-  <!-- ============================= -->
-  <div class="resumen-general__content" *ngIf="resumenGeneral && !loading">
-
-    <!-- ============================= -->
-    <!-- METRICS SECTION -->
-    <!-- ============================= -->
-    <div class="resumen-general__metrics">
-      <p-card styleClass="resumen-general__metrics-panel mb-4">
+  <!-- Primera fila: Métricas principales -->
+  <div class="row g-2 mb-3">
+    <div class="col-md-6 col-xl-3">
+      <p-card styleClass="h-100 border-start border-4 border-primary">
         <ng-template pTemplate="header">
-          <div class="resumen-general__card-header">
-            <p-avatar icon="pi pi-chart-line" styleClass="mr-2"></p-avatar>
-            <span>Métricas Principales</span>
+          <div class="resumen-general__card-header d-flex align-items-center gap-2">
+            <p-avatar icon="pi pi-box" styleClass="bg-primary"></p-avatar>
+            <small class="text-muted fw-semibold">TOTAL PRODUCTOS</small>
           </div>
         </ng-template>
-
-        <div class="p-grid">
-          <!-- Total Productos -->
-          <div class="p-col-12 p-md-6 p-lg-3">
-            <div class="resumen-general__metric resumen-general__metric--primary">
-              <div class="resumen-general__metric-icon">
-                <p-avatar icon="pi pi-box" size="xlarge"></p-avatar>
-              </div>
-              <div class="resumen-general__metric-content">
-                <div class="resumen-general__metric-value">{{resumenGeneral.totalProductos}}</div>
-                <div class="resumen-general__metric-label">Total Productos</div>
-              </div>
-            </div>
+        <ng-template pTemplate="body">
+          <div class="text-center">
+            <h2 class="display-4 text-primary fw-bold mb-0">{{resumenGeneral.totalProductos || 0}}</h2>
+            <small class="text-muted">Productos en inventario</small>
           </div>
-
-          <!-- Stock Bajo -->
-          <div class="p-col-12 p-md-6 p-lg-3">
-            <div class="resumen-general__metric resumen-general__metric--warning">
-              <div class="resumen-general__metric-icon">
-                <p-avatar icon="pi pi-exclamation-triangle" size="xlarge"></p-avatar>
-              </div>
-              <div class="resumen-general__metric-content">
-                <div class="resumen-general__metric-value">{{resumenGeneral.productosConStockBajo}}</div>
-                <div class="resumen-general__metric-label">Stock Bajo</div>
-                <p-tag
-                  [value]="getSeverityText((resumenGeneral.productosConStockBajo / resumenGeneral.totalProductos) * 100)"
-                  [styleClass]="getSeverityClass((resumenGeneral.productosConStockBajo / resumenGeneral.totalProductos) * 100)">
-                </p-tag>
-              </div>
-            </div>
-          </div>
-
-          <!-- Próximos a Vencer -->
-          <div class="p-col-12 p-md-6 p-lg-3">
-            <div class="resumen-general__metric resumen-general__metric--info">
-              <div class="resumen-general__metric-icon">
-                <p-avatar icon="pi pi-clock" size="xlarge"></p-avatar>
-              </div>
-              <div class="resumen-general__metric-content">
-                <div class="resumen-general__metric-value">{{resumenGeneral.productosProximosVencer}}</div>
-                <div class="resumen-general__metric-label">Próximos a Vencer</div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Valor Total -->
-          <div class="p-col-12 p-md-6 p-lg-3">
-            <div class="resumen-general__metric resumen-general__metric--success">
-              <div class="resumen-general__metric-icon">
-                <p-avatar icon="pi pi-wallet" size="xlarge"></p-avatar>
-              </div>
-              <div class="resumen-general__metric-content">
-                <div class="resumen-general__metric-value resumen-general__metric-value--currency">{{formatCurrency(resumenGeneral.valorTotalInventario)}}</div>
-                <div class="resumen-general__metric-label">Valor Total</div>
-              </div>
-            </div>
-          </div>
-        </div>
+        </ng-template>
       </p-card>
     </div>
 
-    <!-- ============================= -->
-    <!-- STATISTICS SECTION -->
-    <!-- ============================= -->
-    <div class="resumen-general__statistics">
-      <div class="p-grid">
-
-        <!-- Movimientos del Mes -->
-        <div class="p-col-12 p-md-6">
-          <div class="resumen-general__stats-card">
-            <div class="resumen-general__stats-header">
-              <p-avatar icon="pi pi-arrows-v" styleClass="resumen-general__stats-avatar resumen-general__stats-avatar--movements"></p-avatar>
-              <div class="resumen-general__stats-title">
-                <h3>Movimientos del Mes</h3>
-                <p>Entradas y Salidas</p>
-              </div>
-            </div>
-
-            <div class="resumen-general__stats-content">
-              <div class="p-grid">
-                <div class="p-col-6">
-                  <div class="resumen-general__stat-item resumen-general__stat-item--success">
-                    <p-avatar icon="pi pi-arrow-up" styleClass="resumen-general__stat-avatar"></p-avatar>
-                    <div class="resumen-general__stat-info">
-                      <div class="resumen-general__stat-number">{{resumenGeneral.totalEntradasMes}}</div>
-                      <div class="resumen-general__stat-text">Entradas</div>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="p-col-6">
-                  <div class="resumen-general__stat-item resumen-general__stat-item--danger">
-                    <p-avatar icon="pi pi-arrow-down" styleClass="resumen-general__stat-avatar"></p-avatar>
-                    <div class="resumen-general__stat-info">
-                      <div class="resumen-general__stat-number">{{resumenGeneral.totalSalidasMes}}</div>
-                      <div class="resumen-general__stat-text">Salidas</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+    <div class="col-md-6 col-xl-3">
+      <p-card styleClass="h-100 border-start border-4 border-warning">
+        <ng-template pTemplate="header">
+          <div class="resumen-general__card-header d-flex align-items-center gap-2">
+            <p-avatar icon="pi pi-exclamation-triangle" styleClass="bg-warning"></p-avatar>
+            <small class="text-muted fw-semibold">STOCK BAJO</small>
+          </div>
+        </ng-template>
+        <ng-template pTemplate="body">
+          <div class="text-center">
+            <h2 class="display-4 text-warning fw-bold mb-0">{{resumenGeneral.productosConStockBajo || 0}}</h2>
+            <small class="text-muted">Requieren reposición</small>
+            <div class="mt-1" *ngIf="resumenGeneral.totalProductos > 0">
+              <p-tag
+                [value]="getSeverityText((resumenGeneral.productosConStockBajo / resumenGeneral.totalProductos) * 100)"
+                [styleClass]="getSeverityClass((resumenGeneral.productosConStockBajo / resumenGeneral.totalProductos) * 100)">
+              </p-tag>
             </div>
           </div>
-        </div>
-
-        <!-- Estado del Inventario -->
-        <div class="p-col-12 p-md-6">
-          <div class="resumen-general__stats-card">
-            <div class="resumen-general__stats-header">
-              <p-avatar icon="pi pi-info-circle" styleClass="resumen-general__stats-avatar resumen-general__stats-avatar--info"></p-avatar>
-              <div class="resumen-general__stats-title">
-                <h3>Estado General</h3>
-                <p>Información del Sistema</p>
-              </div>
-            </div>
-
-            <div class="resumen-general__stats-content">
-              <div class="resumen-general__stat-item resumen-general__stat-item--secondary">
-                <p-avatar icon="pi pi-pause" styleClass="resumen-general__stat-avatar"></p-avatar>
-                <div class="resumen-general__stat-info">
-                  <div class="resumen-general__stat-number">{{resumenGeneral.productosSinMovimientos}}</div>
-                  <div class="resumen-general__stat-text">Sin Movimientos</div>
-                </div>
-              </div>
-
-              <p-divider></p-divider>
-
-              <div class="resumen-general__update-section">
-                <div class="resumen-general__update-content">
-                  <p-avatar icon="pi pi-sync" styleClass="resumen-general__update-avatar"></p-avatar>
-                  <div>
-                    <div class="resumen-general__stat-text">Última Actualización</div>
-                    <div class="resumen-general__update-date">{{formatDate(resumenGeneral.ultimaActualizacion)}}</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+        </ng-template>
+      </p-card>
     </div>
 
+    <div class="col-md-6 col-xl-3">
+      <p-card styleClass="h-100 border-start border-4 border-info">
+        <ng-template pTemplate="header">
+          <div class="resumen-general__card-header d-flex align-items-center gap-2">
+            <p-avatar icon="pi pi-clock" styleClass="bg-info"></p-avatar>
+            <small class="text-muted fw-semibold">PRÓXIMOS A VENCER</small>
+          </div>
+        </ng-template>
+        <ng-template pTemplate="body">
+          <div class="text-center">
+            <h2 class="display-4 text-info fw-bold mb-0">{{resumenGeneral.productosProximosVencer || 0}}</h2>
+            <small class="text-muted">Requieren atención</small>
+          </div>
+        </ng-template>
+      </p-card>
+    </div>
+
+    <div class="col-md-6 col-xl-3">
+      <p-card styleClass="h-100 border-start border-4 border-success">
+        <ng-template pTemplate="header">
+          <div class="resumen-general__card-header d-flex align-items-center gap-2">
+            <p-avatar icon="pi pi-wallet" styleClass="bg-success"></p-avatar>
+            <small class="text-muted fw-semibold">VALOR TOTAL</small>
+          </div>
+        </ng-template>
+        <ng-template pTemplate="body">
+          <div class="text-center">
+            <h3 class="text-success fw-bold mb-0">{{formatCurrency(resumenGeneral.valorTotalInventario || 0)}}</h3>
+            <small class="text-muted">Valor del inventario</small>
+          </div>
+        </ng-template>
+      </p-card>
+    </div>
   </div>
 
-  <!-- ============================= -->
-  <!-- LOADING STATE -->
-  <!-- ============================= -->
-  <div class="resumen-general__loading-state" *ngIf="loading">
-    <p-card styleClass="resumen-general__loading-panel text-center">
-      <div class="py-6">
-        <p-progressSpinner styleClass="mb-3"></p-progressSpinner>
-        <h4 class="mb-2">Cargando resumen</h4>
-        <p class="text-muted">Obteniendo datos del inventario...</p>
-      </div>
-    </p-card>
+  <!-- Segunda fila: Movimientos y actividad -->
+  <div class="row g-2 mb-3">
+    <div class="col-md-6">
+      <p-card styleClass="h-100">
+        <ng-template pTemplate="header">
+          <div class="resumen-general__card-header d-flex align-items-center gap-2">
+            <p-avatar icon="pi pi-arrows-v" styleClass="bg-secondary"></p-avatar>
+            <span class="fw-semibold">Movimientos del Mes</span>
+          </div>
+        </ng-template>
+        <ng-template pTemplate="body">
+          <div class="row g-2">
+            <div class="col-6">
+              <div class="d-flex align-items-center gap-2 p-2 bg-light rounded">
+                <p-avatar icon="pi pi-arrow-up" styleClass="bg-success"></p-avatar>
+                <div>
+                  <div class="h4 text-success fw-bold mb-0">{{resumenGeneral.totalEntradasMes || 0}}</div>
+                  <small class="text-muted">Entradas</small>
+                </div>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="d-flex align-items-center gap-2 p-2 bg-light rounded">
+                <p-avatar icon="pi pi-arrow-down" styleClass="bg-danger"></p-avatar>
+                <div>
+                  <div class="h4 text-danger fw-bold mb-0">{{resumenGeneral.totalSalidasMes || 0}}</div>
+                  <small class="text-muted">Salidas</small>
+                </div>
+              </div>
+            </div>
+          </div>
+          <hr>
+          <div class="text-center">
+            <div class="h5 fw-bold mb-0">
+              Balance:
+              <span [class]="(resumenGeneral.totalEntradasMes - resumenGeneral.totalSalidasMes) >= 0 ? 'text-success' : 'text-danger'">
+                {{(resumenGeneral.totalEntradasMes || 0) - (resumenGeneral.totalSalidasMes || 0)}}
+              </span>
+            </div>
+            <small class="text-muted">Diferencia neta del mes</small>
+          </div>
+        </ng-template>
+      </p-card>
+    </div>
+
+    <div class="col-md-6">
+      <p-card styleClass="h-100">
+        <ng-template pTemplate="header">
+          <div class="resumen-general__card-header d-flex align-items-center gap-2">
+            <p-avatar icon="pi pi-info-circle" styleClass="bg-info"></p-avatar>
+            <span class="fw-semibold">Estado del Sistema</span>
+          </div>
+        </ng-template>
+        <ng-template pTemplate="body">
+          <div class="d-flex align-items-center gap-2 p-2 bg-light rounded mb-2">
+            <p-avatar icon="pi pi-pause" styleClass="bg-secondary"></p-avatar>
+            <div>
+              <div class="h4 text-secondary fw-bold mb-0">{{resumenGeneral.productosSinMovimientos || 0}}</div>
+              <small class="text-muted">Productos sin movimientos</small>
+            </div>
+          </div>
+
+          <div class="border-top pt-2">
+            <div class="d-flex align-items-center gap-2 mb-2">
+              <p-avatar icon="pi pi-sync" styleClass="bg-primary"></p-avatar>
+              <strong class="text-primary">Última Actualización</strong>
+            </div>
+            <div class="text-center">
+              <div class="fw-semibold">{{formatDate(resumenGeneral.ultimaActualizacion)}}</div>
+              <small class="text-muted">Fecha y hora de la última sincronización</small>
+            </div>
+          </div>
+        </ng-template>
+      </p-card>
+    </div>
   </div>
 
-  <!-- ============================= -->
-  <!-- EMPTY STATE -->
-  <!-- ============================= -->
-  <div class="resumen-general__empty-state" *ngIf="!loading && !resumenGeneral">
-    <p-card styleClass="resumen-general__empty-panel text-center">
-      <div class="py-6">
-        <p-avatar
-          icon="pi pi-chart-bar"
-          size="xlarge"
-          styleClass="mb-3"
-          [style]="{'background-color': 'var(--surface-300)', 'color': 'var(--surface-600)'}">
-        </p-avatar>
-        <h4 class="mb-3">No hay datos disponibles</h4>
-        <p class="text-muted mb-4">
-          Selecciona una fecha y presiona "Actualizar" para ver el resumen del inventario.
-        </p>
-        <p-button
-          label="Cargar Datos"
-          icon="pi pi-refresh"
-          (onClick)="cargarResumenGeneral()"
-          styleClass="p-button-primary">
-        </p-button>
-      </div>
-    </p-card>
+  <!-- Tercera fila: Acciones rápidas -->
+  <div class="row g-2">
+    <div class="col-12">
+      <p-card>
+        <ng-template pTemplate="header">
+          <div class="resumen-general__card-header d-flex align-items-center gap-2">
+            <p-avatar icon="pi pi-cog" styleClass="bg-dark"></p-avatar>
+            <span class="fw-semibold">Acciones Rápidas</span>
+          </div>
+        </ng-template>
+        <ng-template pTemplate="body">
+          <div class="d-flex flex-wrap gap-2 justify-content-center">
+            <p-button
+              label="Ver Stock Bajo"
+              icon="pi pi-exclamation-triangle"
+              styleClass="p-button-warning p-button-outlined"
+              (onClick)="verProductosStockBajo()"
+              *ngIf="resumenGeneral.productosConStockBajo > 0">
+            </p-button>
+            <p-button
+              label="Ver Próximos a Vencer"
+              icon="pi pi-clock"
+              styleClass="p-button-info p-button-outlined"
+              (onClick)="verProductosProximosVencer()"
+              *ngIf="resumenGeneral.productosProximosVencer > 0">
+            </p-button>
+            <p-button
+              label="Ver Sin Movimientos"
+              icon="pi pi-pause"
+              styleClass="p-button-secondary p-button-outlined"
+              (onClick)="verProductosSinMovimientos()"
+              *ngIf="resumenGeneral.productosSinMovimientos > 0">
+            </p-button>
+            <p-button
+              label="Reporte Completo"
+              icon="pi pi-file-export"
+              styleClass="p-button-primary p-button-outlined"
+              (onClick)="generarReporteCompleto()">
+            </p-button>
+          </div>
+        </ng-template>
+      </p-card>
+    </div>
   </div>
 
+</div>
+
+<!-- Loading State -->
+<div *ngIf="loading" class="d-flex justify-content-center align-items-center py-5">
+  <div class="text-center">
+    <p-progressSpinner styleClass="mb-3"></p-progressSpinner>
+    <h4 class="mb-2">Cargando resumen</h4>
+    <p class="text-muted">Obteniendo datos del inventario...</p>
+  </div>
+</div>
+
+<!-- Empty State -->
+<div *ngIf="!loading && !resumenGeneral" class="d-flex justify-content-center align-items-center py-5">
+  <div class="text-center">
+    <p-avatar icon="pi pi-chart-bar" size="xlarge" styleClass="mb-3"
+      [style]="{'background-color': 'var(--surface-300)', 'color': 'var(--surface-600)'}">
+    </p-avatar>
+    <h4 class="mb-3">No hay datos disponibles</h4>
+    <p class="text-muted mb-4">
+      Selecciona una fecha y presiona "Actualizar" para ver el resumen del inventario.
+    </p>
+    <p-button label="Cargar Datos" icon="pi pi-refresh" (onClick)="cargarResumenGeneral()"
+      styleClass="p-button-primary">
+    </p-button>
+  </div>
 </div>

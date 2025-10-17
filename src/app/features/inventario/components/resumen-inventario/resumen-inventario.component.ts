@@ -168,4 +168,11 @@ export class ResumenInventarioComponent implements OnInit {
     this.cargarResumenGeneral();
     this.cargarValorTotalInventario();
   }
+
+  limpiarFiltros(): void {
+    this.fechaSeleccionada = new Date();
+    this.fechaInput = new Date().toISOString().split('T')[0];
+    this.cargarResumenGeneral();
+    this.messageService.info('Filtros de fecha restablecidos', 'Filtros');
+  }
 }

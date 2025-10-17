@@ -1,40 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TableModule } from 'primeng/table';
-import { ButtonModule } from 'primeng/button';
-import { CardModule } from 'primeng/card';
-import { TagModule } from 'primeng/tag';
-import { ToolbarModule } from 'primeng/toolbar';
-import { DialogModule } from 'primeng/dialog';
-import { InputTextModule } from 'primeng/inputtext';
-import { SelectModule } from 'primeng/select';
-// import { CalendarModule } from 'primeng/calendar'; // Removed - using native date input
-import { FormsModule } from '@angular/forms';
-import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { MessageService } from '../../../../core/services/message.service';
-import { AutoCompleteModule } from 'primeng/autocomplete';
 
 import { InventarioReportesService } from '../../services/inventario-reportes.service';
 import { MovimientoInventario } from '../../models/movimiento-inventario.model';
 import { HistorialStockRequest } from '../../models/historial-stock.model';
+import { PrimeNgModule } from '../../../../prime-ng/prime-ng.module';
 
 @Component({
   selector: 'app-historial-stock',
   standalone: true,
   imports: [
     CommonModule,
-    TableModule,
-    ButtonModule,
-    CardModule,
-    TagModule,
-    ToolbarModule,
-    DialogModule,
-    InputTextModule,
-    SelectModule,
-    // CalendarModule, // Removed
-    FormsModule,
-    ProgressSpinnerModule,
-    AutoCompleteModule
+    PrimeNgModule
   ],
   templateUrl: './historial-stock.component.html',
   styleUrls: ['./historial-stock.component.css']
