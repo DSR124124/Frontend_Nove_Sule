@@ -9,11 +9,11 @@ import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
 // import { CalendarModule } from 'primeng/calendar'; // Removed - using native date input
 import { FormsModule } from '@angular/forms';
-import { MessageService } from 'primeng/api';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 import { InventarioReportesService } from '../../services/inventario-reportes.service';
 import { StockBajo } from '../../models/stock-bajo.model';
+import { MessageService } from '../../../../core/services/message.service';
 import { PrimeNgModule } from '../../../../prime-ng/prime-ng.module';
 @Component({
   selector: 'app-stock-bajo',
@@ -38,7 +38,7 @@ export class StockBajoComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.cargarProductosConStockBajo();
+    this.cargarProductosConStockBajoSilencioso();
   }
 
   cargarProductosConStockBajo(): void {
@@ -47,14 +47,29 @@ export class StockBajoComponent implements OnInit {
       next: (response) => {
         this.productos = response.data;
         this.loading = false;
+
+        // Mostrar mensaje de éxito
+        this.messageService.success(
+          `Se encontraron ${this.productos.length} productos con stock bajo`,
+          'Stock Bajo Cargado'
+        );
       },
       error: (error) => {
-        console.error('Error cargando productos con stock bajo:', error);
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'Error al cargar productos con stock bajo'
-        });
+        this.messageService.handleHttpError(error);
+        this.loading = false;
+      }
+    });
+  }
+
+  private cargarProductosConStockBajoSilencioso(): void {
+    this.loading = true;
+    this.inventarioReportesService.getProductosConStockBajo().subscribe({
+      next: (response) => {
+        this.productos = response.data;
+        this.loading = false;
+      },
+      error: (error) => {
+        this.messageService.handleHttpError(error);
         this.loading = false;
       }
     });
@@ -91,19 +106,17 @@ export class StockBajoComponent implements OnInit {
 
   exportarExcel(): void {
     // TODO: Implementar exportación a Excel
-    this.messageService.add({
-      severity: 'info',
-      summary: 'Exportar',
-      detail: 'Funcionalidad de exportación en desarrollo'
-    });
+    this.messageService.info(
+      'Funcionalidad de exportación a Excel en desarrollo',
+      'Exportar Excel'
+    );
   }
 
   exportarPDF(): void {
     // TODO: Implementar exportación a PDF
-    this.messageService.add({
-      severity: 'info',
-      summary: 'Exportar',
-      detail: 'Funcionalidad de exportación en desarrollo'
-    });
+    this.messageService.info(
+      'Funcionalidad de exportación a PDF en desarrollo',
+      'Exportar PDF'
+    );
   }
 }

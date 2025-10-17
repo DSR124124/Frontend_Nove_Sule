@@ -10,8 +10,8 @@ import { InputTextModule } from 'primeng/inputtext';
 import { SelectModule } from 'primeng/select';
 // import { CalendarModule } from 'primeng/calendar'; // Removed - using native date input
 import { FormsModule } from '@angular/forms';
-import { MessageService } from 'primeng/api';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { MessageService } from '../../../../core/services/message.service';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 
 import { InventarioReportesService } from '../../services/inventario-reportes.service';
@@ -76,20 +76,18 @@ export class HistorialStockComponent implements OnInit {
 
   buscarHistorial(): void {
     if (!this.productoId || !this.fechaInicio || !this.fechaFin) {
-      this.messageService.add({
-        severity: 'warn',
-        summary: 'Advertencia',
-        detail: 'Por favor seleccione un producto y las fechas de búsqueda'
-      });
+      this.messageService.warn(
+        'Por favor seleccione un producto y las fechas de búsqueda',
+        'Advertencia'
+      );
       return;
     }
 
     if (this.fechaInicio > this.fechaFin) {
-      this.messageService.add({
-        severity: 'warn',
-        summary: 'Advertencia',
-        detail: 'La fecha de inicio debe ser anterior a la fecha de fin'
-      });
+      this.messageService.warn(
+        'La fecha de inicio debe ser anterior a la fecha de fin',
+        'Advertencia'
+      );
       return;
     }
 
@@ -104,14 +102,18 @@ export class HistorialStockComponent implements OnInit {
       next: (response) => {
         this.movimientos = response.data;
         this.loading = false;
+
+        // Mostrar mensaje de éxito con información del historial
+        const periodo = `${this.fechaInicio?.toLocaleDateString('es-PE')} - ${this.fechaFin?.toLocaleDateString('es-PE')}`;
+        const productoNombre = this.productoSeleccionado?.nombre || 'Producto seleccionado';
+
+        this.messageService.success(
+          `Se encontraron ${this.movimientos.length} movimientos para "${productoNombre}" en el período ${periodo}`,
+          'Historial Cargado'
+        );
       },
       error: (error) => {
-        console.error('Error cargando historial:', error);
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'Error al cargar historial de stock'
-        });
+        this.messageService.handleHttpError(error);
         this.loading = false;
       }
     });
@@ -154,11 +156,10 @@ export class HistorialStockComponent implements OnInit {
 
   exportarExcel(): void {
     // TODO: Implementar exportación a Excel
-    this.messageService.add({
-      severity: 'info',
-      summary: 'Exportar',
-      detail: 'Funcionalidad de exportación en desarrollo'
-    });
+    this.messageService.info(
+      'Funcionalidad de exportación a Excel en desarrollo',
+      'Exportar Excel'
+    );
   }
 
   onFechaInicioChange(): void {
@@ -175,10 +176,25 @@ export class HistorialStockComponent implements OnInit {
 
   exportarPDF(): void {
     // TODO: Implementar exportación a PDF
-    this.messageService.add({
-      severity: 'info',
-      summary: 'Exportar',
-      detail: 'Funcionalidad de exportación en desarrollo'
-    });
+    this.messageService.info(
+      'Funcionalidad de exportación a PDF en desarrollo',
+      'Exportar PDF'
+    );
+  }
+
+  limpiarFiltros(): void {
+    this.productoId = null;
+    this.productoSeleccionado = null;
+    this.fechaInicio = null;
+    this.fechaFin = null;
+    this.fechaInicioInput = '';
+    this.fechaFinInput = '';
+    this.movimientos = [];
+
+    // Mostrar feedback al usuario
+    this.messageService.info(
+      'Filtros limpiados. Selecciona un producto y fechas para buscar el historial.',
+      'Filtros Limpiados'
+    );
   }
 }

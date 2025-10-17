@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { MessageService } from 'primeng/api';
 import { FormsModule } from '@angular/forms';
+import { MessageService } from '../../../../core/services/message.service';
 
 import { InventarioReportesService } from '../../services/inventario-reportes.service';
 import { MovimientoInventario } from '../../models/movimiento-inventario.model';
@@ -64,20 +64,18 @@ export class ReporteMovimientosComponent implements OnInit {
 
   generarReporte(): void {
     if (!this.fechaInicio || !this.fechaFin) {
-      this.messageService.add({
-        severity: 'warn',
-        summary: 'Advertencia',
-        detail: 'Por favor seleccione las fechas de búsqueda'
-      });
+      this.messageService.warn(
+        'Por favor seleccione las fechas de búsqueda',
+        'Advertencia'
+      );
       return;
     }
 
     if (this.fechaInicio > this.fechaFin) {
-      this.messageService.add({
-        severity: 'warn',
-        summary: 'Advertencia',
-        detail: 'La fecha de inicio debe ser anterior a la fecha de fin'
-      });
+      this.messageService.warn(
+        'La fecha de inicio debe ser anterior a la fecha de fin',
+        'Advertencia'
+      );
       return;
     }
 
@@ -93,14 +91,22 @@ export class ReporteMovimientosComponent implements OnInit {
       next: (response) => {
         this.movimientos = response.data;
         this.loading = false;
+
+        // Mostrar mensaje de éxito con información del reporte generado
+        const periodo = `${this.fechaInicio?.toLocaleDateString('es-PE')} - ${this.fechaFin?.toLocaleDateString('es-PE')}`;
+        const filtros = [];
+        if (this.productoSeleccionado) filtros.push(`producto: ${this.productoSeleccionado.nombre}`);
+        if (this.tipoMovimiento) filtros.push(`tipo: ${this.tipoMovimiento}`);
+
+        const filtrosTexto = filtros.length > 0 ? ` (${filtros.join(', ')})` : '';
+
+        this.messageService.success(
+          `Se generó el reporte con ${this.movimientos.length} movimientos para el período ${periodo}${filtrosTexto}`,
+          'Reporte Generado'
+        );
       },
       error: (error) => {
-        console.error('Error generando reporte:', error);
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'Error al generar reporte de movimientos'
-        });
+        this.messageService.handleHttpError(error);
         this.loading = false;
       }
     });
@@ -116,7 +122,15 @@ export class ReporteMovimientosComponent implements OnInit {
     this.tipoMovimiento = null;
     this.fechaInicio = null;
     this.fechaFin = null;
+    this.fechaInicioInput = '';
+    this.fechaFinInput = '';
     this.movimientos = [];
+
+    // Mostrar feedback al usuario
+    this.messageService.info(
+      'Filtros limpiados. Selecciona nuevas fechas y criterios para generar un reporte.',
+      'Filtros Limpiados'
+    );
   }
 
   getSeverityClass(tipoMovimiento: string): string {
@@ -160,19 +174,17 @@ export class ReporteMovimientosComponent implements OnInit {
 
   exportarExcel(): void {
     // TODO: Implementar exportación a Excel
-    this.messageService.add({
-      severity: 'info',
-      summary: 'Exportar',
-      detail: 'Funcionalidad de exportación en desarrollo'
-    });
+    this.messageService.info(
+      'Funcionalidad de exportación a Excel en desarrollo',
+      'Exportar Excel'
+    );
   }
 
   exportarPDF(): void {
     // TODO: Implementar exportación a PDF
-    this.messageService.add({
-      severity: 'info',
-      summary: 'Exportar',
-      detail: 'Funcionalidad de exportación en desarrollo'
-    });
+    this.messageService.info(
+      'Funcionalidad de exportación a PDF en desarrollo',
+      'Exportar PDF'
+    );
   }
 }

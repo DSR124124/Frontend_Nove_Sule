@@ -73,10 +73,10 @@ export class CategoriaListComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.cargarCategorias(false); // No mostrar mensaje de éxito en la carga inicial
+    this.cargarCategorias();
   }
 
-  cargarCategorias(showSuccessMessage: boolean = true): void {
+  cargarCategorias(): void {
     this.loading = true;
 
     // Crear filtros limpios
@@ -94,23 +94,21 @@ export class CategoriaListComponent implements OnInit {
         this.totalPages = response.data?.totalPages || 0;
         this.loading = false;
 
-        // Mostrar mensaje de éxito solo si se solicita
-        if (showSuccessMessage) {
-          const filtrosAplicados = Object.keys(filtrosLimpios).filter(key =>
-            key !== 'page' && key !== 'size' && filtrosLimpios[key as keyof CategoriaFiltros]
-          );
+        // Mostrar mensaje de éxito con filtros
+        const filtrosAplicados = Object.keys(filtrosLimpios).filter(key =>
+          key !== 'page' && key !== 'size' && filtrosLimpios[key as keyof CategoriaFiltros]
+        );
 
-          if (filtrosAplicados.length > 0) {
-            this.messageService.success(
-              `Se encontraron ${this.categorias.length} categorías con los filtros aplicados`,
-              'Búsqueda Exitosa'
-            );
-          } else {
-            this.messageService.success(
-              `Se cargaron ${this.categorias.length} categorías correctamente`,
-              'Categorías Cargadas'
-            );
-          }
+        if (filtrosAplicados.length > 0) {
+          this.messageService.success(
+            `Se encontraron ${this.categorias.length} categorías con los filtros aplicados`,
+            'Búsqueda Exitosa'
+          );
+        } else {
+          this.messageService.success(
+            `Se cargaron ${this.categorias.length} categorías correctamente`,
+            'Categorías Cargadas'
+          );
         }
       },
       error: (error) => {
@@ -153,9 +151,9 @@ export class CategoriaListComponent implements OnInit {
 
     if (confirmed) {
       this.categoriaService.eliminar(categoria.id).subscribe({
-        next: (response) => {
+        next: () => {
           this.messageService.success('Categoría eliminada exitosamente', 'Eliminación Exitosa');
-          this.cargarCategorias(false); // No mostrar mensaje de éxito al recargar
+          this.cargarCategorias();
         },
         error: (error) => {
           this.messageService.handleHttpError(error);
@@ -176,9 +174,9 @@ export class CategoriaListComponent implements OnInit {
 
     if (confirmed) {
       this.categoriaService.cambiarEstado(categoria.id, nuevoEstado).subscribe({
-        next: (response) => {
+        next: () => {
           this.messageService.success(`Categoría ${accion}da exitosamente`, 'Estado Actualizado');
-          this.cargarCategorias(false); // No mostrar mensaje de éxito al recargar
+          this.cargarCategorias();
         },
         error: (error) => {
           this.messageService.handleHttpError(error);
@@ -204,4 +202,5 @@ export class CategoriaListComponent implements OnInit {
       default: return 'Desconocido';
     }
   }
+
 }

@@ -10,8 +10,8 @@ import { InputTextModule } from 'primeng/inputtext';
 import { SelectModule } from 'primeng/select';
 // import { CalendarModule } from 'primeng/calendar'; // Removed - using native date input
 import { FormsModule } from '@angular/forms';
-import { MessageService } from 'primeng/api';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { MessageService } from '../../../../core/services/message.service';
 import { InputNumberModule } from 'primeng/inputnumber';
 
 import { InventarioReportesService } from '../../services/inventario-reportes.service';
@@ -50,7 +50,7 @@ export class ProductosProximosVencerComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.cargarProductosProximosVencer();
+    this.cargarProductosProximosVencerSilencioso();
   }
 
   cargarProductosProximosVencer(): void {
@@ -63,14 +63,33 @@ export class ProductosProximosVencerComponent implements OnInit {
       next: (response) => {
         this.productos = response.data;
         this.loading = false;
+
+        // Mostrar mensaje de éxito
+        this.messageService.success(
+          `Se encontraron ${this.productos.length} productos próximos a vencer en ${this.dias} días`,
+          'Consulta Exitosa'
+        );
       },
       error: (error) => {
-        console.error('Error cargando productos próximos a vencer:', error);
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'Error al cargar productos próximos a vencer'
-        });
+        this.messageService.handleHttpError(error);
+        this.loading = false;
+      }
+    });
+  }
+
+  private cargarProductosProximosVencerSilencioso(): void {
+    this.loading = true;
+    const request: ProductosProximosVencerRequest = {
+      dias: this.dias
+    };
+
+    this.inventarioReportesService.getProductosProximosVencer(request).subscribe({
+      next: (response) => {
+        this.productos = response.data;
+        this.loading = false;
+      },
+      error: (error) => {
+        this.messageService.handleHttpError(error);
         this.loading = false;
       }
     });
@@ -111,19 +130,17 @@ export class ProductosProximosVencerComponent implements OnInit {
 
   exportarExcel(): void {
     // TODO: Implementar exportación a Excel
-    this.messageService.add({
-      severity: 'info',
-      summary: 'Exportar',
-      detail: 'Funcionalidad de exportación en desarrollo'
-    });
+    this.messageService.info(
+      'Funcionalidad de exportación a Excel en desarrollo',
+      'Exportar Excel'
+    );
   }
 
   exportarPDF(): void {
     // TODO: Implementar exportación a PDF
-    this.messageService.add({
-      severity: 'info',
-      summary: 'Exportar',
-      detail: 'Funcionalidad de exportación en desarrollo'
-    });
+    this.messageService.info(
+      'Funcionalidad de exportación a PDF en desarrollo',
+      'Exportar PDF'
+    );
   }
 }

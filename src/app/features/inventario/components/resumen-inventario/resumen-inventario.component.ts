@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
-import { MessageService } from 'primeng/api';
 import { PrimeNgModule } from '../../../../prime-ng/prime-ng.module';
+import { MessageService } from '../../../../core/services/message.service';
 
 import { InventarioReportesService } from '../../services/inventario-reportes.service';
 import { ResumenInventario, ResumenGeneralInventario } from '../../models/resumen-inventario.model';
@@ -35,8 +35,8 @@ export class ResumenInventarioComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.cargarResumenGeneral();
-    this.cargarValorTotalInventario();
+    this.cargarResumenGeneralSilencioso();
+    this.cargarValorTotalInventarioSilencioso();
   }
 
   cargarResumenGeneral(): void {
@@ -50,14 +50,35 @@ export class ResumenInventarioComponent implements OnInit {
         this.productosConStockBajo = this.resumenGeneral.productosConStockBajo;
         this.valorTotalInventario = this.resumenGeneral.valorTotalInventario;
         this.loading = false;
+
+        // Mostrar mensaje de éxito
+        const fechaFormateada = new Date(fecha).toLocaleDateString('es-PE');
+        this.messageService.success(
+          `Resumen del inventario cargado para ${fechaFormateada}. Total productos: ${this.totalProductos}, Stock bajo: ${this.productosConStockBajo}`,
+          'Resumen Cargado'
+        );
       },
       error: (error) => {
-        console.error('Error cargando resumen general:', error);
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'Error al cargar resumen general del inventario'
-        });
+        this.messageService.handleHttpError(error);
+        this.loading = false;
+      }
+    });
+  }
+
+  private cargarResumenGeneralSilencioso(): void {
+    this.loading = true;
+    const fecha = this.fechaSeleccionada.toISOString().split('T')[0];
+
+    this.inventarioReportesService.getResumenGeneral(fecha).subscribe({
+      next: (response) => {
+        this.resumenGeneral = response.data;
+        this.totalProductos = this.resumenGeneral.totalProductos;
+        this.productosConStockBajo = this.resumenGeneral.productosConStockBajo;
+        this.valorTotalInventario = this.resumenGeneral.valorTotalInventario;
+        this.loading = false;
+      },
+      error: (error) => {
+        this.messageService.handleHttpError(error);
         this.loading = false;
       }
     });
@@ -67,14 +88,26 @@ export class ResumenInventarioComponent implements OnInit {
     this.inventarioReportesService.getValorTotalInventario().subscribe({
       next: (response) => {
         this.valorTotalInventario = response.data;
+
+        // Mostrar mensaje de éxito
+        this.messageService.success(
+          `Valor total del inventario actualizado: ${this.formatCurrency(this.valorTotalInventario)}`,
+          'Valor Actualizado'
+        );
       },
       error: (error) => {
-        console.error('Error cargando valor total:', error);
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'Error al cargar valor total del inventario'
-        });
+        this.messageService.handleHttpError(error);
+      }
+    });
+  }
+
+  private cargarValorTotalInventarioSilencioso(): void {
+    this.inventarioReportesService.getValorTotalInventario().subscribe({
+      next: (response) => {
+        this.valorTotalInventario = response.data;
+      },
+      error: (error) => {
+        this.messageService.handleHttpError(error);
       }
     });
   }
@@ -117,19 +150,22 @@ export class ResumenInventarioComponent implements OnInit {
 
   exportarExcel(): void {
     // TODO: Implementar exportación a Excel
-    this.messageService.add({
-      severity: 'info',
-      summary: 'Exportar',
-      detail: 'Funcionalidad de exportación en desarrollo'
-    });
+    this.messageService.info(
+      'Funcionalidad de exportación a Excel en desarrollo',
+      'Exportar Excel'
+    );
   }
 
   exportarPDF(): void {
     // TODO: Implementar exportación a PDF
-    this.messageService.add({
-      severity: 'info',
-      summary: 'Exportar',
-      detail: 'Funcionalidad de exportación en desarrollo'
-    });
+    this.messageService.info(
+      'Funcionalidad de exportación a PDF en desarrollo',
+      'Exportar PDF'
+    );
+  }
+
+  actualizarDatos(): void {
+    this.cargarResumenGeneral();
+    this.cargarValorTotalInventario();
   }
 }

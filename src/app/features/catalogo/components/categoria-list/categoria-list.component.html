@@ -98,13 +98,15 @@
   <p-table
     [value]="categorias"
     [loading]="loading"
-    [paginator]="true"
+    [paginator]="totalElements > pageSize"
     [rows]="pageSize"
     [totalRecords]="totalElements"
     [first]="currentPage * pageSize"
     (onPage)="onPageChange($event)"
     styleClass="p-datatable-sm categories-table"
     [rowHover]="true"
+    [showCurrentPageReport]="true"
+    currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} categorías"
     dataKey="id">
 
     <!-- Columnas de la tabla -->

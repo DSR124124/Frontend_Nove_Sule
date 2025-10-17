@@ -76,12 +76,10 @@ export class ProductoListComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    // Cargar productos sin mensajes de éxito para evitar duplicados
-    this.cargarProductos(false);
+    this.cargarProductos();
   }
 
-
-  cargarProductos(showSuccessMessage: boolean = true): void {
+  cargarProductos(): void {
     this.loading = true;
 
     // Crear filtros limpios
@@ -103,23 +101,21 @@ export class ProductoListComponent implements OnInit {
         this.totalPages = response.data?.totalPages || 0;
         this.loading = false;
 
-        // Mostrar mensaje de éxito solo si se solicita
-        if (showSuccessMessage) {
-          const filtrosAplicados = Object.keys(filtrosLimpios).filter(key =>
-            key !== 'page' && key !== 'size' && filtrosLimpios[key as keyof ProductoFiltros]
-          );
+        // Mostrar mensaje de éxito con filtros
+        const filtrosAplicados = Object.keys(filtrosLimpios).filter(key =>
+          key !== 'page' && key !== 'size' && filtrosLimpios[key as keyof ProductoFiltros]
+        );
 
-          if (filtrosAplicados.length > 0) {
-            this.messageService.success(
-              `Se encontraron ${this.productos.length} productos con los filtros aplicados`,
-              'Búsqueda Exitosa'
-            );
-          } else {
-            this.messageService.success(
-              `Se cargaron ${this.productos.length} productos correctamente`,
-              'Productos Cargados'
-            );
-          }
+        if (filtrosAplicados.length > 0) {
+          this.messageService.success(
+            `Se encontraron ${this.productos.length} productos con los filtros aplicados`,
+            'Búsqueda Exitosa'
+          );
+        } else {
+          this.messageService.success(
+            `Se cargaron ${this.productos.length} productos correctamente`,
+            'Productos Cargados'
+          );
         }
       },
       error: (error) => {
@@ -132,7 +128,7 @@ export class ProductoListComponent implements OnInit {
   onSearch(busqueda: ProductoBusqueda): void {
     this.busquedaActual = busqueda;
     this.currentPage = 0; // Reset a la primera página
-    this.cargarProductos(true); // Mostrar mensaje de éxito para búsquedas
+    this.cargarProductos();
   }
 
   onClearSearch(): void {
@@ -145,16 +141,16 @@ export class ProductoListComponent implements OnInit {
       proveedorId: undefined
     };
     this.currentPage = 0;
-    this.cargarProductos(true); // Mostrar mensaje de éxito al limpiar búsqueda
+    this.cargarProductos();
   }
 
   onPageChange(event: any): void {
     this.currentPage = event.page;
-    this.cargarProductos(false); // No mostrar mensaje de éxito al cambiar página
+    this.cargarProductos();
   }
 
   onRefresh(): void {
-    this.cargarProductos(true); // Mostrar mensaje de éxito al refrescar
+    this.cargarProductos();
   }
 
   getEstadoStyleClass(estado: string): string {

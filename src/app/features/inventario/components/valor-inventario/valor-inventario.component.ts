@@ -5,8 +5,8 @@ import { ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table';
 import { InputTextModule } from 'primeng/inputtext';
 import { FormsModule } from '@angular/forms';
-import { MessageService } from 'primeng/api';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { MessageService } from '../../../../core/services/message.service';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { TagModule } from 'primeng/tag';
 
@@ -45,7 +45,7 @@ export class ValorInventarioComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.cargarValorTotal();
+    this.cargarValorTotalSilencioso();
     this.cargarProductos();
   }
 
@@ -55,14 +55,29 @@ export class ValorInventarioComponent implements OnInit {
       next: (response) => {
         this.valorTotal = response.data;
         this.loading = false;
+
+        // Mostrar mensaje de éxito
+        this.messageService.success(
+          `Valor total del inventario: ${this.formatCurrency(this.valorTotal)}`,
+          'Valor Cargado'
+        );
       },
       error: (error) => {
-        console.error('Error cargando valor total:', error);
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'Error al cargar valor total del inventario'
-        });
+        this.messageService.handleHttpError(error);
+        this.loading = false;
+      }
+    });
+  }
+
+  private cargarValorTotalSilencioso(): void {
+    this.loading = true;
+    this.inventarioReportesService.getValorTotalInventario().subscribe({
+      next: (response) => {
+        this.valorTotal = response.data;
+        this.loading = false;
+      },
+      error: (error) => {
+        this.messageService.handleHttpError(error);
         this.loading = false;
       }
     });
@@ -79,11 +94,10 @@ export class ValorInventarioComponent implements OnInit {
 
   consultarValorProducto(): void {
     if (!this.productoId) {
-      this.messageService.add({
-        severity: 'warn',
-        summary: 'Advertencia',
-        detail: 'Por favor seleccione un producto'
-      });
+      this.messageService.warn(
+        'Por favor seleccione un producto',
+        'Advertencia'
+      );
       return;
     }
 
@@ -93,14 +107,15 @@ export class ValorInventarioComponent implements OnInit {
         this.valorProducto = response.data;
         this.mostrarDetalleProducto = true;
         this.loading = false;
+
+        // Mostrar mensaje de éxito con información del producto
+        this.messageService.success(
+          `Valor del producto "${this.productoSeleccionado?.nombre}": ${this.formatCurrency(this.valorProducto)}`,
+          'Consulta Exitosa'
+        );
       },
       error: (error) => {
-        console.error('Error cargando valor del producto:', error);
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'Error al cargar valor del producto'
-        });
+        this.messageService.handleHttpError(error);
         this.loading = false;
       }
     });
@@ -127,10 +142,9 @@ export class ValorInventarioComponent implements OnInit {
 
   exportarPDF(): void {
     // TODO: Implementar exportación a PDF
-    this.messageService.add({
-      severity: 'info',
-      summary: 'Exportar',
-      detail: 'Funcionalidad de exportación en desarrollo'
-    });
+    this.messageService.info(
+      'Funcionalidad de exportación a PDF en desarrollo',
+      'Exportar PDF'
+    );
   }
 }

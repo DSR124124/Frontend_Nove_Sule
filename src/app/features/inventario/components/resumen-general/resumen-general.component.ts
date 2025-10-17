@@ -69,7 +69,7 @@ export class ResumenGeneralComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.cargarResumenGeneral();
+    this.cargarResumenGeneralSilencioso();
   }
 
   // ===============================
@@ -91,11 +91,10 @@ export class ResumenGeneralComponent implements OnInit {
    */
   exportarPDF(): void {
     // TODO: Implementar exportación a PDF
-    this.messageService.add({
-      severity: 'info',
-      summary: 'Exportar',
-      detail: 'Funcionalidad de exportación en desarrollo'
-    });
+    this.messageService.info(
+      'Funcionalidad de exportación en desarrollo',
+      'Exportar'
+    );
   }
 
   // ===============================
@@ -113,25 +112,39 @@ export class ResumenGeneralComponent implements OnInit {
       next: (response) => {
         this.resumenGeneral = response.data;
         this.loading = false;
+
+        // Mostrar mensaje de éxito
+        this.messageService.success(
+          'Resumen del inventario cargado correctamente',
+          'Inventario Cargado'
+        );
       },
       error: (error) => {
-        console.error('Error cargando resumen general:', error);
-        this.showErrorMessage('Error al cargar resumen general del inventario');
+        this.messageService.handleHttpError(error);
         this.loading = false;
       }
     });
   }
 
   /**
-   * Muestra mensaje de error
+   * Carga el resumen general del inventario sin mostrar mensaje de éxito (para carga inicial)
    */
-  private showErrorMessage(message: string): void {
-    this.messageService.add({
-      severity: 'error',
-      summary: 'Error',
-      detail: message
+  private cargarResumenGeneralSilencioso(): void {
+    this.loading = true;
+    const fecha = this.fechaSeleccionada.toISOString().split('T')[0];
+
+    this.inventarioReportesService.getResumenGeneral(fecha).subscribe({
+      next: (response) => {
+        this.resumenGeneral = response.data;
+        this.loading = false;
+      },
+      error: (error) => {
+        this.messageService.handleHttpError(error);
+        this.loading = false;
+      }
     });
   }
+
 
   // ===============================
   // MÉTODOS HELPER/UTILIDADES

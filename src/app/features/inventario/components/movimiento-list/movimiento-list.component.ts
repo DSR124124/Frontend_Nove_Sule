@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { MessageService as CoreMessageService } from '../../../../core/services/message.service';
+import { MessageService } from '../../../../core/services/message.service';
 
 // PrimeNG imports
 import { ButtonModule } from 'primeng/button';
@@ -15,7 +15,6 @@ import { TableModule } from 'primeng/table';
 import { TooltipModule } from 'primeng/tooltip';
 // import { CalendarModule } from 'primeng/calendar'; // Removed - using native date input
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { MessageService } from 'primeng/api';
 
 import { MovimientoInventario, MovimientoInventarioFiltros, TipoMovimiento } from '../../models/movimiento-inventario.model';
 import { MovimientoInventarioService } from '../../services/movimiento-inventario.service';
@@ -76,15 +75,14 @@ export class MovimientoListComponent implements OnInit {
 
   constructor(
     private movimientoService: MovimientoInventarioService,
-    private messageService: MessageService,
-    private coreMessageService: CoreMessageService
+    private messageService: MessageService
   ) { }
 
   ngOnInit(): void {
-    this.cargarMovimientos(false);
+    this.cargarMovimientosSilencioso();
   }
 
-  cargarMovimientos(showSuccessMessage: boolean = true): void {
+  cargarMovimientos(): void {
     this.loading = true;
 
     const filtrosLimpios: MovimientoInventarioFiltros = {
@@ -103,26 +101,51 @@ export class MovimientoListComponent implements OnInit {
         this.totalPages = response.data?.totalPages || 0;
         this.loading = false;
 
-        if (showSuccessMessage) {
-          const filtrosAplicados = Object.keys(filtrosLimpios).filter(key =>
-            key !== 'page' && key !== 'size' && filtrosLimpios[key as keyof MovimientoInventarioFiltros]
-          );
+        // Mostrar mensaje de éxito con filtros
+        const filtrosAplicados = Object.keys(filtrosLimpios).filter(key =>
+          key !== 'page' && key !== 'size' && filtrosLimpios[key as keyof MovimientoInventarioFiltros]
+        );
 
-          if (filtrosAplicados.length > 0) {
-            this.coreMessageService.success(
-              `Se encontraron ${this.movimientos.length} movimientos con los filtros aplicados`,
-              'Búsqueda Exitosa'
-            );
-          } else {
-            this.coreMessageService.success(
-              `Se cargaron ${this.movimientos.length} movimientos correctamente`,
-              'Movimientos Cargados'
-            );
-          }
+        if (filtrosAplicados.length > 0) {
+          this.messageService.success(
+            `Se encontraron ${this.movimientos.length} movimientos con los filtros aplicados`,
+            'Búsqueda Exitosa'
+          );
+        } else {
+          this.messageService.success(
+            `Se cargaron ${this.movimientos.length} movimientos correctamente`,
+            'Movimientos Cargados'
+          );
         }
       },
       error: (error) => {
-        this.coreMessageService.handleHttpError(error);
+        this.messageService.handleHttpError(error);
+        this.loading = false;
+      }
+    });
+  }
+
+  private cargarMovimientosSilencioso(): void {
+    this.loading = true;
+
+    const filtrosLimpios: MovimientoInventarioFiltros = {
+      page: this.currentPage,
+      size: this.pageSize,
+      productoId: this.filtros.productoId || undefined,
+      tipoMovimiento: this.filtros.tipoMovimiento || undefined,
+      fechaInicio: this.filtros.fechaInicio || undefined,
+      fechaFin: this.filtros.fechaFin || undefined
+    };
+
+    this.movimientoService.buscarConFiltros(filtrosLimpios).subscribe({
+      next: (response: ApiResponse<PaginatedResponse<MovimientoInventario>>) => {
+        this.movimientos = response.data?.content || [];
+        this.totalElements = response.data?.totalElements || 0;
+        this.totalPages = response.data?.totalPages || 0;
+        this.loading = false;
+      },
+      error: (error) => {
+        this.messageService.handleHttpError(error);
         this.loading = false;
       }
     });
@@ -130,7 +153,7 @@ export class MovimientoListComponent implements OnInit {
 
   onSearch(): void {
     this.currentPage = 0;
-    this.cargarMovimientos(true);
+    this.cargarMovimientos();
   }
 
   onClearSearch(): void {
@@ -142,17 +165,26 @@ export class MovimientoListComponent implements OnInit {
       page: 0,
       size: 10
     };
+    this.fechaInicioInput = '';
+    this.fechaFinInput = '';
     this.currentPage = 0;
-    this.cargarMovimientos(true);
+
+    // Mostrar feedback al usuario
+    this.messageService.info(
+      'Filtros limpiados. Aplicar nuevos criterios para filtrar movimientos.',
+      'Filtros Limpiados'
+    );
+
+    this.cargarMovimientos();
   }
 
   onPageChange(event: any): void {
     this.currentPage = event.page;
-    this.cargarMovimientos(false);
+    this.cargarMovimientosSilencioso();
   }
 
   onRefresh(): void {
-    this.cargarMovimientos(true);
+    this.cargarMovimientos();
   }
 
   getTipoMovimientoStyleClass(tipo: TipoMovimiento): string {
