@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { firstValueFrom } from 'rxjs';
 
 import { PrimeNgModule } from '../../../../prime-ng/prime-ng.module';
 import { MessageService } from '../../../../core/services/message.service';
+import { LoadingService } from '../../../../shared/services/loading.service';
 
 import { InventarioReportesService } from '../../services/inventario-reportes.service';
 import { ResumenInventario, ResumenGeneralInventario } from '../../models/resumen-inventario.model';
@@ -22,7 +24,6 @@ import { ResumenInventario, ResumenGeneralInventario } from '../../models/resume
 export class ResumenInventarioComponent implements OnInit {
   resumenGeneral: ResumenGeneralInventario | null = null;
   resumenes: ResumenInventario[] = [];
-  loading = false;
   fechaSeleccionada: Date = new Date();
   fechaInput: string = new Date().toISOString().split('T')[0];
   valorTotalInventario = 0;
@@ -31,91 +32,57 @@ export class ResumenInventarioComponent implements OnInit {
 
   constructor(
     private inventarioReportesService: InventarioReportesService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private loadingService: LoadingService
   ) { }
 
-  ngOnInit(): void {
-    this.cargarResumenGeneralSilencioso();
-    this.cargarValorTotalInventarioSilencioso();
+  async ngOnInit(): Promise<void> {
+    await this.cargarResumenGeneral(true);
   }
 
-  cargarResumenGeneral(): void {
-    this.loading = true;
+  async cargarResumenGeneral(mostrarMensajeExito: boolean = true): Promise<void> {
     const fecha = this.fechaSeleccionada.toISOString().split('T')[0];
 
-    this.inventarioReportesService.getResumenGeneral(fecha).subscribe({
-      next: (response) => {
-        this.resumenGeneral = response.data;
-        this.totalProductos = this.resumenGeneral.totalProductos;
-        this.productosConStockBajo = this.resumenGeneral.productosConStockBajo;
-        this.valorTotalInventario = this.resumenGeneral.valorTotalInventario;
-        this.loading = false;
+    try {
+      await this.loadingService.withLoading(
+        async () => {
+          const [resumenResponse, valorResponse] = await Promise.all([
+            firstValueFrom(this.inventarioReportesService.getResumenGeneral(fecha)),
+            firstValueFrom(this.inventarioReportesService.getValorTotalInventario())
+          ]);
 
-        // Mostrar mensaje de éxito
+          this.resumenGeneral = resumenResponse.data;
+          this.totalProductos = this.resumenGeneral.totalProductos;
+          this.productosConStockBajo = this.resumenGeneral.productosConStockBajo;
+          this.valorTotalInventario = valorResponse.data || this.resumenGeneral.valorTotalInventario;
+
+          return { resumenResponse, valorResponse };
+        },
+        {
+          id: 'resumen-inventario',
+          message: 'Cargando resumen del inventario...',
+          size: 'medium',
+          overlay: true
+        }
+      );
+
+      if (mostrarMensajeExito) {
         const fechaFormateada = new Date(fecha).toLocaleDateString('es-PE');
         this.messageService.success(
-          `Resumen del inventario cargado para ${fechaFormateada}. Total productos: ${this.totalProductos}, Stock bajo: ${this.productosConStockBajo}`,
-          'Resumen Cargado'
+          `Resumen cargado para ${fechaFormateada}. Total: ${this.totalProductos} productos, Stock bajo: ${this.productosConStockBajo}`,
+          'Resumen Actualizado'
         );
-      },
-      error: (error) => {
-        this.messageService.handleHttpError(error);
-        this.loading = false;
       }
-    });
+
+    } catch (error) {
+      this.messageService.handleHttpError(error);
+    }
   }
 
-  private cargarResumenGeneralSilencioso(): void {
-    this.loading = true;
-    const fecha = this.fechaSeleccionada.toISOString().split('T')[0];
-
-    this.inventarioReportesService.getResumenGeneral(fecha).subscribe({
-      next: (response) => {
-        this.resumenGeneral = response.data;
-        this.totalProductos = this.resumenGeneral.totalProductos;
-        this.productosConStockBajo = this.resumenGeneral.productosConStockBajo;
-        this.valorTotalInventario = this.resumenGeneral.valorTotalInventario;
-        this.loading = false;
-      },
-      error: (error) => {
-        this.messageService.handleHttpError(error);
-        this.loading = false;
-      }
-    });
-  }
-
-  cargarValorTotalInventario(): void {
-    this.inventarioReportesService.getValorTotalInventario().subscribe({
-      next: (response) => {
-        this.valorTotalInventario = response.data;
-
-        // Mostrar mensaje de éxito
-        this.messageService.success(
-          `Valor total del inventario actualizado: ${this.formatCurrency(this.valorTotalInventario)}`,
-          'Valor Actualizado'
-        );
-      },
-      error: (error) => {
-        this.messageService.handleHttpError(error);
-      }
-    });
-  }
-
-  private cargarValorTotalInventarioSilencioso(): void {
-    this.inventarioReportesService.getValorTotalInventario().subscribe({
-      next: (response) => {
-        this.valorTotalInventario = response.data;
-      },
-      error: (error) => {
-        this.messageService.handleHttpError(error);
-      }
-    });
-  }
-
-  onFechaChange(): void {
+  async onFechaChange(): Promise<void> {
     if (this.fechaInput) {
       this.fechaSeleccionada = new Date(this.fechaInput);
-      this.cargarResumenGeneral();
+      await this.cargarResumenGeneral();
     }
   }
 
@@ -164,15 +131,18 @@ export class ResumenInventarioComponent implements OnInit {
     );
   }
 
-  actualizarDatos(): void {
-    this.cargarResumenGeneral();
-    this.cargarValorTotalInventario();
+  async actualizarDatos(): Promise<void> {
+    await this.cargarResumenGeneral(true);
   }
 
-  limpiarFiltros(): void {
+  async limpiarFiltros(): Promise<void> {
     this.fechaSeleccionada = new Date();
     this.fechaInput = new Date().toISOString().split('T')[0];
-    this.cargarResumenGeneral();
-    this.messageService.info('Filtros de fecha restablecidos', 'Filtros');
+    await this.cargarResumenGeneral(true);
+  }
+
+  // Getter para verificar si está cargando
+  get isLoading(): boolean {
+    return this.loadingService.isLoading;
   }
 }

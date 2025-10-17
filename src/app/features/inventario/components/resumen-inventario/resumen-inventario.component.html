@@ -10,10 +10,10 @@
         </p-inputgroup-addon>
       </p-inputgroup>
 
-      <p-button label="Limpiar" icon="pi pi-times" (onClick)="limpiarFiltros()"
+      <p-button label="Limpiar" icon="pi pi-times" (onClick)="limpiarFiltros()" [disabled]="isLoading"
         styleClass="btn btn-secondary btn-md btn-outline">
       </p-button>
-      <p-button label="Actualizar" icon="pi pi-refresh" (onClick)="cargarResumenGeneral()" [loading]="loading"
+      <p-button label="Actualizar" icon="pi pi-refresh" (onClick)="cargarResumenGeneral()" [disabled]="isLoading"
         styleClass="btn btn-primary btn-md btn-outline">
       </p-button>
     </div>
@@ -21,10 +21,10 @@
   <ng-template pTemplate="right">
     <div class="d-flex gap-2">
 
-      <p-button label="Excel" icon="pi pi-file-excel" (onClick)="exportarExcel()"
+      <p-button label="Excel" icon="pi pi-file-excel" (onClick)="exportarExcel()" [disabled]="isLoading"
         styleClass="btn btn-success btn-md btn-outline">
       </p-button>
-      <p-button label="PDF" icon="pi pi-file-pdf" (onClick)="exportarPDF()"
+      <p-button label="PDF" icon="pi pi-file-pdf" (onClick)="exportarPDF()" [disabled]="isLoading"
         styleClass="btn btn-danger btn-md btn-outline">
       </p-button>
     </div>
@@ -111,7 +111,7 @@
   </div>
 
 
-      <p-table [value]="resumenes" [loading]="loading" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+      <p-table [value]="resumenes" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
         currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} productos"
         [rowsPerPageOptions]="[10, 25, 50]" [globalFilterFields]="['productoNombre', 'productoCodigo']"
         styleClass="p-datatable-sm" #dt>

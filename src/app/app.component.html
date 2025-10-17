@@ -2,8 +2,11 @@
 <!-- Toast para notificaciones -->
 <p-toast></p-toast>
 
+<!-- Loading Spinner Global -->
+<app-loading-spinner></app-loading-spinner>
+
 <!-- Contenido principal -->
-<div *ngIf="!isLoading" class="app-container">
+<div class="app-container">
   <!-- Router outlet para mostrar las páginas -->
   <router-outlet></router-outlet>
 </div>

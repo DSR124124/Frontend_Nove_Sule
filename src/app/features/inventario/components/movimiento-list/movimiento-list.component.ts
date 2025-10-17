@@ -2,23 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { firstValueFrom } from 'rxjs';
 import { MessageService } from '../../../../core/services/message.service';
-
-// PrimeNG imports
-import { ButtonModule } from 'primeng/button';
-import { InputTextModule } from 'primeng/inputtext';
-import { SelectModule } from 'primeng/select';
-import { TagModule } from 'primeng/tag';
-import { ProgressSpinnerModule } from 'primeng/progressspinner';
-import { PanelModule } from 'primeng/panel';
-import { TableModule } from 'primeng/table';
-import { TooltipModule } from 'primeng/tooltip';
-// import { CalendarModule } from 'primeng/calendar'; // Removed - using native date input
-import { ConfirmDialogModule } from 'primeng/confirmdialog';
-
+import { LoadingService } from '../../../../shared/services/loading.service';
 import { MovimientoInventario, MovimientoInventarioFiltros, TipoMovimiento } from '../../models/movimiento-inventario.model';
 import { MovimientoInventarioService } from '../../services/movimiento-inventario.service';
 import { ApiResponse, PaginatedResponse } from '../../../catalogo/models/api-response.model';
+import { PrimeNgModule } from '../../../../prime-ng/prime-ng.module';
 
 @Component({
   selector: 'app-movimiento-list',
@@ -27,23 +17,13 @@ import { ApiResponse, PaginatedResponse } from '../../../catalogo/models/api-res
     CommonModule,
     FormsModule,
     RouterModule,
-    ButtonModule,
-    InputTextModule,
-    SelectModule,
-    TagModule,
-    ProgressSpinnerModule,
-    PanelModule,
-    TableModule,
-    TooltipModule,
-    // CalendarModule, // Removed
-    ConfirmDialogModule
+    PrimeNgModule
   ],
   templateUrl: './movimiento-list.component.html',
   styleUrl: './movimiento-list.component.css'
 })
 export class MovimientoListComponent implements OnInit {
   movimientos: MovimientoInventario[] = [];
-  loading = false;
 
   // Paginación
   currentPage = 0;
@@ -75,16 +55,16 @@ export class MovimientoListComponent implements OnInit {
 
   constructor(
     private movimientoService: MovimientoInventarioService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private loadingService: LoadingService
   ) { }
 
-  ngOnInit(): void {
-    this.cargarMovimientosSilencioso();
+  async ngOnInit(): Promise<void> {
+    await this.cargarMovimientosIniciales();
   }
 
-  cargarMovimientos(): void {
-    this.loading = true;
-
+  // Método para carga inicial con loading y mensaje de éxito
+  private async cargarMovimientosIniciales(): Promise<void> {
     const filtrosLimpios: MovimientoInventarioFiltros = {
       page: this.currentPage,
       size: this.pageSize,
@@ -94,40 +74,39 @@ export class MovimientoListComponent implements OnInit {
       fechaFin: this.filtros.fechaFin || undefined
     };
 
-    this.movimientoService.buscarConFiltros(filtrosLimpios).subscribe({
-      next: (response: ApiResponse<PaginatedResponse<MovimientoInventario>>) => {
-        this.movimientos = response.data?.content || [];
-        this.totalElements = response.data?.totalElements || 0;
-        this.totalPages = response.data?.totalPages || 0;
-        this.loading = false;
-
-        // Mostrar mensaje de éxito con filtros
-        const filtrosAplicados = Object.keys(filtrosLimpios).filter(key =>
-          key !== 'page' && key !== 'size' && filtrosLimpios[key as keyof MovimientoInventarioFiltros]
-        );
-
-        if (filtrosAplicados.length > 0) {
-          this.messageService.success(
-            `Se encontraron ${this.movimientos.length} movimientos con los filtros aplicados`,
-            'Búsqueda Exitosa'
-          );
-        } else {
-          this.messageService.success(
-            `Se cargaron ${this.movimientos.length} movimientos correctamente`,
-            'Movimientos Cargados'
-          );
+    try {
+      const response = await this.loadingService.withLoading(
+        () => firstValueFrom(this.movimientoService.buscarConFiltros(filtrosLimpios)),
+        {
+          id: 'carga-inicial',
+          message: 'Cargando movimientos de inventario...',
+          size: 'medium',
+          overlay: true
         }
-      },
-      error: (error) => {
-        this.messageService.handleHttpError(error);
-        this.loading = false;
+      );
+
+      this.movimientos = response?.data?.content || [];
+      this.totalElements = response?.data?.totalElements || 0;
+      this.totalPages = response?.data?.totalPages || 0;
+
+      // Mensaje de carga exitosa
+      if (this.movimientos.length > 0) {
+        this.messageService.success(
+          `Se cargaron ${this.movimientos.length} movimientos correctamente`,
+          'Carga Exitosa'
+        );
+      } else {
+        this.messageService.info(
+          'No se encontraron movimientos registrados',
+          'Sin Resultados'
+        );
       }
-    });
+    } catch (error) {
+      this.messageService.handleHttpError(error);
+    }
   }
 
-  private cargarMovimientosSilencioso(): void {
-    this.loading = true;
-
+  async cargarMovimientos(): Promise<void> {
     const filtrosLimpios: MovimientoInventarioFiltros = {
       page: this.currentPage,
       size: this.pageSize,
@@ -137,26 +116,84 @@ export class MovimientoListComponent implements OnInit {
       fechaFin: this.filtros.fechaFin || undefined
     };
 
-    this.movimientoService.buscarConFiltros(filtrosLimpios).subscribe({
-      next: (response: ApiResponse<PaginatedResponse<MovimientoInventario>>) => {
-        this.movimientos = response.data?.content || [];
-        this.totalElements = response.data?.totalElements || 0;
-        this.totalPages = response.data?.totalPages || 0;
-        this.loading = false;
-      },
-      error: (error) => {
-        this.messageService.handleHttpError(error);
-        this.loading = false;
+    try {
+      const response = await this.loadingService.withLoading(
+        () => firstValueFrom(this.movimientoService.buscarConFiltros(filtrosLimpios)),
+        {
+          id: 'cargar-movimientos',
+          message: 'Cargando movimientos...',
+          size: 'medium',
+          overlay: true
+        }
+      );
+
+      this.movimientos = response?.data?.content || [];
+      this.totalElements = response?.data?.totalElements || 0;
+      this.totalPages = response?.data?.totalPages || 0;
+
+      // Mostrar mensaje de éxito con filtros
+      const filtrosAplicados = Object.keys(filtrosLimpios).filter(key =>
+        key !== 'page' && key !== 'size' && filtrosLimpios[key as keyof MovimientoInventarioFiltros]
+      );
+
+      if (filtrosAplicados.length > 0) {
+        this.messageService.success(
+          `Se encontraron ${this.movimientos.length} movimientos con los filtros aplicados`,
+          'Búsqueda Exitosa'
+        );
+      } else {
+        this.messageService.success(
+          `Se cargaron ${this.movimientos.length} movimientos correctamente`,
+          'Movimientos Cargados'
+        );
       }
-    });
+    } catch (error) {
+      this.messageService.handleHttpError(error);
+    }
   }
 
-  onSearch(): void {
+  private async cargarMovimientosSilencioso(): Promise<void> {
+    const filtrosLimpios: MovimientoInventarioFiltros = {
+      page: this.currentPage,
+      size: this.pageSize,
+      productoId: this.filtros.productoId || undefined,
+      tipoMovimiento: this.filtros.tipoMovimiento || undefined,
+      fechaInicio: this.filtros.fechaInicio || undefined,
+      fechaFin: this.filtros.fechaFin || undefined
+    };
+
+    try {
+      const response = await this.loadingService.withLoading(
+        () => firstValueFrom(this.movimientoService.buscarConFiltros(filtrosLimpios)),
+        {
+          id: 'paginacion',
+          message: 'Actualizando página...',
+          size: 'small'
+        }
+      );
+
+      this.movimientos = response?.data?.content || [];
+      this.totalElements = response?.data?.totalElements || 0;
+      this.totalPages = response?.data?.totalPages || 0;
+
+      // Sin mensaje de éxito para paginación (mantiene UX limpia)
+    } catch (error) {
+      this.messageService.handleHttpError(error);
+    }
+  }
+
+  // Getter para verificar si está cargando
+  get isLoading(): boolean {
+    return this.loadingService.isLoading;
+  }
+
+  async onSearch(): Promise<void> {
     this.currentPage = 0;
-    this.cargarMovimientos();
+    await this.cargarMovimientos();
   }
 
-  onClearSearch(): void {
+  async onClearSearch(): Promise<void> {
+    // Limpiar filtros
     this.filtros = {
       productoId: undefined,
       tipoMovimiento: undefined,
@@ -169,13 +206,14 @@ export class MovimientoListComponent implements OnInit {
     this.fechaFinInput = '';
     this.currentPage = 0;
 
-    // Mostrar feedback al usuario
+    // Mostrar mensaje informativo
     this.messageService.info(
-      'Filtros limpiados. Aplicar nuevos criterios para filtrar movimientos.',
+      'Filtros limpiados, cargando todos los movimientos...',
       'Filtros Limpiados'
     );
 
-    this.cargarMovimientos();
+    // Cargar todos los movimientos con loading
+    await this.cargarMovimientos();
   }
 
   onPageChange(event: any): void {
@@ -183,8 +221,13 @@ export class MovimientoListComponent implements OnInit {
     this.cargarMovimientosSilencioso();
   }
 
-  onRefresh(): void {
-    this.cargarMovimientos();
+  async onRefresh(): Promise<void> {
+    this.messageService.info(
+      'Actualizando lista de movimientos...',
+      'Actualizando'
+    );
+
+    await this.cargarMovimientos();
   }
 
   getTipoMovimientoStyleClass(tipo: TipoMovimiento): string {
