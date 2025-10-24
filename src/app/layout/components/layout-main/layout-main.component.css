@@ -11,8 +11,7 @@
 /* Main Content */
 .main-content {
   margin-left: 280px;
-  margin-top: 80px;
-  margin-bottom: 100px;
+  margin-top: 60px;
   min-height: calc(100vh - 180px);
   transition: margin-left var(--transition-normal);
   background: var(--bg-secondary);
@@ -20,6 +19,7 @@
 
 .layout-main.sidebar-collapsed .main-content {
   margin-left: 80px;
+  margin-top: 60px;
 }
 
 .content-wrapper {

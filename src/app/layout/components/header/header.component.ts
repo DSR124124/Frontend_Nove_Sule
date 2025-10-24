@@ -1,13 +1,16 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { SidebarService } from '../../services/sidebar.service';
 import { BreadcrumbComponent } from '../breadcrumb/breadcrumb.component';
+import { AuthService } from '../../../features/auth/services/auth.service';
+import { LoadingSpinnerComponent } from '../../../shared/components/loading-spinner/loading-spinner.component';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule, BreadcrumbComponent],
+  imports: [CommonModule, BreadcrumbComponent, LoadingSpinnerComponent],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css'
 })
@@ -16,14 +19,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   isSidebarCollapsed = false;
   currentTime = new Date();
-  notifications = [
-    { id: 1, title: 'Nueva venta', message: 'Se registró una venta por S/ 150.00', time: '2 min', type: 'success', read: false },
-    { id: 2, title: 'Stock bajo', message: 'Producto "Laptop HP" con stock bajo', time: '15 min', type: 'warning', read: false },
-    { id: 3, title: 'Pago recibido', message: 'Pago de factura #001-0001234', time: '1 hora', type: 'info', read: false }
-  ];
-  unreadNotifications = 3;
+  isLoggingOut = false;
 
-  constructor(private sidebarService: SidebarService) {}
+  constructor(
+    private sidebarService: SidebarService,
+    private authService: AuthService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     // Subscribe to sidebar collapse state
@@ -48,20 +50,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.sidebarService.toggleSidebar();
   }
 
-  markNotificationAsRead(notificationId: number): void {
-    const notification = this.notifications.find(n => n.id === notificationId);
-    if (notification && !notification.read) {
-      notification.read = true;
-      this.unreadNotifications--;
-    }
-  }
-
-  markAllAsRead(): void {
-    this.notifications.forEach(notification => {
-      notification.read = true;
-    });
-    this.unreadNotifications = 0;
-  }
 
   getFormattedTime(): string {
     return this.currentTime.toLocaleTimeString('es-PE', {
@@ -77,5 +65,20 @@ export class HeaderComponent implements OnInit, OnDestroy {
       month: 'long',
       day: 'numeric'
     });
+  }
+
+  logout(): void {
+    this.isLoggingOut = true;
+
+    // Simular un pequeño delay para mostrar el spinner
+    setTimeout(() => {
+      this.authService.logout();
+      this.router.navigate(['/auth/login']);
+      this.isLoggingOut = false;
+    }, 1000);
+  }
+
+  goToProfile(): void {
+    this.router.navigate(['/usuarios/mi-perfil']);
   }
 }

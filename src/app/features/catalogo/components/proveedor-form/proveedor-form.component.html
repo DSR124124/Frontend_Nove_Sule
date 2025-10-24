@@ -1,1 +1,374 @@
-<p>proveedor-form works!</p>
+<div class="proveedor-form-container">
+  <!-- Header -->
+  <div class="form-header">
+    <div class="header-content">
+      <h1 class="form-title">
+        {{ isEditMode ? 'Editar Proveedor' : 'Nuevo Proveedor' }}
+      </h1>
+      <p class="form-subtitle">
+        {{ isEditMode ? 'Modifica la información del proveedor' : 'Completa la información del nuevo proveedor' }}
+      </p>
+    </div>
+  </div>
+
+  <!-- Formulario -->
+  <form [formGroup]="proveedorForm" (ngSubmit)="onSubmit()" class="proveedor-form">
+    <div class="form-grid">
+      <!-- Información Básica -->
+      <p-card header="Información Básica" class="form-card">
+        <div class="card-content">
+          <div class="input-group">
+            <label for="nombre" class="input-label">
+              Nombre <span class="required">*</span>
+            </label>
+            <input
+              id="nombre"
+              type="text"
+              pInputText
+              formControlName="nombre"
+              placeholder="Nombre del proveedor"
+              class="input-field"
+              [class.error]="nombre?.invalid && nombre?.touched">
+            <small class="error-message" *ngIf="nombre?.invalid && nombre?.touched">
+              <span *ngIf="nombre?.errors?.['required']">El nombre es requerido</span>
+              <span *ngIf="nombre?.errors?.['maxlength']">El nombre no puede exceder 100 caracteres</span>
+            </small>
+          </div>
+
+          <div class="input-group">
+            <label for="razonSocial" class="input-label">Razón Social</label>
+            <input
+              id="razonSocial"
+              type="text"
+              pInputText
+              formControlName="razonSocial"
+              placeholder="Razón social del proveedor"
+              class="input-field">
+          </div>
+
+          <div class="input-group">
+            <label for="ruc" class="input-label">
+              RUC <span class="required">*</span>
+            </label>
+            <input
+              id="ruc"
+              type="text"
+              pInputText
+              formControlName="ruc"
+              placeholder="11 dígitos del RUC"
+              class="input-field"
+              [class.error]="ruc?.invalid && ruc?.touched">
+            <small class="error-message" *ngIf="ruc?.invalid && ruc?.touched">
+              <span *ngIf="ruc?.errors?.['required']">El RUC es requerido</span>
+              <span *ngIf="ruc?.errors?.['minlength'] || ruc?.errors?.['maxlength']">El RUC debe tener 11 dígitos</span>
+              <span *ngIf="ruc?.errors?.['pattern']">El RUC debe contener solo números</span>
+            </small>
+          </div>
+        </div>
+      </p-card>
+
+      <!-- Ubicación -->
+      <p-card header="Ubicación" class="form-card">
+        <div class="card-content">
+          <div class="input-group full-width">
+            <label for="direccion" class="input-label">
+              Dirección <span class="required">*</span>
+            </label>
+            <textarea
+              id="direccion"
+              formControlName="direccion"
+              placeholder="Dirección completa"
+              class="input-field textarea"
+              rows="3"
+              [class.error]="direccion?.invalid && direccion?.touched">
+            </textarea>
+            <small class="error-message" *ngIf="direccion?.invalid && direccion?.touched">
+              <span *ngIf="direccion?.errors?.['required']">La dirección es requerida</span>
+            </small>
+          </div>
+
+          <div class="input-row">
+            <div class="input-group">
+              <label for="distrito" class="input-label">
+                Distrito <span class="required">*</span>
+              </label>
+              <input
+                id="distrito"
+                type="text"
+                pInputText
+                formControlName="distrito"
+                placeholder="Distrito"
+                class="input-field"
+                [class.error]="distrito?.invalid && distrito?.touched">
+              <small class="error-message" *ngIf="distrito?.invalid && distrito?.touched">
+                <span *ngIf="distrito?.errors?.['required']">El distrito es requerido</span>
+                <span *ngIf="distrito?.errors?.['maxlength']">El distrito no puede exceder 50 caracteres</span>
+              </small>
+            </div>
+
+            <div class="input-group">
+              <label for="provincia" class="input-label">
+                Provincia <span class="required">*</span>
+              </label>
+              <input
+                id="provincia"
+                type="text"
+                pInputText
+                formControlName="provincia"
+                placeholder="Provincia"
+                class="input-field"
+                [class.error]="provincia?.invalid && provincia?.touched">
+              <small class="error-message" *ngIf="provincia?.invalid && provincia?.touched">
+                <span *ngIf="provincia?.errors?.['required']">La provincia es requerida</span>
+                <span *ngIf="provincia?.errors?.['maxlength']">La provincia no puede exceder 50 caracteres</span>
+              </small>
+            </div>
+          </div>
+
+          <div class="input-row">
+            <div class="input-group">
+              <label for="departamento" class="input-label">
+                Departamento <span class="required">*</span>
+              </label>
+              <input
+                id="departamento"
+                type="text"
+                pInputText
+                formControlName="departamento"
+                placeholder="Departamento"
+                class="input-field"
+                [class.error]="departamento?.invalid && departamento?.touched">
+              <small class="error-message" *ngIf="departamento?.invalid && departamento?.touched">
+                <span *ngIf="departamento?.errors?.['required']">El departamento es requerido</span>
+                <span *ngIf="departamento?.errors?.['maxlength']">El departamento no puede exceder 50 caracteres</span>
+              </small>
+            </div>
+
+            <div class="input-group">
+              <label for="codigoPostal" class="input-label">Código Postal</label>
+              <input
+                id="codigoPostal"
+                type="text"
+                pInputText
+                formControlName="codigoPostal"
+                placeholder="Código postal"
+                class="input-field">
+            </div>
+          </div>
+        </div>
+      </p-card>
+
+      <!-- Contacto -->
+      <p-card header="Información de Contacto" class="form-card">
+        <div class="card-content">
+          <div class="input-row">
+            <div class="input-group">
+              <label for="telefono" class="input-label">
+                Teléfono <span class="required">*</span>
+              </label>
+              <input
+                id="telefono"
+                type="text"
+                pInputText
+                formControlName="telefono"
+                placeholder="Número de teléfono"
+                class="input-field"
+                [class.error]="telefono?.invalid && telefono?.touched">
+              <small class="error-message" *ngIf="telefono?.invalid && telefono?.touched">
+                <span *ngIf="telefono?.errors?.['required']">El teléfono es requerido</span>
+                <span *ngIf="telefono?.errors?.['maxlength']">El teléfono no puede exceder 20 caracteres</span>
+              </small>
+            </div>
+
+            <div class="input-group">
+              <label for="email" class="input-label">
+                Email <span class="required">*</span>
+              </label>
+              <input
+                id="email"
+                type="email"
+                pInputText
+                formControlName="email"
+                placeholder="Correo electrónico"
+                class="input-field"
+                [class.error]="email?.invalid && email?.touched">
+              <small class="error-message" *ngIf="email?.invalid && email?.touched">
+                <span *ngIf="email?.errors?.['required']">El email es requerido</span>
+                <span *ngIf="email?.errors?.['email']">El email debe tener un formato válido</span>
+                <span *ngIf="email?.errors?.['maxlength']">El email no puede exceder 100 caracteres</span>
+              </small>
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label for="sitioWeb" class="input-label">Sitio Web</label>
+            <input
+              id="sitioWeb"
+              type="url"
+              pInputText
+              formControlName="sitioWeb"
+              placeholder="https://www.ejemplo.com"
+              class="input-field">
+          </div>
+
+          <div class="input-row">
+            <div class="input-group">
+              <label for="contacto" class="input-label">
+                Contacto <span class="required">*</span>
+              </label>
+              <input
+                id="contacto"
+                type="text"
+                pInputText
+                formControlName="contacto"
+                placeholder="Nombre del contacto"
+                class="input-field"
+                [class.error]="contacto?.invalid && contacto?.touched">
+              <small class="error-message" *ngIf="contacto?.invalid && contacto?.touched">
+                <span *ngIf="contacto?.errors?.['required']">El contacto es requerido</span>
+                <span *ngIf="contacto?.errors?.['maxlength']">El contacto no puede exceder 100 caracteres</span>
+              </small>
+            </div>
+
+            <div class="input-group">
+              <label for="cargo" class="input-label">Cargo</label>
+              <input
+                id="cargo"
+                type="text"
+                pInputText
+                formControlName="cargo"
+                placeholder="Cargo del contacto"
+                class="input-field">
+            </div>
+          </div>
+        </div>
+      </p-card>
+
+      <!-- Información Bancaria -->
+      <p-card header="Información Bancaria" class="form-card">
+        <div class="card-content">
+          <div class="input-row">
+            <div class="input-group">
+              <label for="banco" class="input-label">Banco</label>
+              <input
+                id="banco"
+                type="text"
+                pInputText
+                formControlName="banco"
+                placeholder="Nombre del banco"
+                class="input-field">
+            </div>
+
+            <div class="input-group">
+              <label for="numeroCuenta" class="input-label">Número de Cuenta</label>
+              <input
+                id="numeroCuenta"
+                type="text"
+                pInputText
+                formControlName="numeroCuenta"
+                placeholder="Número de cuenta"
+                class="input-field">
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label for="tipoCuenta" class="input-label">Tipo de Cuenta</label>
+            <p-select
+              id="tipoCuenta"
+              formControlName="tipoCuenta"
+              [options]="opcionesTipoCuenta"
+              placeholder="Seleccionar tipo de cuenta"
+              class="input-dropdown">
+            </p-select>
+          </div>
+        </div>
+      </p-card>
+
+      <!-- Términos Comerciales -->
+      <p-card header="Términos Comerciales" class="form-card">
+        <div class="card-content">
+          <div class="input-row">
+            <div class="input-group">
+              <label for="plazoPago" class="input-label">Plazo de Pago (días)</label>
+              <p-inputNumber
+                id="plazoPago"
+                formControlName="plazoPago"
+                [min]="1"
+                [max]="365"
+                placeholder="30"
+                class="input-field">
+              </p-inputNumber>
+            </div>
+
+            <div class="input-group">
+              <label for="descuento" class="input-label">Descuento (%)</label>
+              <p-inputNumber
+                id="descuento"
+                formControlName="descuento"
+                [min]="0"
+                [max]="100"
+                [minFractionDigits]="2"
+                [maxFractionDigits]="2"
+                placeholder="0.00"
+                class="input-field">
+              </p-inputNumber>
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label for="limiteCredito" class="input-label">Límite de Crédito (S/)</label>
+            <p-inputNumber
+              id="limiteCredito"
+              formControlName="limiteCredito"
+              [min]="0"
+              [minFractionDigits]="2"
+              [maxFractionDigits]="2"
+              placeholder="0.00"
+              class="input-field">
+            </p-inputNumber>
+          </div>
+
+          <div class="input-group full-width">
+            <label for="observaciones" class="input-label">Observaciones</label>
+            <textarea
+              id="observaciones"
+              formControlName="observaciones"
+              placeholder="Observaciones adicionales"
+              class="input-field textarea"
+              rows="3">
+            </textarea>
+          </div>
+        </div>
+      </p-card>
+    </div>
+
+    <!-- Botones de Acción -->
+    <div class="form-actions">
+      <p-button
+        label="Cancelar"
+        icon="pi pi-times"
+        styleClass="btn-secondary"
+        type="button"
+        (onClick)="onCancel()">
+      </p-button>
+      <p-button
+        [label]="isEditMode ? 'Actualizar' : 'Crear'"
+        [icon]="isEditMode ? 'pi pi-check' : 'pi pi-plus'"
+        styleClass="btn-primary"
+        type="submit"
+        [loading]="loading">
+      </p-button>
+    </div>
+  </form>
+
+  <!-- Loading Spinner -->
+  <p-progressSpinner
+    *ngIf="loading"
+    styleClass="loading-spinner"
+    strokeWidth="3"
+    fill="transparent"
+    animationDuration="1s">
+  </p-progressSpinner>
+
+  <!-- Toast para mensajes -->
+</div>

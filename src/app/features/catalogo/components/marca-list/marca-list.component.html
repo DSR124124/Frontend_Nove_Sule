@@ -1,0 +1,200 @@
+<div class="marca-list-container">
+  <!-- Diálogo de confirmación -->
+  <p-confirmDialog></p-confirmDialog>
+  <!-- Header con acciones -->
+  <div class="list-header">
+    <div class="header-left">
+      <h2 class="heading-2">Lista de Marcas</h2>
+      <span class="text-caption">{{totalElements}} marcas</span>
+    </div>
+    <div class="header-actions">
+      <p-button
+        (onClick)="onRefresh()"
+        [disabled]="loading"
+        label="Actualizar"
+        icon="pi pi-refresh"
+        styleClass="btn-secondary btn-outlined btn-sm"
+        [loading]="loading">
+      </p-button>
+      <p-button
+        routerLink="/catalogo/marcas/nuevo"
+        label="Nueva Marca"
+        icon="pi pi-plus"
+        styleClass="btn-primary btn-sm">
+      </p-button>
+    </div>
+  </div>
+
+  <!-- Panel de búsqueda y filtros -->
+  <p-panel
+    header="Búsqueda y Filtros"
+    [toggleable]="true"
+    [collapsed]="filtrosCollapsed"
+    styleClass="filters-panel">
+    <ng-template pTemplate="header">
+      <div class="panel-header">
+        <i class="pi pi-search"></i>
+        <span>Búsqueda y Filtros</span>
+        <i class="pi" [ngClass]="filtrosCollapsed ? 'pi-chevron-down' : 'pi-chevron-up'"></i>
+      </div>
+    </ng-template>
+
+    <!-- Filtros -->
+    <div class="filters-content">
+      <div class="filters-row">
+        <div class="input-group">
+          <label for="nombre" class="input-label">Nombre:</label>
+          <input
+            type="text"
+            id="nombre"
+            [(ngModel)]="filtros.nombre"
+            placeholder="Buscar por nombre..."
+            class="input-text">
+        </div>
+
+        <div class="input-group">
+          <label for="estado" class="input-label">Estado:</label>
+          <p-select
+            id="estado"
+            [(ngModel)]="filtros.estado"
+            [options]="estadoOptions"
+            optionLabel="label"
+            optionValue="value"
+            placeholder="Seleccionar estado"
+            [showClear]="true"
+            styleClass="w-full">
+          </p-select>
+        </div>
+
+        <div class="filter-actions">
+          <p-button
+            (onClick)="onSearch()"
+            [disabled]="loading"
+            label="Buscar"
+            icon="pi pi-search"
+            styleClass="btn-primary btn-sm">
+          </p-button>
+          <p-button
+            (onClick)="onClearSearch()"
+            [disabled]="loading"
+            label="Limpiar"
+            icon="pi pi-times"
+            styleClass="btn-secondary btn-outlined btn-sm">
+          </p-button>
+        </div>
+      </div>
+    </div>
+  </p-panel>
+
+  <!-- Loading -->
+  <div class="loading-container" *ngIf="loading">
+    <p-progressSpinner [style]="{'width': '50px', 'height': '50px'}" styleClass="custom-spinner"
+      ariaLabel="Cargando marcas">
+    </p-progressSpinner>
+    <p class="text-body">Cargando marcas...</p>
+  </div>
+
+  <!-- Tabla de marcas -->
+  <p-table
+    [value]="marcas"
+    [loading]="loading"
+    [paginator]="true"
+    [rows]="pageSize"
+    [totalRecords]="totalElements"
+    [first]="currentPage * pageSize"
+    (onPage)="onPageChange($event)"
+    styleClass="p-datatable-sm marcas-table"
+    [rowHover]="true"
+    dataKey="id">
+
+    <!-- Columnas de la tabla -->
+    <ng-template pTemplate="header">
+      <tr>
+        <th style="width: 3rem">ID</th>
+        <th>Nombre</th>
+        <th style="width: 20rem">Descripción</th>
+        <th style="width: 6rem">Logo</th>
+        <th style="width: 6rem">Estado</th>
+        <th style="width: 8rem">Acciones</th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-marca>
+      <tr>
+        <td>
+          <span class="text-caption">{{marca.id}}</span>
+        </td>
+        <td>
+          <div class="marca-info">
+            <div class="marca-name">{{marca.nombre}}</div>
+            <div class="marca-logo" *ngIf="marca.logo">
+              <img [src]="marca.logo" [alt]="marca.nombre" class="marca-img">
+            </div>
+          </div>
+        </td>
+        <td>
+          <span class="text-body" *ngIf="marca.descripcion">
+            {{marca.descripcion | slice:0:80}}{{marca.descripcion.length > 80 ? '...' : ''}}
+          </span>
+          <span class="text-muted" *ngIf="!marca.descripcion">Sin descripción</span>
+        </td>
+        <td>
+          <div class="logo-preview" *ngIf="marca.logo">
+            <img [src]="marca.logo" [alt]="marca.nombre" class="logo-img">
+          </div>
+          <span class="text-muted" *ngIf="!marca.logo">Sin logo</span>
+        </td>
+        <td>
+          <p-tag
+            [value]="getEstadoText(marca.estado)"
+            [styleClass]="getEstadoStyleClass(marca.estado)"
+            [rounded]="true">
+          </p-tag>
+        </td>
+        <td>
+          <div class="table-actions">
+            <p-button
+              icon="pi pi-pencil"
+              styleClass="btn-primary btn-outlined btn-sm p-button-icon-only"
+              pTooltip="Editar marca"
+              tooltipPosition="top"
+              [routerLink]="['/catalogo/marcas/editar', marca.id]">
+            </p-button>
+            <p-button
+              (onClick)="onCambiarEstado(marca)"
+              [icon]="marca.estado === 'ACTIVO' ? 'pi pi-pause' : 'pi pi-play'"
+              [styleClass]="marca.estado === 'ACTIVO' ? 'btn-warning btn-outlined btn-sm p-button-icon-only' : 'btn-success btn-outlined btn-sm p-button-icon-only'"
+              [pTooltip]="marca.estado === 'ACTIVO' ? 'Desactivar marca' : 'Activar marca'"
+              tooltipPosition="top">
+            </p-button>
+            <p-button
+              (onClick)="onEliminar(marca)"
+              icon="pi pi-trash"
+              styleClass="btn-danger btn-outlined btn-sm p-button-icon-only"
+              pTooltip="Eliminar marca"
+              tooltipPosition="top">
+            </p-button>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="6" class="text-center">
+          <div class="no-marcas-content">
+            <i class="pi pi-tag text-6xl text-muted"></i>
+            <h3 class="heading-3">No hay marcas</h3>
+            <p class="text-body">No se encontraron marcas con los filtros aplicados.</p>
+            <p-button
+              (onClick)="onClearSearch()"
+              label="Limpiar Filtros"
+              icon="pi pi-refresh"
+              styleClass="btn-primary btn-sm">
+            </p-button>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

@@ -1,1 +1,276 @@
-<p>producto-form works!</p>
+<div class="producto-form-container">
+  <!-- Header -->
+  <div class="form-header">
+    <div class="header-left">
+      <h2 class="heading-2">{{ isEdit ? 'Editar Producto' : 'Nuevo Producto' }}</h2>
+      <span class="text-caption">{{ isEdit ? 'Modifica la información del producto' : 'Completa la información para crear un nuevo producto' }}</span>
+    </div>
+    <div class="header-actions">
+      <p-button
+        (onClick)="onCancel()"
+        label="Cancelar"
+        icon="fas fa-times"
+        styleClass="btn-secondary btn-outlined btn-sm">
+      </p-button>
+    </div>
+  </div>
+
+  <!-- Loading -->
+  <div class="loading-container" *ngIf="loading">
+    <p-progressSpinner [style]="{'width': '50px', 'height': '50px'}" styleClass="custom-spinner"
+      ariaLabel="Cargando">
+    </p-progressSpinner>
+    <p class="text-body">{{ isEdit ? 'Cargando producto...' : 'Procesando...' }}</p>
+  </div>
+
+  <!-- Formulario -->
+  <form [formGroup]="productoForm" (ngSubmit)="onSubmit()" *ngIf="!loading">
+    <div class="form-grid">
+      <!-- Información Básica -->
+      <p-card header="Información Básica" styleClass="form-card">
+        <div class="form-row">
+          <div class="input-group">
+            <label for="codigo" class="input-label required">Código:</label>
+            <input
+              type="text"
+              id="codigo"
+              formControlName="codigo"
+              placeholder="Ej: PROD001"
+              class="input-text"
+              [class.error]="codigo?.invalid && codigo?.touched">
+            <div class="error-message" *ngIf="codigo?.invalid && codigo?.touched">
+              <span *ngIf="codigo?.errors?.['required']">El código es requerido</span>
+              <span *ngIf="codigo?.errors?.['maxlength']">Máximo 50 caracteres</span>
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label for="nombre" class="input-label required">Nombre:</label>
+            <input
+              type="text"
+              id="nombre"
+              formControlName="nombre"
+              placeholder="Nombre del producto"
+              class="input-text"
+              [class.error]="nombre?.invalid && nombre?.touched">
+            <div class="error-message" *ngIf="nombre?.invalid && nombre?.touched">
+              <span *ngIf="nombre?.errors?.['required']">El nombre es requerido</span>
+              <span *ngIf="nombre?.errors?.['maxlength']">Máximo 100 caracteres</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="input-group full-width">
+            <label for="descripcion" class="input-label">Descripción:</label>
+            <textarea
+              id="descripcion"
+              formControlName="descripcion"
+              placeholder="Descripción detallada del producto"
+              class="input-textarea"
+              rows="3"
+              [class.error]="descripcion?.invalid && descripcion?.touched">
+            </textarea>
+            <div class="error-message" *ngIf="descripcion?.invalid && descripcion?.touched">
+              <span *ngIf="descripcion?.errors?.['maxlength']">Máximo 500 caracteres</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="input-group">
+            <label for="codigoBarras" class="input-label">Código de Barras:</label>
+            <input
+              type="text"
+              id="codigoBarras"
+              formControlName="codigoBarras"
+              placeholder="1234567890123"
+              class="input-text"
+              [class.error]="codigoBarras?.invalid && codigoBarras?.touched">
+            <div class="error-message" *ngIf="codigoBarras?.invalid && codigoBarras?.touched">
+              <span *ngIf="codigoBarras?.errors?.['maxlength']">Máximo 50 caracteres</span>
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label for="imagenUrl" class="input-label">URL de Imagen:</label>
+            <input
+              type="url"
+              id="imagenUrl"
+              formControlName="imagenUrl"
+              placeholder="https://ejemplo.com/imagen.jpg"
+              class="input-text"
+              [class.error]="imagenUrl?.invalid && imagenUrl?.touched">
+            <div class="error-message" *ngIf="imagenUrl?.invalid && imagenUrl?.touched">
+              <span *ngIf="imagenUrl?.errors?.['maxlength']">Máximo 500 caracteres</span>
+            </div>
+          </div>
+        </div>
+      </p-card>
+
+      <!-- Precios -->
+      <p-card header="Precios" styleClass="form-card">
+        <div class="form-row">
+          <div class="input-group">
+            <label for="precio" class="input-label required">Precio de Venta (S/):</label>
+            <p-inputNumber
+              id="precio"
+              formControlName="precio"
+              mode="currency"
+              currency="PEN"
+              locale="es-PE"
+              [min]="0"
+              [maxFractionDigits]="2"
+              placeholder="0.00"
+              styleClass="w-full"
+              [class.error]="precio?.invalid && precio?.touched">
+            </p-inputNumber>
+            <div class="error-message" *ngIf="precio?.invalid && precio?.touched">
+              <span *ngIf="precio?.errors?.['required']">El precio es requerido</span>
+              <span *ngIf="precio?.errors?.['min']">El precio debe ser mayor o igual a 0</span>
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label for="precioCompra" class="input-label required">Precio de Compra (S/):</label>
+            <p-inputNumber
+              id="precioCompra"
+              formControlName="precioCompra"
+              mode="currency"
+              currency="PEN"
+              locale="es-PE"
+              [min]="0"
+              [maxFractionDigits]="2"
+              placeholder="0.00"
+              styleClass="w-full"
+              [class.error]="precioCompra?.invalid && precioCompra?.touched">
+            </p-inputNumber>
+            <div class="error-message" *ngIf="precioCompra?.invalid && precioCompra?.touched">
+              <span *ngIf="precioCompra?.errors?.['required']">El precio de compra es requerido</span>
+              <span *ngIf="precioCompra?.errors?.['min']">El precio debe ser mayor o igual a 0</span>
+            </div>
+          </div>
+        </div>
+      </p-card>
+
+      <!-- Stock -->
+      <p-card header="Gestión de Stock" styleClass="form-card">
+        <div class="form-row">
+          <div class="input-group">
+            <label for="stock" class="input-label required">Stock Actual:</label>
+            <p-inputNumber
+              id="stock"
+              formControlName="stock"
+              [min]="0"
+              [maxFractionDigits]="0"
+              placeholder="0"
+              styleClass="w-full"
+              [class.error]="stock?.invalid && stock?.touched">
+            </p-inputNumber>
+            <div class="error-message" *ngIf="stock?.invalid && stock?.touched">
+              <span *ngIf="stock?.errors?.['required']">El stock es requerido</span>
+              <span *ngIf="stock?.errors?.['min']">El stock debe ser mayor o igual a 0</span>
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label for="stockMinimo" class="input-label required">Stock Mínimo:</label>
+            <p-inputNumber
+              id="stockMinimo"
+              formControlName="stockMinimo"
+              [min]="0"
+              [maxFractionDigits]="0"
+              placeholder="0"
+              styleClass="w-full"
+              [class.error]="stockMinimo?.invalid && stockMinimo?.touched">
+            </p-inputNumber>
+            <div class="error-message" *ngIf="stockMinimo?.invalid && stockMinimo?.touched">
+              <span *ngIf="stockMinimo?.errors?.['required']">El stock mínimo es requerido</span>
+              <span *ngIf="stockMinimo?.errors?.['min']">El stock mínimo debe ser mayor o igual a 0</span>
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label for="stockMaximo" class="input-label">Stock Máximo:</label>
+            <p-inputNumber
+              id="stockMaximo"
+              formControlName="stockMaximo"
+              [min]="0"
+              [maxFractionDigits]="0"
+              placeholder="Opcional"
+              styleClass="w-full"
+              [class.error]="stockMaximo?.invalid && stockMaximo?.touched">
+            </p-inputNumber>
+            <div class="error-message" *ngIf="stockMaximo?.invalid && stockMaximo?.touched">
+              <span *ngIf="stockMaximo?.errors?.['min']">El stock máximo debe ser mayor o igual a 0</span>
+            </div>
+          </div>
+        </div>
+      </p-card>
+
+      <!-- Clasificación -->
+      <p-card header="Clasificación" styleClass="form-card">
+        <div class="form-row">
+          <div class="input-group">
+            <label for="categoriaId" class="input-label required">Categoría:</label>
+            <p-select
+              id="categoriaId"
+              formControlName="categoriaId"
+              [options]="categoriaOptions"
+              placeholder="Seleccione una categoría"
+              [showClear]="true"
+              styleClass="w-full"
+              [class.error]="categoriaId?.invalid && categoriaId?.touched">
+            </p-select>
+            <div class="error-message" *ngIf="categoriaId?.invalid && categoriaId?.touched">
+              <span *ngIf="categoriaId?.errors?.['required']">La categoría es requerida</span>
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label for="marcaId" class="input-label">Marca:</label>
+            <p-select
+              id="marcaId"
+              formControlName="marcaId"
+              [options]="marcaOptions"
+              placeholder="Seleccione una marca"
+              [showClear]="true"
+              styleClass="w-full">
+            </p-select>
+          </div>
+
+          <div class="input-group">
+            <label for="proveedorId" class="input-label">Proveedor:</label>
+            <p-select
+              id="proveedorId"
+              formControlName="proveedorId"
+              [options]="proveedorOptions"
+              placeholder="Seleccione un proveedor"
+              [showClear]="true"
+              styleClass="w-full">
+            </p-select>
+          </div>
+        </div>
+      </p-card>
+    </div>
+
+    <!-- Botones de acción -->
+    <div class="form-actions">
+      <p-button
+        type="button"
+        (onClick)="onCancel()"
+        label="Cancelar"
+        icon="fas fa-times"
+        styleClass="btn-secondary btn-outlined">
+      </p-button>
+      <p-button
+        type="submit"
+        [disabled]="productoForm.invalid || loading"
+        [label]="isEdit ? 'Actualizar Producto' : 'Crear Producto'"
+        [icon]="isEdit ? 'fas fa-save' : 'fas fa-plus'"
+        styleClass="btn-primary"
+        [loading]="loading">
+      </p-button>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,48 @@
+/* HISTORIAL STOCK - MINIMAL */
+
+/* Container */
+.container-fluid {
+  padding: 0.5rem;
+}
+
+/* Table compacta */
+.p-datatable-sm .p-datatable-tbody > tr > td {
+  padding: 0.5rem 0.75rem;
+}
+
+.p-datatable-sm .p-datatable-thead > tr > th {
+  padding: 0.75rem;
+  font-weight: 600;
+}
+
+/* Avatar colors */
+.bg-info {
+  background-color: var(--cyan-500) !important;
+  color: white !important;
+}
+
+/* Text colors */
+.text-success {
+  color: var(--green-600) !important;
+}
+
+.text-danger {
+  color: var(--red-600) !important;
+}
+
+.text-muted {
+  color: var(--text-color-secondary) !important;
+}
+
+/* Empty State */
+.empty-state-avatar {
+  background-color: var(--surface-200) !important;
+  color: var(--text-color-secondary) !important;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .container-fluid {
+    padding: 0.25rem;
+  }
+}

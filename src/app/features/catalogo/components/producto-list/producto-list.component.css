@@ -1,0 +1,204 @@
+.producto-list-container {
+  padding: var(--space-5);
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Header */
+.list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-8);
+  padding-bottom: var(--space-4);
+  border-bottom: 2px solid var(--border-light);
+}
+
+.header-left {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.header-actions {
+  display: flex;
+  gap: var(--space-3);
+}
+
+/* Panel de filtros */
+.filters-panel {
+  margin-bottom: var(--space-5);
+}
+
+.filters-panel .p-panel-header {
+  background: var(--surface-50);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  padding: var(--space-3) var(--space-4);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+}
+
+.filters-panel .p-panel-header:hover {
+  background: var(--surface-100);
+}
+
+.filters-panel .p-panel-content {
+  background: var(--surface-0);
+  border: 1px solid var(--border-light);
+  border-top: none;
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+  padding: var(--space-4);
+}
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-weight: var(--font-semibold);
+  color: var(--text-primary);
+}
+
+.panel-header i:first-child {
+  color: var(--primary);
+}
+
+.panel-header i:last-child {
+  margin-left: auto;
+  transition: transform var(--transition-normal);
+}
+
+/* Tabla de productos */
+.products-table {
+  margin-bottom: var(--space-5);
+}
+
+.products-table .p-datatable-header {
+  background: var(--surface-50);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  padding: var(--space-3) var(--space-4);
+}
+
+.products-table .p-datatable-thead > tr > th {
+  background: var(--surface-100);
+  color: var(--text-primary);
+  font-weight: var(--font-semibold);
+  border-bottom: 2px solid var(--border-light);
+  padding: var(--space-3) var(--space-2);
+}
+
+.products-table .p-datatable-tbody > tr {
+  transition: background-color var(--transition-normal);
+}
+
+.products-table .p-datatable-tbody > tr:hover {
+  background: var(--surface-50);
+}
+
+.products-table .p-datatable-tbody > tr > td {
+  padding: var(--space-3) var(--space-2);
+  border-bottom: 1px solid var(--border-light);
+  vertical-align: middle;
+}
+
+.products-table .p-datatable-footer {
+  background: var(--surface-50);
+  border: 1px solid var(--border-light);
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+  padding: var(--space-3) var(--space-4);
+}
+
+/* Información del producto en la tabla */
+.producto-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.producto-name {
+  font-weight: var(--font-semibold);
+  color: var(--text-primary);
+  font-size: var(--text-sm);
+}
+
+.producto-desc {
+  color: var(--text-muted);
+  line-height: 1.3;
+}
+
+/* Información de stock en la tabla */
+.stock-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.stock-value {
+  font-weight: var(--font-semibold);
+  font-size: var(--text-sm);
+}
+
+.stock-min {
+  color: var(--text-muted);
+}
+
+/* Acciones en la tabla */
+.table-actions {
+  display: flex;
+  gap: var(--space-1);
+  justify-content: center;
+}
+
+.table-actions .p-button {
+  margin: 0;
+}
+
+
+/* Estados de carga y error */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-16);
+  color: var(--text-muted);
+  gap: var(--space-4);
+}
+
+/* No hay productos - integrado en la tabla */
+.no-products-content {
+  text-align: center;
+  color: var(--text-muted);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-5);
+}
+
+.no-products-content i {
+  font-size: 4rem;
+  opacity: 0.5;
+}
+
+/* PrimeNG Dropdown Overrides */
+.p-dropdown {
+  width: 100%;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .list-header {
+    flex-direction: column;
+    gap: var(--space-4);
+    align-items: stretch;
+  }
+
+  .header-actions {
+    justify-content: center;
+  }
+
+  .panel-header {
+    font-size: var(--text-sm);
+  }
+}

@@ -1,0 +1,97 @@
+<div class="search-container">
+  <div class="search-form">
+    <!-- Búsqueda por texto -->
+    <div class="input-group">
+      <label for="texto" class="input-label">Buscar por texto:</label>
+      <input
+        type="text"
+        id="texto"
+        [(ngModel)]="busqueda.texto"
+        placeholder="Nombre o descripción del producto"
+        class="input-search">
+    </div>
+
+    <!-- Rango de precios -->
+    <div class="form-row">
+      <div class="input-group">
+        <label for="precioMin" class="input-label">Precio mínimo:</label>
+        <input
+          type="number"
+          id="precioMin"
+          [(ngModel)]="busqueda.precioMin"
+          placeholder="0.00"
+          class="input-text"
+          step="0.01">
+      </div>
+      <div class="input-group">
+        <label for="precioMax" class="input-label">Precio máximo:</label>
+        <input
+          type="number"
+          id="precioMax"
+          [(ngModel)]="busqueda.precioMax"
+          placeholder="999.99"
+          class="input-text"
+          step="0.01">
+      </div>
+    </div>
+
+    <!-- Filtros por categoría, marca y proveedor -->
+    <div class="form-row">
+      <div class="input-group">
+        <label for="categoriaId" class="input-label">Categoría:</label>
+        <p-select
+          id="categoriaId"
+          [(ngModel)]="busqueda.categoriaId"
+          [options]="categoriaOptions"
+          optionLabel="label"
+          optionValue="value"
+          placeholder="Todas las categorías"
+          [showClear]="true"
+          styleClass="w-full">
+        </p-select>
+      </div>
+      <div class="input-group">
+        <label for="marcaId" class="input-label">Marca:</label>
+        <p-select
+          id="marcaId"
+          [(ngModel)]="busqueda.marcaId"
+          [options]="marcaOptions"
+          optionLabel="label"
+          optionValue="value"
+          placeholder="Todas las marcas"
+          [showClear]="true"
+          styleClass="w-full">
+        </p-select>
+      </div>
+      <div class="input-group">
+        <label for="proveedorId" class="input-label">Proveedor:</label>
+        <p-select
+          id="proveedorId"
+          [(ngModel)]="busqueda.proveedorId"
+          [options]="proveedorOptions"
+          optionLabel="label"
+          optionValue="value"
+          placeholder="Todos los proveedores"
+          [showClear]="true"
+          styleClass="w-full">
+        </p-select>
+      </div>
+    </div>
+
+    <!-- Botones de acción -->
+    <div class="form-actions">
+      <p-button
+        (onClick)="onSearch()"
+        label="Buscar"
+        icon="fas fa-search"
+        styleClass="btn-primary btn-sm">
+      </p-button>
+      <p-button
+        (onClick)="onClear()"
+        label="Limpiar"
+        icon="fas fa-times"
+        styleClass="btn-secondary btn-sm">
+      </p-button>
+    </div>
+  </div>
+</div>

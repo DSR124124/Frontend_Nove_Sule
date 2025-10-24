@@ -16,7 +16,6 @@ export class FooterComponent implements OnInit, OnDestroy {
   isSidebarCollapsed = false;
   currentYear = new Date().getFullYear();
   version = '1.0.0';
-  lastUpdateDate = new Date().toLocaleDateString('es-PE');
 
   constructor(private sidebarService: SidebarService) {}
 

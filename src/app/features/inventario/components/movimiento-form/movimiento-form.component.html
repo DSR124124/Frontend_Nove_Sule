@@ -1,0 +1,168 @@
+<div class="movimiento-form-container">
+  <!-- Header -->
+  <div class="form-header">
+    <div class="header-left">
+      <h2 class="heading-2">{{isEdit ? 'Editar Movimiento' : 'Nuevo Movimiento de Inventario'}}</h2>
+      <p class="text-body text-muted">{{isEdit ? 'Modifica los datos del movimiento' : 'Registra un nuevo movimiento de inventario'}}</p>
+    </div>
+  </div>
+
+  <!-- Loading -->
+  <div class="loading-container" *ngIf="loading">
+    <p-progressSpinner [style]="{'width': '50px', 'height': '50px'}" styleClass="custom-spinner"
+      ariaLabel="Cargando">
+    </p-progressSpinner>
+    <p class="text-body">{{isEdit ? 'Cargando movimiento...' : 'Procesando...'}}</p>
+  </div>
+
+  <!-- Formulario -->
+  <form [formGroup]="movimientoForm" (ngSubmit)="onSubmit()" *ngIf="!loading">
+    <div class="form-grid">
+      <!-- Información del Movimiento -->
+      <p-card header="Información del Movimiento" styleClass="form-card">
+        <div class="form-row">
+          <div class="input-group">
+            <label class="input-label required">ID del Producto</label>
+            <p-inputNumber
+              formControlName="productoId"
+              placeholder="Ingrese ID del producto"
+              [useGrouping]="false"
+              styleClass="w-full"
+              [class.error]="isFieldInvalid('productoId')">
+            </p-inputNumber>
+            <small class="error-message" *ngIf="getFieldError('productoId')">
+              {{getFieldError('productoId')}}
+            </small>
+          </div>
+
+          <div class="input-group">
+            <label class="input-label required">Tipo de Movimiento</label>
+            <p-select
+              formControlName="tipoMovimiento"
+              [options]="tipoMovimientoOptions"
+              optionLabel="label"
+              optionValue="value"
+              placeholder="Seleccione tipo"
+              styleClass="w-full"
+              [class.error]="isFieldInvalid('tipoMovimiento')">
+            </p-select>
+            <small class="error-message" *ngIf="getFieldError('tipoMovimiento')">
+              {{getFieldError('tipoMovimiento')}}
+            </small>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="input-group">
+            <label class="input-label required">Cantidad</label>
+            <p-inputNumber
+              formControlName="cantidad"
+              placeholder="Ingrese cantidad"
+              [min]="0.01"
+              [maxFractionDigits]="2"
+              styleClass="w-full"
+              [class.error]="isFieldInvalid('cantidad')">
+            </p-inputNumber>
+            <small class="error-message" *ngIf="getFieldError('cantidad')">
+              {{getFieldError('cantidad')}}
+            </small>
+          </div>
+
+          <div class="input-group">
+            <label class="input-label required">Precio Unitario</label>
+            <p-inputNumber
+              formControlName="precioUnitario"
+              placeholder="Ingrese precio unitario"
+              [min]="0.01"
+              [maxFractionDigits]="2"
+              mode="currency"
+              currency="PEN"
+              styleClass="w-full"
+              [class.error]="isFieldInvalid('precioUnitario')">
+            </p-inputNumber>
+            <small class="error-message" *ngIf="getFieldError('precioUnitario')">
+              {{getFieldError('precioUnitario')}}
+            </small>
+          </div>
+        </div>
+      </p-card>
+
+      <!-- Detalles Adicionales -->
+      <p-card header="Detalles Adicionales" styleClass="form-card">
+        <div class="form-row full-width">
+          <div class="input-group">
+            <label class="input-label required">Motivo</label>
+            <input
+              type="text"
+              pInputText
+              formControlName="motivo"
+              placeholder="Ingrese el motivo del movimiento"
+              class="input-text"
+              [class.error]="isFieldInvalid('motivo')">
+            <small class="error-message" *ngIf="getFieldError('motivo')">
+              {{getFieldError('motivo')}}
+            </small>
+          </div>
+        </div>
+
+        <div class="form-row full-width">
+          <div class="input-group">
+            <label class="input-label">Observaciones</label>
+            <textarea
+              pInputTextarea
+              formControlName="observaciones"
+              placeholder="Ingrese observaciones adicionales (opcional)"
+              rows="3"
+              class="input-textarea"
+              [class.error]="isFieldInvalid('observaciones')">
+            </textarea>
+            <small class="error-message" *ngIf="getFieldError('observaciones')">
+              {{getFieldError('observaciones')}}
+            </small>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="input-group">
+            <label class="input-label">ID de Orden de Compra</label>
+            <p-inputNumber
+              formControlName="ordenCompraId"
+              placeholder="ID de orden de compra (opcional)"
+              [useGrouping]="false"
+              styleClass="w-full">
+            </p-inputNumber>
+          </div>
+
+          <div class="input-group">
+            <label class="input-label">ID de Comprobante de Venta</label>
+            <p-inputNumber
+              formControlName="comprobanteVentaId"
+              placeholder="ID de comprobante de venta (opcional)"
+              [useGrouping]="false"
+              styleClass="w-full">
+            </p-inputNumber>
+          </div>
+        </div>
+      </p-card>
+    </div>
+
+    <!-- Botones de acción -->
+    <div class="form-actions">
+      <p-button
+        type="button"
+        (onClick)="onCancel()"
+        label="Cancelar"
+        icon="pi pi-times"
+        styleClass="btn-secondary btn-outlined">
+      </p-button>
+      <p-button
+        type="submit"
+        [disabled]="movimientoForm.invalid || loading"
+        [loading]="loading"
+        [label]="isEdit ? 'Actualizar' : 'Registrar'"
+        [icon]="isEdit ? 'pi pi-check' : 'pi pi-plus'"
+        styleClass="btn-primary">
+      </p-button>
+    </div>
+  </form>
+</div>

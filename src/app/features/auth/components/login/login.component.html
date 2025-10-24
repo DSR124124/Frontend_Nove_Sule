@@ -63,4 +63,13 @@
       </ng-template>
     </p-card>
   </div>
+
+  <!-- Loading Spinner for Login -->
+  <app-loading-spinner
+    *ngIf="isLoading"
+    size="large"
+    color="primary"
+    message="Iniciando sesión..."
+    [fullScreen]="true">
+  </app-loading-spinner>
 </div>

@@ -94,7 +94,6 @@ export class AuthService {
         const user = JSON.parse(userStr);
         this.currentUserSubject.next(user);
       } catch (error) {
-        console.error('Error parsing user from localStorage:', error);
         this.logout();
       }
     }

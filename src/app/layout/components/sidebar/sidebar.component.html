@@ -10,9 +10,6 @@
         <p class="text-caption text-white">Sistema de Gestión</p>
       </div>
     </div>
-    <button class="toggle-btn" (click)="toggleSidebar()" [attr.aria-label]="isCollapsed ? 'Expandir sidebar' : 'Colapsar sidebar'">
-      <i class="pi" [class.pi-angle-left]="!isCollapsed" [class.pi-angle-right]="isCollapsed"></i>
-    </button>
   </div>
 
   <!-- Sidebar Navigation -->
@@ -31,16 +28,4 @@
     </div>
   </nav>
 
-  <!-- Sidebar Footer -->
-  <div class="sidebar-footer" *ngIf="!isCollapsed">
-    <div class="user-info">
-      <div class="user-avatar">
-        <i class="pi pi-user icon-md"></i>
-      </div>
-      <div class="user-details">
-        <p class="user-name">Usuario Admin</p>
-        <p class="user-role">Administrador</p>
-      </div>
-    </div>
-  </div>
 </div>

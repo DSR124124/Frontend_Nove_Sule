@@ -1,0 +1,234 @@
+.marca-list-container {
+  padding: var(--space-3);
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Header */
+.list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-4);
+  padding-bottom: var(--space-2);
+  border-bottom: 2px solid var(--border-light);
+}
+
+.header-left {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.header-actions {
+  display: flex;
+  gap: var(--space-2);
+}
+
+/* Panel de filtros */
+.filters-panel {
+  margin-bottom: var(--space-4);
+}
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-weight: var(--font-semibold);
+  color: var(--text-primary);
+}
+
+.filters-content {
+  padding: var(--space-2);
+}
+
+.filters-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: var(--space-4);
+  align-items: end;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.input-label {
+  font-weight: var(--font-medium);
+  color: var(--text-primary);
+  font-size: var(--text-sm);
+}
+
+.input-text {
+  padding: var(--space-2);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  transition: border-color 0.2s ease;
+}
+
+.input-text:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px var(--primary-alpha-20);
+}
+
+.filter-actions {
+  display: flex;
+  gap: var(--space-2);
+}
+
+/* Loading */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-8);
+  color: var(--text-muted);
+  gap: var(--space-2);
+}
+
+/* Tabla */
+.marcas-table {
+  background: var(--surface-0);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.marcas-table .p-datatable-header {
+  background: var(--surface-50);
+  border-bottom: 1px solid var(--border-light);
+  padding: var(--space-3);
+}
+
+.marcas-table .p-datatable-thead > tr > th {
+  background: var(--surface-100);
+  color: var(--text-primary);
+  font-weight: var(--font-semibold);
+  padding: var(--space-3);
+  border-bottom: 1px solid var(--border-light);
+}
+
+.marcas-table .p-datatable-tbody > tr > td {
+  padding: var(--space-3);
+  border-bottom: 1px solid var(--border-light);
+  vertical-align: middle;
+}
+
+.marcas-table .p-datatable-tbody > tr:hover {
+  background: var(--surface-50);
+}
+
+/* Información de marca */
+.marca-info {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.marca-name {
+  font-weight: var(--font-medium);
+  color: var(--text-primary);
+}
+
+.marca-img {
+  width: 32px;
+  height: 32px;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-light);
+}
+
+/* Logo preview */
+.logo-preview {
+  display: flex;
+  justify-content: center;
+}
+
+.logo-img {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-light);
+}
+
+/* Acciones en la tabla */
+.table-actions {
+  display: flex;
+  gap: var(--space-2);
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* No hay marcas */
+.no-marcas-content {
+  text-align: center;
+  color: var(--text-muted);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-5);
+}
+
+.no-marcas-content i {
+  font-size: 4rem;
+  opacity: 0.5;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .list-header {
+    flex-direction: column;
+    gap: var(--space-4);
+    align-items: stretch;
+  }
+
+  .header-actions {
+    justify-content: center;
+  }
+
+  .filters-row {
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+  }
+
+  .filter-actions {
+    justify-content: center;
+  }
+
+  .panel-header {
+    font-size: var(--text-sm);
+  }
+
+  .marca-info {
+    gap: var(--space-1);
+  }
+
+  .marca-img {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .marca-list-container {
+    padding: var(--space-3);
+  }
+
+  .table-actions {
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  .table-actions .p-button {
+    width: 2rem !important;
+    height: 2rem !important;
+    min-width: 2rem !important;
+  }
+}

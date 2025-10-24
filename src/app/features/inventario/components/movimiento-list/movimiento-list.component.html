@@ -1,0 +1,157 @@
+<p-toolbar>
+  <ng-template pTemplate="left">
+
+    <div class="d-flex gap-2">
+      <div class="input-group">
+        <input type="number" pInputText [(ngModel)]="filtros.productoId" placeholder="Ingrese ID del producto"
+          class="input-text">
+      </div>
+
+      <div class="input-group">
+        <p-select [(ngModel)]="filtros.tipoMovimiento" [options]="tipoMovimientoOptions" optionLabel="label"
+          optionValue="value" placeholder="Seleccione tipo" styleClass="w-auto">
+        </p-select>
+      </div>
+
+      <div class="input-group">
+        <input type="date" [(ngModel)]="fechaInicioInput" (change)="onFechaInicioChange()"
+          class="p-inputtext p-component w-auto" placeholder="Ingrese fecha inicio" pInputText>
+      </div>
+
+      <div class="input-group">
+        <input type="date" [(ngModel)]="fechaFinInput" (change)="onFechaFinChange()"
+          class="p-inputtext p-component w-auto" placeholder="Ingrese fecha fin" pInputText>
+      </div>
+
+      <div class="d-flex gap-2">
+        <p-button (onClick)="onSearch()" [disabled]="isLoading" label="Buscar" icon="pi pi-search"
+          styleClass="btn-success btn-md btn-outline">
+        </p-button>
+        <p-button (onClick)="onClearSearch()" [disabled]="isLoading" label="Limpiar" icon="pi pi-refresh"
+          styleClass="btn-danger btn-md btn-outline">
+        </p-button>
+      </div>
+    </div>
+
+  </ng-template>
+  <ng-template pTemplate="right">
+    <div class="d-flex gap-2">
+      <p-button (onClick)="onRefresh()" [disabled]="isLoading" label="Actualizar" icon="pi pi-refresh"
+        styleClass="btn-warning btn-md btn-outline">
+      </p-button>
+      <p-button routerLink="/inventario/movimientos/nuevo" label="Nuevo Movimiento" icon="pi pi-plus"
+        styleClass="btn-primary btn-md btn-outline">
+      </p-button>
+    </div>
+  </ng-template>
+</p-toolbar>
+
+
+<p-divider></p-divider>
+
+<!-- Tabla de movimientos -->
+<p-table [value]="movimientos" [paginator]="true" [rows]="pageSize" [totalRecords]="totalElements"
+  [first]="currentPage * pageSize" (onPage)="onPageChange($event)" styleClass="p-datatable-sm movimientos-table"
+  [rowHover]="true" dataKey="id">
+
+  <!-- Columnas de la tabla -->
+  <ng-template pTemplate="header">
+    <tr>
+      <th style="width: 3rem">ID</th>
+      <th style="width: 4rem">Producto</th>
+      <th style="width: 6rem">Tipo</th>
+      <th style="width: 5rem">Cantidad</th>
+      <th style="width: 6rem">Precio Unit.</th>
+      <th style="width: 6rem">Total</th>
+      <th style="width: 8rem">Motivo</th>
+      <th style="width: 6rem">Fecha</th>
+      <th style="width: 6rem">Usuario</th>
+      <th style="width: 5rem">Acciones</th>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="body" let-movimiento>
+    <tr>
+      <td>
+        <span class="text-caption">{{movimiento.id}}</span>
+      </td>
+      <td>
+        <div class="producto-info">
+          <div class="producto-name">{{movimiento.producto.nombre}}</div>
+          <div class="producto-code text-caption">{{movimiento.producto.codigo}}</div>
+        </div>
+      </td>
+      <td>
+        <p-tag [value]="getTipoMovimientoText(movimiento.tipoMovimiento)"
+          [styleClass]="getTipoMovimientoStyleClass(movimiento.tipoMovimiento)" [rounded]="true">
+        </p-tag>
+      </td>
+      <td>
+        <span class="text-body font-semibold"
+          [ngClass]="movimiento.tipoMovimiento === 'ENTRADA' ? 'text-success' : 'text-danger'">
+          {{movimiento.tipoMovimiento === 'ENTRADA' ? '+' : '-'}}{{movimiento.cantidad}}
+        </span>
+      </td>
+      <td>
+        <span class="text-body">
+          {{formatCurrency(movimiento.precioUnitario)}}
+        </span>
+      </td>
+      <td>
+        <span class="text-body font-semibold text-primary">
+          {{formatCurrency(movimiento.total)}}
+        </span>
+      </td>
+      <td>
+        <span class="text-body" [title]="movimiento.motivo">
+          {{movimiento.motivo | slice:0:30}}{{movimiento.motivo.length > 30 ? '...' : ''}}
+        </span>
+      </td>
+      <td>
+        <span class="text-caption">
+          {{formatDate(movimiento.fechaMovimiento)}}
+        </span>
+      </td>
+      <td>
+        <span class="text-body">{{movimiento.usuario.nombre}}</span>
+      </td>
+      <td>
+        <div class="table-actions">
+          <p-button icon="pi pi-eye" styleClass="btn-secondary btn-outlined btn-sm btn-text" pTooltip="Ver detalles"
+            tooltipPosition="top">
+          </p-button>
+        </div>
+      </td>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="emptymessage">
+    <tr>
+      <td colspan="10" class="text-center py-5">
+        <div class="no-movimientos-content">
+          <div class="empty-state-container">
+            <p-avatar
+              icon="pi pi-history"
+              styleClass="empty-state-avatar"
+              size="xlarge">
+            </p-avatar>
+          </div>
+          <div class="empty-state-content">
+            <h5 class="empty-state-title mb-2">No hay movimientos registrados</h5>
+            <p class="empty-state-message mb-3">
+              No se encontraron movimientos con los filtros aplicados
+            </p>
+            <small class="empty-state-suggestion">
+              <i class="pi pi-info-circle me-1"></i>
+              Intenta cambiar los filtros o verificar que existan movimientos registrados
+            </small>
+          </div>
+        </div>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>
+
+
+
+<p-confirmDialog></p-confirmDialog>

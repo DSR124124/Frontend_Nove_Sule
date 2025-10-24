@@ -1,0 +1,162 @@
+<div class="ultimo-movimiento-producto" [ngClass]="'vista-' + vista">
+
+  <!-- Vista completa -->
+  <div *ngIf="vista === 'completa'">
+    <div class="card" *ngIf="mostrarTitulo">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="card-title mb-0">
+          <i class="pi pi-history me-2"></i>
+          Último Movimiento
+        </h5>
+        <p-badge *ngIf="ultimoMovimiento"
+                 [value]="getTipoMovimientoLabel(ultimoMovimiento.tipoMovimiento)"
+                 [severity]="ultimoMovimientoSeverity">
+        </p-badge>
+      </div>
+    </div>
+
+    <div class="movimiento-container" *ngIf="!isLoading; else loadingTemplate">
+      <div *ngIf="!ultimoMovimiento" class="empty-state text-center p-4">
+        <i class="pi pi-clock text-muted" style="font-size: 3rem;"></i>
+        <p class="text-muted mt-3">No hay movimientos registrados para este producto</p>
+      </div>
+
+      <div *ngIf="ultimoMovimiento" class="movimiento-detail">
+        <div class="row g-3">
+          <!-- Información principal -->
+          <div class="col-md-6">
+            <div class="info-card">
+              <div class="info-header">
+                <i [class]="getTipoMovimientoIcon(ultimoMovimiento.tipoMovimiento)"></i>
+                <strong>Información del Movimiento</strong>
+              </div>
+              <div class="info-content">
+                <div class="info-item">
+                  <span class="label">Tipo:</span>
+                  <p-tag [value]="getTipoMovimientoLabel(ultimoMovimiento.tipoMovimiento)"
+                         [severity]="ultimoMovimientoSeverity">
+                  </p-tag>
+                </div>
+                <div class="info-item">
+                  <span class="label">Cantidad:</span>
+                  <span class="value fw-bold">{{ultimoMovimiento.cantidad}}</span>
+                </div>
+                <div class="info-item">
+                  <span class="label">Precio unitario:</span>
+                  <span class="value">{{ultimoMovimiento.precioUnitario | currencyPe}}</span>
+                </div>
+                <div class="info-item">
+                  <span class="label">Total:</span>
+                  <span class="value fw-bold">{{calcularTotal(ultimoMovimiento) | currencyPe}}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Información de stock -->
+          <div class="col-md-6">
+            <div class="info-card">
+              <div class="info-header">
+                <i class="pi pi-box"></i>
+                <strong>Cambio de Stock</strong>
+              </div>
+              <div class="info-content">
+                <div class="stock-change" [ngClass]="getStockChangeClass()">
+                  <div class="stock-item">
+                    <span class="label">Stock anterior:</span>
+                    <span class="stock-value">{{ultimoMovimiento.stockAnterior}}</span>
+                  </div>
+                  <div class="stock-arrow">
+                    <i class="pi pi-arrow-right"></i>
+                  </div>
+                  <div class="stock-item">
+                    <span class="label">Stock nuevo:</span>
+                    <span class="stock-value">{{ultimoMovimiento.stockNuevo}}</span>
+                  </div>
+                </div>
+                <div class="stock-diff mt-2" [ngClass]="getStockChangeClass()">
+                  <span>Cambio:
+                    <strong>{{getStockChange() > 0 ? '+' : ''}}{{getStockChange()}}</strong>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Información adicional -->
+          <div class="col-12">
+            <div class="info-card">
+              <div class="info-header">
+                <i class="pi pi-info-circle"></i>
+                <strong>Detalles Adicionales</strong>
+              </div>
+              <div class="info-content">
+                <div class="row g-2">
+                  <div class="col-md-6">
+                    <div class="info-item">
+                      <span class="label">Concepto:</span>
+                      <span class="value">{{ultimoMovimiento.concepto}}</span>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="info-item">
+                      <span class="label">Usuario:</span>
+                      <span class="value">{{ultimoMovimiento.usuarioNombre}}</span>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="info-item">
+                      <span class="label">Fecha:</span>
+                      <span class="value">{{ultimoMovimiento.fechaMovimiento | date:'dd/MM/yyyy HH:mm'}}</span>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="info-item">
+                      <span class="label">Hace:</span>
+                      <span class="value text-muted">{{ultimoMovimiento.fechaMovimiento | timeAgo}}</span>
+                    </div>
+                  </div>
+                  <div class="col-12" *ngIf="ultimoMovimiento.observaciones">
+                    <div class="info-item">
+                      <span class="label">Observaciones:</span>
+                      <span class="value">{{ultimoMovimiento.observaciones}}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Vista compacta -->
+  <div *ngIf="vista === 'compacta'" class="vista-compacta">
+    <div *ngIf="isLoading" class="loading-compact">
+      <p-progressSpinner [style]="{width: '20px', height: '20px'}" strokeWidth="4"></p-progressSpinner>
+    </div>
+
+    <div *ngIf="!isLoading && !ultimoMovimiento" class="no-movement-compact">
+      <small class="text-muted">Sin movimientos</small>
+    </div>
+
+    <div *ngIf="!isLoading && ultimoMovimiento" class="movement-compact">
+      <div class="movement-info">
+        <p-tag [value]="getTipoMovimientoLabel(ultimoMovimiento.tipoMovimiento)"
+               [severity]="ultimoMovimientoSeverity"
+               class="movement-type">
+        </p-tag>
+        <span class="movement-quantity">{{ultimoMovimiento.cantidad}}</span>
+        <small class="movement-date">{{ultimoMovimiento.fechaMovimiento | timeAgo}}</small>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #loadingTemplate>
+    <div class="text-center p-4">
+      <p-progressSpinner strokeWidth="4" fill="transparent" animationDuration=".5s"></p-progressSpinner>
+      <p class="mt-3 text-muted">Cargando último movimiento...</p>
+    </div>
+  </ng-template>
+</div>

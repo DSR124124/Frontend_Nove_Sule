@@ -1,0 +1,223 @@
+/* ===== CONTENEDOR PRINCIPAL ===== */
+.proveedor-list-container {
+  padding: var(--space-4);
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* ===== HEADER ===== */
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--space-6);
+  gap: var(--space-4);
+}
+
+.header-content {
+  flex: 1;
+}
+
+.page-title {
+  font-size: var(--text-2xl);
+  font-weight: var(--font-bold);
+  color: var(--text-primary);
+  margin: 0 0 var(--space-2) 0;
+  line-height: 1.2;
+}
+
+.page-subtitle {
+  font-size: var(--text-base);
+  color: var(--text-muted);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.header-actions {
+  display: flex;
+  gap: var(--space-3);
+  align-items: center;
+  flex-shrink: 0;
+}
+
+/* ===== PANEL DE FILTROS ===== */
+.filters-panel {
+  margin-bottom: var(--space-6);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+}
+
+.filters-content {
+  padding: var(--space-4);
+}
+
+.filters-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--space-4);
+  margin-bottom: var(--space-4);
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.filter-label {
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.filter-input,
+.filter-dropdown {
+  width: 100%;
+}
+
+.filters-actions {
+  display: flex;
+  gap: var(--space-3);
+  justify-content: flex-end;
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--border-light);
+}
+
+/* ===== TABLA ===== */
+.table-container {
+  background: var(--surface-card);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-light);
+  overflow: hidden;
+}
+
+/* Información del proveedor */
+.proveedor-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.proveedor-nombre {
+  font-weight: var(--font-semibold);
+  color: var(--text-primary);
+  font-size: var(--text-sm);
+}
+
+.proveedor-razon {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+/* Estados */
+.estado-activo {
+  background: var(--success-100) !important;
+  color: var(--success-700) !important;
+  border: 1px solid var(--success-200) !important;
+}
+
+.estado-inactivo {
+  background: var(--warning-100) !important;
+  color: var(--warning-700) !important;
+  border: 1px solid var(--warning-200) !important;
+}
+
+/* Acciones en la tabla */
+.table-actions {
+  display: flex;
+  gap: var(--space-2);
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* Estado vacío */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-8);
+  gap: var(--space-3);
+}
+
+.empty-state p {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: var(--text-base);
+}
+
+/* Loading spinner */
+.loading-spinner {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .proveedor-list-container {
+    padding: var(--space-3);
+  }
+
+  .page-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-4);
+  }
+
+  .header-actions {
+    justify-content: stretch;
+  }
+
+  .filters-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+  }
+
+  .filters-actions {
+    flex-direction: column;
+  }
+
+  .table-actions {
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  .table-actions .p-button {
+    width: 2rem !important;
+    height: 2rem !important;
+    min-width: 2rem !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .proveedor-list-container {
+    padding: var(--space-2);
+  }
+
+  .page-title {
+    font-size: var(--text-xl);
+  }
+
+  .filters-content {
+    padding: var(--space-3);
+  }
+
+  .table-actions {
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  .table-actions .p-button {
+    width: 2rem !important;
+    height: 2rem !important;
+    min-width: 2rem !important;
+  }
+}

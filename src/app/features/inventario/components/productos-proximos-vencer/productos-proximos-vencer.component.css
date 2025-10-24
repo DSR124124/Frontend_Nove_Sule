@@ -1,0 +1,46 @@
+/* PRODUCTOS PRÓXIMOS A VENCER - SIMPLIFIED */
+
+/* Container */
+.container-fluid {
+  padding: 0.5rem;
+}
+
+/* Table compacta */
+.p-datatable-sm .p-datatable-tbody > tr > td {
+  padding: 0.5rem 0.75rem;
+}
+
+.p-datatable-sm .p-datatable-thead > tr > th {
+  padding: 0.75rem;
+  font-weight: 600;
+}
+
+/* Avatar colors */
+.bg-light {
+  background-color: var(--surface-100) !important;
+  color: var(--text-secondary) !important;
+}
+
+/* Bootstrap text colors */
+.text-danger {
+  color: var(--error) !important;
+}
+
+.text-warning {
+  color: var(--warning) !important;
+}
+
+.text-muted {
+  color: var(--text-secondary) !important;
+}
+
+.text-primary {
+  color: var(--primary) !important;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .container-fluid {
+    padding: 0.25rem;
+  }
+}

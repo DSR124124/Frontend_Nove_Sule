@@ -1,0 +1,166 @@
+/* RESUMEN GENERAL - CLEAN DASHBOARD WITH BOOTSTRAP */
+
+/* SHARED HEADERS */
+.resumen-general__card-header {
+  font-weight: var(--font-semibold);
+  color: var(--text-primary);
+  font-size: var(--text-base);
+  padding: 0.75rem 1rem 0.25rem 1rem;
+}
+
+/* PRIMENG CARD STYLING */
+.p-card {
+  border: 1px solid rgba(0, 0, 0, 0.125);
+  border-radius: 0.25rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.p-card .p-card-header {
+  background: transparent;
+  border-bottom: none;
+  padding: 0;
+}
+
+.p-card .p-card-body {
+  padding: 0.25rem 1rem 1rem 1rem;
+}
+
+/* BORDER COLORS FOR CARDS */
+.border-primary {
+  border-left-color: var(--primary) !important;
+}
+
+.border-warning {
+  border-left-color: var(--warning) !important;
+}
+
+.border-info {
+  border-left-color: var(--info) !important;
+}
+
+.border-success {
+  border-left-color: var(--success) !important;
+}
+
+/* AVATAR COLORS */
+.bg-primary {
+  background-color: var(--primary) !important;
+  color: white !important;
+}
+
+.bg-warning {
+  background-color: var(--warning) !important;
+  color: white !important;
+}
+
+.bg-info {
+  background-color: var(--info) !important;
+  color: white !important;
+}
+
+.bg-success {
+  background-color: var(--success) !important;
+  color: white !important;
+}
+
+.bg-danger {
+  background-color: var(--error) !important;
+  color: white !important;
+}
+
+.bg-secondary {
+  background-color: var(--surface-400) !important;
+  color: white !important;
+}
+
+.bg-dark {
+  background-color: var(--surface-900) !important;
+  color: white !important;
+}
+
+/* TEXT COLORS */
+.text-primary {
+  color: var(--primary) !important;
+}
+
+.text-warning {
+  color: var(--warning) !important;
+}
+
+.text-info {
+  color: var(--info) !important;
+}
+
+.text-success {
+  color: var(--success) !important;
+}
+
+.text-danger {
+  color: var(--error) !important;
+}
+
+.text-secondary {
+  color: var(--surface-600) !important;
+}
+
+.text-muted {
+  color: var(--text-secondary) !important;
+}
+
+/* PROGRESS SPINNER */
+.p-progress-spinner {
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+/* TOOLBAR SPACING */
+.p-toolbar {
+  margin-bottom: 0.75rem;
+}
+
+.p-divider {
+  margin: 0.5rem 0;
+}
+
+/* RESPONSIVE DESIGN */
+@media (max-width: 1200px) {
+  .display-4 {
+    font-size: 1.75rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .resumen-general__card-header {
+    padding: 0.5rem 0.75rem 0.25rem 0.75rem;
+  }
+
+  .p-card .p-card-body {
+    padding: 0.25rem 0.75rem 0.75rem 0.75rem;
+  }
+
+  .display-4 {
+    font-size: 1.25rem;
+  }
+
+  .h4 {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .container-fluid {
+    padding: 0.25rem;
+  }
+
+  .display-4 {
+    font-size: 1.1rem;
+  }
+
+  .h4 {
+    font-size: 0.9rem;
+  }
+
+  .resumen-general__card-header small {
+    font-size: 0.65rem;
+  }
+}

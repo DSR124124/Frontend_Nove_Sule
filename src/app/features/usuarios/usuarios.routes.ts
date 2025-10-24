@@ -29,6 +29,6 @@ export const USUARIOS_ROUTES: Routes = [
   {
     path: 'mi-perfil',
     loadComponent: () =>
-      import('./components/usuario-form/usuario-form.component').then(c => c.UsuarioFormComponent)
+      import('./components/usuario-perfil/usuario-perfil.component').then(c => c.UsuarioPerfilComponent)
   }
 ];

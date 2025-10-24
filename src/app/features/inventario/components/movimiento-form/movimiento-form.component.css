@@ -1,0 +1,218 @@
+.movimiento-form-container {
+  padding: var(--space-5);
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+/* Header */
+.form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-6);
+  padding-bottom: var(--space-4);
+  border-bottom: 2px solid var(--border-light);
+}
+
+.header-left {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+/* Loading */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-16);
+  color: var(--text-muted);
+  gap: var(--space-4);
+}
+
+/* Formulario */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-6);
+  margin-bottom: var(--space-6);
+}
+
+.form-card {
+  background: var(--surface-0);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.form-card .p-card-header {
+  background: var(--surface-50);
+  border-bottom: 1px solid var(--border-light);
+  font-weight: var(--font-semibold);
+  color: var(--text-primary);
+  padding: var(--space-4);
+}
+
+.form-card .p-card-content {
+  padding: var(--space-6);
+}
+
+/* Filas del formulario */
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--space-6);
+  margin-bottom: var(--space-6);
+}
+
+.form-row:last-child {
+  margin-bottom: 0;
+}
+
+.full-width {
+  grid-column: 1 / -1;
+}
+
+/* Grupos de input */
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.input-label {
+  font-weight: var(--font-medium);
+  color: var(--text-primary);
+  font-size: var(--text-sm);
+}
+
+.input-label.required::after {
+  content: ' *';
+  color: var(--danger);
+}
+
+/* Inputs */
+.input-text,
+.input-textarea {
+  width: 100%;
+  padding: var(--space-3);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  transition: all var(--transition-normal);
+  background: var(--surface-0);
+  color: var(--text-primary);
+}
+
+.input-text:focus,
+.input-textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px var(--primary-light);
+}
+
+.input-text.error,
+.input-textarea.error {
+  border-color: var(--danger);
+  box-shadow: 0 0 0 2px var(--danger-light);
+}
+
+.input-textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+/* PrimeNG InputNumber */
+.p-inputnumber {
+  width: 100%;
+}
+
+.p-inputnumber .p-inputnumber-input {
+  width: 100%;
+  padding: var(--space-3);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  background: var(--surface-0);
+  color: var(--text-primary);
+}
+
+.p-inputnumber .p-inputnumber-input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px var(--primary-light);
+}
+
+.p-inputnumber.error .p-inputnumber-input {
+  border-color: var(--danger);
+  box-shadow: 0 0 0 2px var(--danger-light);
+}
+
+/* PrimeNG Dropdown */
+.p-dropdown {
+  width: 100%;
+}
+
+.p-dropdown .p-dropdown-label {
+  padding: var(--space-3);
+  font-size: var(--text-sm);
+}
+
+.p-dropdown.error .p-dropdown-label {
+  border-color: var(--danger);
+  box-shadow: 0 0 0 2px var(--danger-light);
+}
+
+/* Mensajes de error */
+.error-message {
+  color: var(--danger);
+  font-size: var(--text-xs);
+  margin-top: var(--space-1);
+}
+
+/* Botones de acción */
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-4);
+  padding-top: var(--space-6);
+  border-top: 1px solid var(--border-light);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .movimiento-form-container {
+    padding: var(--space-4);
+  }
+
+  .form-header {
+    flex-direction: column;
+    gap: var(--space-4);
+    align-items: stretch;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+  }
+
+  .form-actions {
+    flex-direction: column;
+  }
+
+}
+
+@media (max-width: 480px) {
+  .movimiento-form-container {
+    padding: var(--space-3);
+  }
+
+  .form-card .p-card-content {
+    padding: var(--space-4);
+  }
+
+  .form-row {
+    gap: var(--space-3);
+  }
+}

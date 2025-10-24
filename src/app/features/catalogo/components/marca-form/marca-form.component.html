@@ -1,0 +1,164 @@
+<div class="marca-form-container">
+  <!-- Header -->
+  <div class="form-header">
+    <div class="header-left">
+      <h2 class="heading-2">{{ isEdit ? 'Editar Marca' : 'Nueva Marca' }}</h2>
+      <span class="text-caption">{{ isEdit ? 'Modifica la información de la marca' : 'Completa la información para crear una nueva marca' }}</span>
+    </div>
+    <div class="header-actions">
+      <p-button
+        (onClick)="onCancel()"
+        label="Cancelar"
+        icon="pi pi-times"
+        styleClass="btn-secondary btn-outlined btn-sm">
+      </p-button>
+    </div>
+  </div>
+
+  <!-- Loading -->
+  <div class="loading-container" *ngIf="loading">
+    <p-progressSpinner [style]="{'width': '50px', 'height': '50px'}" styleClass="custom-spinner"
+      ariaLabel="Cargando">
+    </p-progressSpinner>
+    <p class="text-body">{{ isEdit ? 'Cargando marca...' : 'Procesando...' }}</p>
+  </div>
+
+  <!-- Formulario -->
+  <form [formGroup]="marcaForm" (ngSubmit)="onSubmit()" *ngIf="!loading">
+    <div class="form-grid">
+      <!-- Información Básica -->
+      <p-card header="Información Básica" styleClass="form-card">
+        <div class="form-row">
+          <div class="input-group">
+            <label for="nombre" class="input-label required">Nombre:</label>
+            <input
+              type="text"
+              id="nombre"
+              formControlName="nombre"
+              placeholder="Nombre de la marca"
+              class="input-text"
+              [class.error]="nombre?.invalid && nombre?.touched">
+            <div class="error-message" *ngIf="nombre?.invalid && nombre?.touched">
+              <span *ngIf="nombre?.errors?.['required']">El nombre es requerido</span>
+              <span *ngIf="nombre?.errors?.['maxlength']">Máximo 100 caracteres</span>
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label for="logo" class="input-label">URL del Logo:</label>
+            <input
+              type="url"
+              id="logo"
+              formControlName="logo"
+              placeholder="https://ejemplo.com/logo.png"
+              class="input-text"
+              [class.error]="logo?.invalid && logo?.touched">
+            <div class="error-message" *ngIf="logo?.invalid && logo?.touched">
+              <span *ngIf="logo?.errors?.['maxlength']">Máximo 255 caracteres</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="input-group full-width">
+            <label for="descripcion" class="input-label">Descripción:</label>
+            <textarea
+              id="descripcion"
+              formControlName="descripcion"
+              placeholder="Descripción de la marca"
+              class="input-textarea"
+              rows="3"
+              [class.error]="descripcion?.invalid && descripcion?.touched">
+            </textarea>
+            <div class="error-message" *ngIf="descripcion?.invalid && descripcion?.touched">
+              <span *ngIf="descripcion?.errors?.['maxlength']">Máximo 500 caracteres</span>
+            </div>
+          </div>
+        </div>
+      </p-card>
+
+      <!-- Información de Contacto -->
+      <p-card header="Información de Contacto" styleClass="form-card">
+        <div class="form-row">
+          <div class="input-group">
+            <label for="sitioWeb" class="input-label">Sitio Web:</label>
+            <input
+              type="url"
+              id="sitioWeb"
+              formControlName="sitioWeb"
+              placeholder="https://www.marca.com"
+              class="input-text"
+              [class.error]="sitioWeb?.invalid && sitioWeb?.touched">
+            <div class="error-message" *ngIf="sitioWeb?.invalid && sitioWeb?.touched">
+              <span *ngIf="sitioWeb?.errors?.['maxlength']">Máximo 255 caracteres</span>
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label for="contacto" class="input-label">Contacto:</label>
+            <input
+              type="text"
+              id="contacto"
+              formControlName="contacto"
+              placeholder="Nombre del contacto"
+              class="input-text"
+              [class.error]="contacto?.invalid && contacto?.touched">
+            <div class="error-message" *ngIf="contacto?.invalid && contacto?.touched">
+              <span *ngIf="contacto?.errors?.['maxlength']">Máximo 100 caracteres</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="input-group">
+            <label for="email" class="input-label">Email:</label>
+            <input
+              type="email"
+              id="email"
+              formControlName="email"
+              placeholder="contacto@marca.com"
+              class="input-text"
+              [class.error]="email?.invalid && email?.touched">
+            <div class="error-message" *ngIf="email?.invalid && email?.touched">
+              <span *ngIf="email?.errors?.['email']">Formato de email inválido</span>
+              <span *ngIf="email?.errors?.['maxlength']">Máximo 100 caracteres</span>
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label for="telefono" class="input-label">Teléfono:</label>
+            <input
+              type="tel"
+              id="telefono"
+              formControlName="telefono"
+              placeholder="+1 234 567 8900"
+              class="input-text"
+              [class.error]="telefono?.invalid && telefono?.touched">
+            <div class="error-message" *ngIf="telefono?.invalid && telefono?.touched">
+              <span *ngIf="telefono?.errors?.['maxlength']">Máximo 20 caracteres</span>
+            </div>
+          </div>
+        </div>
+      </p-card>
+    </div>
+
+    <!-- Botones de acción -->
+    <div class="form-actions">
+      <p-button
+        type="button"
+        (onClick)="onCancel()"
+        label="Cancelar"
+        icon="pi pi-times"
+        styleClass="btn-secondary btn-outlined">
+      </p-button>
+      <p-button
+        type="submit"
+        [disabled]="marcaForm.invalid || loading"
+        [label]="isEdit ? 'Actualizar Marca' : 'Crear Marca'"
+        [icon]="isEdit ? 'pi pi-save' : 'pi pi-plus'"
+        styleClass="btn-primary"
+        [loading]="loading">
+      </p-button>
+    </div>
+  </form>
+</div>

@@ -1,8 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Subject, takeUntil } from 'rxjs';
-import { SidebarService, MenuItem } from '../../services/sidebar.service';
 import { SidebarItemComponent } from '../sidebar-item/sidebar-item.component';
+import { SidebarItem } from '../../models/sidebar-item.model';
+import { SidebarService } from '../../services/sidebar.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -15,7 +16,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
 
   isCollapsed = false;
-  menuItems: MenuItem[] = [];
+  menuItems: SidebarItem[] = [];
 
   constructor(private sidebarService: SidebarService) {}
 
@@ -28,7 +29,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
       });
 
     // Subscribe to menu items
-    this.sidebarService.menuItems$
+    this.sidebarService.getMenuItems()
       .pipe(takeUntil(this.destroy$))
       .subscribe(items => {
         this.menuItems = items;
@@ -40,15 +41,11 @@ export class SidebarComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  onItemClick(item: MenuItem): void {
-    this.sidebarService.updateMenuItemActive(item.id);
+  onItemClick(item: SidebarItem): void {
+    // El estado activo se maneja automáticamente por el router
   }
 
   onToggleExpanded(itemId: string): void {
-    this.sidebarService.toggleMenuItemExpanded(itemId);
-  }
-
-  toggleSidebar(): void {
-    this.sidebarService.toggleSidebar();
+    // Se maneja en el sidebar-item component
   }
 }

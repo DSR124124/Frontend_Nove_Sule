@@ -1,0 +1,137 @@
+<div class="categoria-form-container">
+  <!-- Header -->
+  <div class="form-header">
+    <div class="header-left">
+      <h2 class="heading-2">{{ isEdit ? 'Editar Categoría' : 'Nueva Categoría' }}</h2>
+      <span class="text-caption">{{ isEdit ? 'Modifica la información de la categoría' : 'Completa la información para crear una nueva categoría' }}</span>
+    </div>
+    <div class="header-actions">
+      <p-button
+        (onClick)="onCancel()"
+        label="Cancelar"
+        icon="fas fa-times"
+        styleClass="btn-secondary btn-outlined btn-sm">
+      </p-button>
+    </div>
+  </div>
+
+  <!-- Loading -->
+  <div class="loading-container" *ngIf="loading">
+    <p-progressSpinner [style]="{'width': '50px', 'height': '50px'}" styleClass="custom-spinner"
+      ariaLabel="Cargando">
+    </p-progressSpinner>
+    <p class="text-body">{{ isEdit ? 'Cargando categoría...' : 'Procesando...' }}</p>
+  </div>
+
+  <!-- Formulario -->
+  <form [formGroup]="categoriaForm" (ngSubmit)="onSubmit()" *ngIf="!loading">
+    <div class="form-grid">
+      <!-- Información Básica -->
+      <p-card header="Información Básica" styleClass="form-card">
+        <div class="form-row">
+          <div class="input-group">
+            <label for="nombre" class="input-label required">Nombre:</label>
+            <input
+              type="text"
+              id="nombre"
+              formControlName="nombre"
+              placeholder="Nombre de la categoría"
+              class="input-text"
+              [class.error]="nombre?.invalid && nombre?.touched">
+            <div class="error-message" *ngIf="nombre?.invalid && nombre?.touched">
+              <span *ngIf="nombre?.errors?.['required']">El nombre es requerido</span>
+              <span *ngIf="nombre?.errors?.['maxlength']">Máximo 100 caracteres</span>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="form-row">
+          <div class="input-group full-width">
+            <label for="descripcion" class="input-label">Descripción:</label>
+            <textarea
+              id="descripcion"
+              formControlName="descripcion"
+              placeholder="Descripción de la categoría"
+              class="input-textarea"
+              rows="3"
+              [class.error]="descripcion?.invalid && descripcion?.touched">
+            </textarea>
+            <div class="error-message" *ngIf="descripcion?.invalid && descripcion?.touched">
+              <span *ngIf="descripcion?.errors?.['maxlength']">Máximo 500 caracteres</span>
+            </div>
+          </div>
+        </div>
+      </p-card>
+
+      <!-- Apariencia -->
+      <p-card header="Apariencia" styleClass="form-card">
+        <div class="form-row">
+          <div class="input-group">
+            <label for="color" class="input-label">Color:</label>
+            <div class="color-input-group">
+              <input
+                type="color"
+                id="color-picker"
+                formControlName="color"
+                class="color-picker"
+                [class.error]="color?.invalid && color?.touched">
+              <input
+                type="text"
+                id="color"
+                formControlName="color"
+                placeholder="#000000"
+                class="input-text color-text-input"
+                [class.error]="color?.invalid && color?.touched">
+            </div>
+            <div class="error-message" *ngIf="color?.invalid && color?.touched">
+              <span *ngIf="color?.errors?.['pattern']">Formato de color inválido (ej: #FF0000)</span>
+              <span *ngIf="color?.errors?.['maxlength']">Máximo 7 caracteres</span>
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label for="imagen" class="input-label">URL de Imagen:</label>
+            <input
+              type="url"
+              id="imagen"
+              formControlName="imagen"
+              placeholder="https://ejemplo.com/imagen.jpg"
+              class="input-text"
+              [class.error]="imagen?.invalid && imagen?.touched">
+            <div class="error-message" *ngIf="imagen?.invalid && imagen?.touched">
+              <span *ngIf="imagen?.errors?.['maxlength']">Máximo 255 caracteres</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Vista previa del color -->
+        <div class="color-preview" *ngIf="color?.value">
+          <div class="preview-label">Vista previa:</div>
+          <div class="color-preview-box" [style.background-color]="color?.value">
+            <span class="preview-text">{{color?.value}}</span>
+          </div>
+        </div>
+      </p-card>
+    </div>
+
+    <!-- Botones de acción -->
+    <div class="form-actions">
+      <p-button
+        type="button"
+        (onClick)="onCancel()"
+        label="Cancelar"
+        icon="fas fa-times"
+        styleClass="btn-secondary btn-outlined">
+      </p-button>
+      <p-button
+        type="submit"
+        [disabled]="categoriaForm.invalid || loading"
+        [label]="isEdit ? 'Actualizar Categoría' : 'Crear Categoría'"
+        [icon]="isEdit ? 'fas fa-save' : 'fas fa-plus'"
+        styleClass="btn-primary"
+        [loading]="loading">
+      </p-button>
+    </div>
+  </form>
+</div>
